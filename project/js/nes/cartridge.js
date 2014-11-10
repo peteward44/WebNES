@@ -33,7 +33,7 @@ var cartridge = function( mainboard ) {
 
 cartridge.prototype.areGameGenieCodesAvailable = function() {
 
-	return this._dbData && this._dbData['gameGenieCodes'] && this._dbData['gameGenieCodes'].length > 0;
+	return !!( this._dbData && this._dbData['gameGenieCodes'] && this._dbData['gameGenieCodes'].length > 0 );
 };
 
 
