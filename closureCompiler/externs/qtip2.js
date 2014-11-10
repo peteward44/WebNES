@@ -1,0 +1,4 @@
+/**
+ * @constructor
+ */
+window.qtip = function() {};

@@ -1,0 +1,19 @@
+{
+  "name": "nesulator-online",
+  "version": "0.0.1",
+  "dependencies": {
+    "jszip": "latest",
+    "jsziptools": "latest",
+    "jquery": "latest",
+    "FileSaver": "latest",
+    "canvas-toBlob.js": "latest",
+    "rusha": "latest",
+    "fpsmeter": "latest",
+    "jquery-ui": "latest",
+    "bower-qtip2": "~2.1.1"
+  },
+  "devDependencies": {
+    "qunit": "latest"
+  },
+  "private": true
+}

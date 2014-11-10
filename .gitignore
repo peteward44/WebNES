@@ -1,0 +1,9 @@
+/project/tools/node_modules
+/node_modules
+/out
+/.tmp
+/project/tools/nesDbParser/out
+/project/tools/nesDbParser/log.txt
+/tools/cpuCoreBuilder/cpu6502.js
+/tools/cpuCoreBuilder/cpu6502_instructions.js
+/tools/assembler/out.nes

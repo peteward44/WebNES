@@ -1,0 +1,142 @@
+Game genie codes: http://nintendoage.com/forum/messageview.cfm?StartRow=1&catid=31&threadid=34751
+
+- MMC1 - better distinction between SUROM, SOROM, SXROM - http://wiki.nesdev.com/w/index.php/MMC1
+- MMC3 - add blarg mmc6 test to DB
+- MMC3: Differentiate between Rev A and Rev B boards using DB
+- MMC3: Need to remove sync irq event on mapper unload (otherwise irqs will be fired in other games loaded afterwards!)
+- automatically save sram
+- check this.status in cpu class?? should it be replaced with this.regStatus?
+- read in 'perherials' section of db and set up game accordingly
+- allow player to select game genie codes in UI
+- debug methods that can be invoked in console - also setting of breakpoints
+- allow selection if zip file has multiple nes files in
+DONE - refactor mmc5 code so scanline end notification is no longer required, it works it out itself
+- 7z support? https://github.com/cscott/lzma-purejs
+DONE - save states are loaded per ROM using the sha hash, so wrong state cant be loaded for different rom
+- Refactor cartridge.js so detection / db lookup code is outside rom loading stuff
+DONE - Automatic NTSC/PAL detection using filename & db 'region' attribute
+HALF DONE - Support mapper id 5 for castlevania 3
+DONE - 9 for mike tyson's punchout
+
+mmc5 - Bandit Kings of Ancient China (U) - chr switch all messed up
+mig29 - mapper 71 - needs dmc irqs
+
+Controller support
+	2x controllers
+	4x controllers
+	lightgun support
+	NEEDS TESTING - gamepad support https://developer.mozilla.org/en-US/docs/Web/Guide/API/Gamepad
+	
+Broken roms
+	Micro machines menu stutters (sprite zero?)
+	
+HTML layout
+	reset button (reset event on mainboard class)
+	volume control (add gain node to audio graph)
+	full screen support + arbitrary scaling (screenfull lib)
+	pal/ntsc switch
+	frame rate control
+
+Cross browser testing
+
+low pri: iNES trainer support: http://nesdev.parodius.com/bbs/viewtopic.php?t=1804
+game genie support
+
+
+-------------------------------------------
+Problem ROMS
+
+Kid Klown has black sprites
+
+mapper206 - Pacmania - chr messed up
+mapper64 - donkey kong classics - chr all messed up - doesn't appear to make any bank writes. Initial state not correct or irq not executing when it should?
+FIXED - needs full byte passed when switching chr - mapper3 - gyruss - chr all messed up
+mapper2 - silent service - map all messed on on start of game (APU irq?)
+mapper3 - cybernoid - chr all messed up
+FIXED - mapper1 - mega man 2 randomly resets - bad prg swap?
+FIXED - MMC3 - PAL - Beauty and the beast intro messed up (suspected scanline counter problem - or incorrect mapper - no db entry)
+FIXED - MMC3 - Mega man 6 - black screen when try to start game
+FIXED - MMC3 - Bram stoker's dracula - chr messes up when character dies
+FIXED - mapper1 - Ghoul school is broken
+mapper2 - Guardian Legend, The - status bar flickers (sprite 0 missing a frame?) - think it's due to APU irq being used to set sprite 0 flag
+
+----------------------------------------------------------------------------------------
+
+mapper1\adventures of zelda - black sprites when entering cave in desert (happens on all other emulators - is this supposed to happen?)
+FIXED - mapper4\usa\Bram Stoker's Dracula (U).nes - black screen after intro
+
+FIXED - ACTUALLY MAPPER 206 - mapper4\usa\gauntlet.nes - strange error, when playing first level all walls are in wrong place, works on nintendulator
+FIXED - mapper4\usa\Incredible Crash Dummies, The (U) - shaking scrolling bar (same as flintstones 2)
+
+(new does not support 69)(old problem) mapper69\usa\Batman - Return of the Joker (U) - black intro screen, no music plays, but press start and it goes ok
+
+mapper1\usa\day dreamin davey - cant move further than starting screen
+mapper2\usa\3-D Battles of World Runner, The (U) - slalom-style line artifacts on scrolling, probably due to incorrect tile fetch timing (now completely buggered, probably due to tile prefetch optimisation)
+
+FIXED - USE THIS WHEN INVESTIGATE PALETTE PROBLEM - mapper3\usa\Adventures of Dino Riki (U) - black screen at start when intro supposed to display. music plays, works on nemulator
+FIXED - usa\Rampart (U).nes - black screen
+FIXED - usa\George Foreman's KO Boxing (U).nes - black screen
+FIXED - mapper1\usa\Back to the Future 2 & 3 (U).nes - black sprites - possible chr rom bad swap or transparent pixel bug
+FIXED - mapper4\usa\Gun Nac (U) - black screen
+mapper4\usa\Kid Klown (U) - black sprites
+FIXED - mapper4\usa\Code Name Viper (U).nes - black screen
+FIXED - mapper4\usa\alien 3.nes - black screen when starting game
+
+SEEMS FIXED - mapper1\usa\indiana jones last crusade (taito) - input not always recognised
+mapper1\usa\hudson hawk - sprites screwed on play
+
+FIXED - WORKS IN MYNES BUT NOT HALFNES - mapper4|Captain America and the Avengers (U).nes - chr messed up
+happens in nintendulator - mapper11\castle of deceit - chr all messed up
+FIXED - mapper4\usa\Werewolf - The Last Warrior (U).nes - black screen on play, but music keeps playing - chr rom problem?
+
+
+FIXED - mapper34\impossible mission 2 - instant die out hlt (prg switch wrong?) (same problem in mynes)
+
+
+
+
+
+FIXED - usa\Arkanoid (U).nes - doesnt respond to input ( needs arkanoid controller?)
+
+mapper1\usa\Knight Rider (U).nes - black distortion on right side of track, looks like tile prefetching timing problem. note other artifacts such as garbage line
+	on intro and on horizon are present is FCEXP and nintendulator
+
+FIXED - usa\super cars - mirroring messed up? This rom uses illegal opcode LAX, crashes on nintendualator and nemulator.
+
+usa\Athletic World (U).nes - freezes on play HAPPENS IN NINTENDULATOR
+mapper0\japan\door door - freeze when start and collides with other character - probable sprite0 hit problem
+
+FIXED - mapper1\usa\sesame street 123 - pattern tables messed
+FIXED - mapper4\usa\Astyanax (U).nes - messed up CHR tables
+FIXED - mapper4\usa\Baseball Stars 2 (U).nes - messed up pattern tables on bottom on load
+FIXED - mapper4\usa\Conquest of the Crystal Palace (U).nes - no status panel on bottom of screen - most likely mapper timing issue
+FIXED - mapper4 - black screen Adventures of Lolo 2 (U)
+
+mapper2\world\Fantastic Adventures of Dizzy, The (Aladdin) (UE).nes - shakes occassionaly on status bar - possible sprite0 issue? - doesn't happen in nintendulator
+
+/// mapper7 problems - probable timing issues - all of these occur in nintendulator
+
+happens in nintendulator too, buggered rom - mapper7\usa\Caesar's Palace (U).nes - floor messed up. dont know whats going on - possible to do with apu irq
+mapper7\usa\classic concentration - messed up background on contestants when they match a prize
+FIXED - mapper7\usa\WWF Wrestlemania (U).nes - messed up ring
+mapper7\usa\Time Lord (U).nes - shakes when loads of sprite on screen - suspected sprite zero being affected by sprite priority handling code. 
+
+--------
+
+mapper1\usa\Thunderbirds (U) - blue line over narrators head in briefing, doesnt happen on nintendulator
+
+ACTUALLY MAPPER 158 - usa\Alien Syndrome (U).nes - blank screen when attempt to start new game
+
+FIXED - europe\battletoads - PAL shaking on play, intro ok
+FIXED - mapper0\usa\mario - sprite hit zero freeze when jumping off high block into clouds on level 1-1
+FIXED - mapper0\usa\slalom - tile corruption on right side during play
+FIXED - usa\Al Unser Jr Turbo Racing (U) [a1].nes - same problem as knight rider
+FIXED - mapper1\usa\dragon warrior 3 & 4 - blank screen
+FIXED - (MMC1 surom latch) dragon warrior 4 now resets on start game - prg switch gone wrong?
+
+mapper0\japan\f1 race - sides of track not supposed to be red, same with mapper0\japan\exerion - bottom supposed to be green, not red
+
+FIXED - mapper4\usa\Power Punch 2 (U).nes - messed up sprite on intro, doesnt accept keys
+
+sprite missing in mapper0\japan\b-wings - gun middle missing on weapon selection, also middle of ship missing
+

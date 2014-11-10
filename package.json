@@ -1,0 +1,28 @@
+{
+  "name": "nesulator_online",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "node.extend": "~1.0.10"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-usemin": "~2.3.0",
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-contrib-uglify": "~0.5.0",
+    "grunt-contrib-concat": "~0.4.0",
+    "grunt-closure-tools": "*",
+    "grunt-contrib-rename": "0.0.3",
+    "grunt-contrib-cssmin": "~0.10.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@server:/mnt/hd1/gitrepo/nesulator_online.git"
+  },
+  "author": "",
+  "license": "ISC"
+}
