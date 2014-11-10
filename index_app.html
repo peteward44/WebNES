@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+	<title>onlinenes</title>
+    <meta charset="utf-8"/>
+	<meta http-equiv="Cache-Control" content="no-store" /> <!-- stops chrome from caching -->
+	
+	<link rel="stylesheet" href="css/thirdparty.min.css">
+	
+	<link rel="stylesheet" href="css/main.min.css">
+
+</head>
+
+<!-- onunload="" prevents firefox caching javascript files -->
+<body onunload="" id="body">
+	<div id="content" class="normal" style="width:100%; height:100%; display:inline-block">
+		<div id="canvasWrapper" class="wrapper">
+		</div>
+		<div id="controlBar" class="controlBar">
+			<div id="debugBar" class="ui-widget-header ui-corner-all">
+				<button class="controlBarButton" id="debugControlBar_playOneFrameButton"></button>
+				<div class="controlBarSeperator"></div>
+				<button class="controlBarButton" id="debugControlBar_gameSpeedButton"></button>
+				<!--<button class="controlBarButton" id="debugControlBar_getFrameHashButton"></button>-->
+				<div class="controlBarSeperator"></div>
+				<span id="debugControlBar_encoding">
+					<input type="radio" id="debugControlBar_encodingNTSC" name="debugControlBar_encoding" value="NTSC"><label for="debugControlBar_encodingNTSC">NTSC</label>
+					<input type="radio" id="debugControlBar_encodingPAL" name="debugControlBar_encoding" value="PAL"><label for="debugControlBar_encodingPAL">PAL</label>
+				</span>
+				<div class="controlBarSeperator"></div>
+				<button class="controlBarButton" id="debugControlBar_selectTraceButton"></button>
+				<ul id="debugControlBar_traceMenu">
+					<li class="controlBarMenuButton" id="controlBar_cpuTraceParent"><input type="checkbox" id="controlBar_cpuTraceButton"><label for="controlBar_cpuTraceButton">CPU</label></li>
+					<li class="controlBarMenuButton" id="controlBar_cpuInstructionsTraceParent"><input type="checkbox" id="controlBar_cpuInstructionsTraceButton"><label for="controlBar_cpuInstructionsTraceButton">CPU Instructions</label></li>
+					<li class="controlBarMenuButton" id="controlBar_ppuTraceParent"><input type="checkbox" id="controlBar_ppuTraceButton"><label for="controlBar_ppuTraceButton">PPU</label></li>
+					<li class="controlBarMenuButton" id="controlBar_mapperTraceParent"><input type="checkbox" id="controlBar_mapperTraceButton"><label for="controlBar_mapperTraceButton">Mapper</label></li>
+					<li class="controlBarMenuButton" id="controlBar_allTraceParent"><input type="checkbox" id="controlBar_allTraceButton"><label for="controlBar_allTraceButton">All</label></li>
+				</ul>
+				<button class="controlBarButton" id="debugControlBar_traceButton"></button>
+			</div>
+			<div id="normalBar" class="ui-widget-header ui-corner-all">
+				<button class="controlBarButton" id="controlBar_loadRomButton"></button>
+				<div class="controlBarSeperator"></div>
+				<button class="controlBarButton" id="controlBar_resetButton"></button>
+				<div class="controlBarSeperator"></div>
+				<button class="controlBarButton" id="controlBar_playButton"></button>
+				<div class="controlBarSeperator"></div>
+				<button class="controlBarButton" id="controlBar_soundButton"></button>
+				<button class="controlBarButton" id="controlBar_screenshotButton"></button>
+				<div class="controlBarSeperator"></div>
+				<button class="controlBarButton" id="controlBar_quickSaveButton"></button>
+				<button class="controlBarButton" id="controlBar_quickLoadButton"></button>
+				<div class="controlBarSeperator"></div>
+				<input class="controlBarButton" type="checkbox" id="controlBar_debugButton"><label for="controlBar_debugButton"></label>
+				<div class="controlBarSeperator"></div>
+				<button class="controlBarButton" id="controlBar_gameGenieButton"></button>
+				<!--<input type="checkbox" id="controlBar_frameLimit"><label for="controlBar_frameLimit">Limit frames</label>-->
+			</div>
+		</div>
+		<div id="controlBar_volumeSlider"></div>
+		<div id="debugControlBar_gameSpeedSlider"></div>
+		<div id="loadStateDialog">
+			<div id="loadStateDialog_contents"></div>
+		</div>
+		<div id="debugWindow" class="debugWindow">
+<!-- 			<div class="cpuInstructions">
+			</div>
+			<div class="logWindow">
+			</div>
+			<div class="paletteDisplay">
+			</div>
+			<div class="spriteDisplay">
+			</div> -->
+		</div>
+		<div id="gameGenieDialog" class="gameGenieDialog">
+			<div id="gameGenieDialog_contents"></div>
+		</div>
+	</div>
+
+	<script src="js/nes.components.min.js"></script>
+		
+	<script src="js/nes.min.js"></script>
+</body>
+</html>
