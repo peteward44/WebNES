@@ -8,10 +8,10 @@
 	
 	.wrapper {
 		display: inline-block;
-		box-shadow: 2px 2px 5px 0px rgba(20,20,20,1);
 	}
 
 	.wrapper canvas {
+		box-shadow: 2px 2px 5px 0px rgba(20,20,20,1);
 	}
 	
 	.ui-menu { position: absolute; width: 150px; }
