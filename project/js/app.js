@@ -347,7 +347,8 @@ var animateFunction;
 	
 	App.prototype._showError = function( err ) {
 	
-		alert( err );
+		console.log( err );
+		this._eventBus.invoke( 'romLoadFailure', err.toString() );
 	};
 	
 	

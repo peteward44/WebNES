@@ -37,6 +37,7 @@ this.Gui = this.Gui || {};
 		this._app.connect( 'traceRunning', function( on ) { that._onTraceRunning( on ); } );
 		this._app.connect( 'frameLimit', function( on ) { that._onFrameLimitSet( on ); } );
 		this._app.connect( 'isPausedChange', function( on ) { that._onPauseChange( on ); } );
+		this._app.connect( 'romLoadFailure', function( reason ) { that._onRomLoadFailure( reason ); } );
 		
 		this._element = $( "#controlBar" );
 		
@@ -64,6 +65,8 @@ this.Gui = this.Gui || {};
 					that._onVolumeSliderChange( val );
 				}
 			} );
+		this._errorDisplayButton = this._addButton( "controlBar_errorDisplay", { primary: { label: "Alerts", icon: "ui-icon-alert" }, click: function() { that._errorDisplayButtonClick(); } } );
+		this._errorDisplayMessage = new Gui.ControlBarMessage( "controlBar_alertMessage", this._errorDisplayButton );
 		
 		// debug buttons
 		this._addButton( "debugControlBar_playOneFrameButton", { primary: { label: "Play one frame", icon: "ui-icon-seek-next" }, click: function() { that._onPlayOneFrameButtonClick(); } } );
@@ -112,6 +115,18 @@ this.Gui = this.Gui || {};
 			that._setPosition();
 		});
 		this._setPosition();
+	};
+	
+	
+	ControlBar.prototype._errorDisplayButtonClick = function() {
+		this._errorDisplayButton.alert( false );
+	};
+	
+	
+	ControlBar.prototype._onRomLoadFailure = function( reason ) {
+
+		this._errorDisplayMessage.setText( reason );
+		this._errorDisplayMessage.show();
 	};
 	
 	

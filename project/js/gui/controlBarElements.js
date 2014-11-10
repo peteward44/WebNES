@@ -96,6 +96,16 @@ this.Gui = this.Gui || {};
 	};
 	
 	
+	ControlBarButton.prototype.alert = function( hl ) {
+			
+		if ( hl === true || hl === undefined ) {
+			this._button.addClass( 'ui-state-error' );
+		} else {
+			this._button.removeClass( 'ui-state-error' );
+		}
+	};
+	
+	
 	ControlBarButton.prototype.enable = function( enable ) {
 		var txt = ( enable === undefined || enable ) ? 'enable' : 'disable';
 		this._button.button( txt );
@@ -323,9 +333,89 @@ this.Gui = this.Gui || {};
 	
 	
 	
+	
+	var ControlBarMessage = function( jqId, buttonObject, options ) {
+	
+		var that = this;
+		this._buttonObject = buttonObject;
+		this._options = options;
+
+		this._dialog = $( "#" + jqId ).dialog({
+				'dialogClass': "no-close controlBarSlider",
+				'draggable': false,
+				'autoOpen': false,
+				'height': 'auto',
+				'minHeight': 50,
+				'width': 'auto',
+				'minWidth': 100,
+				'modal': false,
+				'resizable': false,
+				'buttons': {
+				},
+				'close': function() {
+				}
+			} );
+			
+		this._textElement = document.createElement( 'div' );
+		this._dialog[0].appendChild( this._textElement );
+		
+		$( document ).on( "click", function( e ) {
+			that._onDocClick( e );
+		});
+	};
+	
+	
+	ControlBarMessage.prototype.setText = function( text ) {
+		
+		this._textElement.innerHTML = '<p>' + text + '</p>';
+	};
+	
+	
+	ControlBarMessage.prototype._onDocClick = function( e ) {
+		// HACK: cx and cy will be zero on a forced (manual) click event invoked by .click(). So we ignore these
+		if ( e.clientX === 0 && e.clientY === 0 ) {
+			return;
+		}
+		// hide menu when clicked somewhere else
+		if ( this.isVisible() ) {
+			if ( !isClickWithinElementBounds( this._dialog, e.clientX, e.clientY ) ) {
+				this.hide();
+			}
+		}
+	};
+	
+	
+	ControlBarMessage.prototype.show = function() {
+		this._dialog.dialog( "option", "position", {
+				'my': "right top",
+				'at': "right bottom",
+				'of': this._buttonObject._button
+			} );
+		this._dialog.dialog( "open" );
+		this._buttonObject.alert( true );
+	};
+	
+	
+	ControlBarMessage.prototype.hide = function() {
+		if ( this._dialog.is(':visible') ) {
+			this._dialog.dialog( "close" );
+		}
+		this._buttonObject.alert( false );
+	};
+	
+	
+	ControlBarMessage.prototype.isVisible = function() {
+		return this._dialog.is(':visible');
+	};
+	
+	
+	
+	
+	
 	Gui.ControlBarButton = ControlBarButton;
 	Gui.ControlBarMenu = ControlBarMenu;
 	Gui.ControlBarSlider = ControlBarSlider;
+	Gui.ControlBarMessage = ControlBarMessage;
 }());
 
 
