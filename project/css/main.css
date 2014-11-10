@@ -57,6 +57,18 @@
 		width: 20%;
 		height: 50%;
 	}
+		
+	.socialMediaPanel {
+		position: absolute;
+		left: 10px;
+		right: auto;
+		top: auto;
+		bottom: 10px;
+		display: block;
+		width: auto;
+		height: auto;
+	}
+	
 	
 	.gameGenieDialog {
 		display: none;
