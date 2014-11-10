@@ -1,0 +1,1 @@
+"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --enable-logging --v=1 --redirect-code-traces --no-sandbox --js-flags="--trace-deopt --code-comments --trace-bailout" "http://localhost/nes/out/index_app.html" > chrome_log.txt

@@ -1,0 +1,28 @@
+#
+# Linker control script for generating pcjr compatible image
+#
+
+MEMORY {
+# file = "/dev/null" is a horrible hack. :-(
+    iNESHDR: start = $0000, size = $0010, file = "/dev/null";
+    PCJRHDR: start = $0000, size = $0200;
+    ZPAGE:   start = $0000, size = $0100;
+    RAM:     start = $0200, size = $0600;
+    PPUIO:   start = $2000, size = $0008;
+    CPUIO:   start = $4000, size = $0018;
+    ROM1:    start = $c000, size = $3ffa, fill = yes;
+    VECTORS: start = $fffa, size = $0006;
+}
+
+SEGMENTS {
+    iNESHDR:  load = iNESHDR, type = ro;
+    PCJRHDR:  load = PCJRHDR, type = ro;
+    ZEROPAGE: load = ZPAGE,   type = bss;
+    RAM:      load = RAM,     type = bss;
+    PPUIO:    load = PPUIO,   type = bss;
+    CPUIO:    load = CPUIO,   type = bss;
+    CODE:     load = ROM1,    type = ro;
+    VECTORS:  load = VECTORS, type = ro;
+}
+
+# EOF

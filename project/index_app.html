@@ -1,0 +1,196 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+	<title>onlinenes</title>
+    <meta charset="utf-8"/>
+	<meta http-equiv="Cache-Control" content="no-store" /> <!-- stops chrome from caching -->
+	
+	<!-- build:css css/thirdparty.min.css -->	
+	<link rel="stylesheet" href="../bower_components/jquery-ui/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" href="../bower_components/bower-qtip2/jquery.qtip.min.css">
+	<!-- endbuild -->
+	
+	<!-- build:css css/main.min.css -->	
+	<link rel="stylesheet" href="css/main.css">
+	<!-- endbuild -->
+
+</head>
+
+<!-- onunload="" prevents firefox caching javascript files -->
+<body onunload="" id="body">
+	<div id="content" class="normal" style="width:100%; height:100%; display:inline-block">
+		<div id="canvasWrapper" class="wrapper">
+		</div>
+		<div id="controlBar" class="controlBar">
+			<div id="debugBar" class="ui-widget-header ui-corner-all">
+				<button class="controlBarButton" id="debugControlBar_playOneFrameButton"></button>
+				<div class="controlBarSeperator"></div>
+				<button class="controlBarButton" id="debugControlBar_gameSpeedButton"></button>
+				<!--<button class="controlBarButton" id="debugControlBar_getFrameHashButton"></button>-->
+				<div class="controlBarSeperator"></div>
+				<span id="debugControlBar_encoding">
+					<input type="radio" id="debugControlBar_encodingNTSC" name="debugControlBar_encoding" value="NTSC"><label for="debugControlBar_encodingNTSC">NTSC</label>
+					<input type="radio" id="debugControlBar_encodingPAL" name="debugControlBar_encoding" value="PAL"><label for="debugControlBar_encodingPAL">PAL</label>
+				</span>
+				<div class="controlBarSeperator"></div>
+				<button class="controlBarButton" id="debugControlBar_selectTraceButton"></button>
+				<ul id="debugControlBar_traceMenu">
+					<li class="controlBarMenuButton" id="controlBar_cpuTraceParent"><input type="checkbox" id="controlBar_cpuTraceButton"><label for="controlBar_cpuTraceButton">CPU</label></li>
+					<li class="controlBarMenuButton" id="controlBar_cpuInstructionsTraceParent"><input type="checkbox" id="controlBar_cpuInstructionsTraceButton"><label for="controlBar_cpuInstructionsTraceButton">CPU Instructions</label></li>
+					<li class="controlBarMenuButton" id="controlBar_ppuTraceParent"><input type="checkbox" id="controlBar_ppuTraceButton"><label for="controlBar_ppuTraceButton">PPU</label></li>
+					<li class="controlBarMenuButton" id="controlBar_mapperTraceParent"><input type="checkbox" id="controlBar_mapperTraceButton"><label for="controlBar_mapperTraceButton">Mapper</label></li>
+					<li class="controlBarMenuButton" id="controlBar_allTraceParent"><input type="checkbox" id="controlBar_allTraceButton"><label for="controlBar_allTraceButton">All</label></li>
+				</ul>
+				<button class="controlBarButton" id="debugControlBar_traceButton"></button>
+			</div>
+			<div id="normalBar" class="ui-widget-header ui-corner-all">
+				<button class="controlBarButton" id="controlBar_loadRomButton"></button>
+				<div class="controlBarSeperator"></div>
+				<button class="controlBarButton" id="controlBar_resetButton"></button>
+				<div class="controlBarSeperator"></div>
+				<button class="controlBarButton" id="controlBar_playButton"></button>
+				<div class="controlBarSeperator"></div>
+				<button class="controlBarButton" id="controlBar_soundButton"></button>
+				<button class="controlBarButton" id="controlBar_screenshotButton"></button>
+				<div class="controlBarSeperator"></div>
+				<button class="controlBarButton" id="controlBar_quickSaveButton"></button>
+				<button class="controlBarButton" id="controlBar_quickLoadButton"></button>
+				<div class="controlBarSeperator"></div>
+				<input class="controlBarButton" type="checkbox" id="controlBar_debugButton"><label for="controlBar_debugButton"></label>
+				<div class="controlBarSeperator"></div>
+				<button class="controlBarButton" id="controlBar_gameGenieButton"></button>
+				<!--<input type="checkbox" id="controlBar_frameLimit"><label for="controlBar_frameLimit">Limit frames</label>-->
+			</div>
+		</div>
+		<div id="controlBar_volumeSlider"></div>
+		<div id="debugControlBar_gameSpeedSlider"></div>
+		<div id="loadStateDialog">
+			<div id="loadStateDialog_contents"></div>
+		</div>
+		<div id="debugWindow" class="debugWindow">
+<!-- 			<div class="cpuInstructions">
+			</div>
+			<div class="logWindow">
+			</div>
+			<div class="paletteDisplay">
+			</div>
+			<div class="spriteDisplay">
+			</div> -->
+		</div>
+		<div id="gameGenieDialog" class="gameGenieDialog">
+			<div id="gameGenieDialog_contents"></div>
+		</div>
+	</div>
+
+	<!-- build:js js/nes.components.min.js -->
+	<script type="text/javascript" src="js/polyfills/arrayPolyfills.js"></script>
+	<script type="text/javascript" src="js/polyfills/typedarrays.js"></script>
+	<script type="text/javascript" src="js/polyfills/setImmediatePolyfill.js"></script>
+	<script type="text/javascript" src="js/utils/typedArrayBoundsCheck.js"></script>
+	
+	<script type="text/javascript" src="../bower_components/canvas-toBlob.js/canvas-toBlob.js"></script>
+	<script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="../bower_components/jquery-ui/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="../bower_components/bower-qtip2/jquery.qtip.min.js"></script>
+	<script type="text/javascript" src="../bower_components/jsziptools/jsziptools.js"></script>
+	<script type="text/javascript" src="../bower_components/jszip/jszip.min.js"></script>
+	<script type="text/javascript" src="../bower_components/FileSaver/FileSaver.js"></script>
+	<script type="text/javascript" src="../bower_components/rusha/rusha.min.js"></script>
+	<script type="text/javascript" src="../bower_components/fpsmeter/dist/fpsmeter.min.js"></script>
+	<!-- endbuild -->
+		
+	<!-- build:js js/nes.min.js -->	
+	<script type="text/javascript" src="js/polyfills/fastSetImmediate.js"></script>
+	<script type="text/javascript" src="js/gui/logWindow.js"></script>
+	
+	<script type="text/javascript" src="js/utils/event.js"></script>
+	<script type="text/javascript" src="js/utils/romLoader.js"></script>
+	<script type="text/javascript" src="js/utils/decompress7z.js"></script>
+	<script type="text/javascript" src="js/utils/serialisation.js"></script>
+
+	<script type="text/javascript" src="js/interface/canvasRenderSurface.js"></script>
+	<script type="text/javascript" src="js/interface/dragDrop.js"></script>
+	<script type="text/javascript" src="js/interface/input.js"></script>
+	<script type="text/javascript" src="js/interface/saveLoadState.js"></script>
+	<script type="text/javascript" src="js/interface/trace.js"></script>
+	<script type="text/javascript" src="js/interface/webAudioRenderer.js"></script>
+	
+	<script type="text/javascript" src="js/gui/canvasParent.js"></script>
+	<script type="text/javascript" src="js/gui/controlBarElements.js"></script>
+	<script type="text/javascript" src="js/gui/controlBar.js"></script>
+	<script type="text/javascript" src="js/gui/loadStateDialog.js"></script>
+	<script type="text/javascript" src="js/gui/gameGenieDialog.js"></script>
+	<script type="text/javascript" src="js/gui/spriteDisplayWindow.js"></script>
+	<script type="text/javascript" src="js/gui/paletteDisplayWindow.js"></script>
+	<script type="text/javascript" src="js/gui/cpuInstructionsWindow.js"></script>
+	
+	<script type="text/javascript" src="js/nes/consts.js"></script>
+	<script type="text/javascript" src="js/nes/synchroniser.js"></script>
+	<script type="text/javascript" src="js/nes/controller.js"></script>
+	<script type="text/javascript" src="js/nes/memory.js"></script>
+	<script type="text/javascript" src="js/nes/cpu6502_instructions_fast.js"></script>
+	<script type="text/javascript" src="js/nes/cpu6502_instructions_fast_switch.js"></script>
+	<script type="text/javascript" src="js/nes/cpu6502_instructions_trace.js"></script>
+	<script type="text/javascript" src="js/nes/cpu6502_instructions_formatString.js"></script>
+	<script type="text/javascript" src="js/nes/cpu6502.js"></script>
+	
+	<!-- Blargg apu port -->
+	<script type="text/javascript" src="js/nes/apulib/Wave_Writer.js"></script>
+	<script type="text/javascript" src="js/nes/apulib/Blip_Buffer.js"></script>
+	<script type="text/javascript" src="js/nes/apulib/Blip_Synth.js"></script>
+	<script type="text/javascript" src="js/nes/apulib/Nes_Oscs.js"></script>
+	<script type="text/javascript" src="js/nes/apulib/Nes_Apu.js"></script>	
+	<script type="text/javascript" src="js/nes/apu_legacy.js"></script>
+	
+	<!-- new apu -->
+	<script type="text/javascript" src="js/nes/apu/frameCounter.js"></script>
+	<script type="text/javascript" src="js/nes/apu/outputBuffer.js"></script>
+	<script type="text/javascript" src="js/nes/apu/envelope.js"></script>
+	<script type="text/javascript" src="js/nes/apu/squareWave.js"></script>
+	<script type="text/javascript" src="js/nes/apu.js"></script>
+
+	<script type="text/javascript" src="js/test/squareWaveTester.js"></script>
+	
+	<script type="text/javascript" src="js/nes/ppu_renderBg.js"></script>
+	<script type="text/javascript" src="js/nes/ppu_renderSprites.js"></script>
+	<script type="text/javascript" src="js/nes/ppu.js"></script>
+	
+	<script type="text/javascript" src="js/nes/mappers/basemapper.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper0.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper1.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper2.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper3.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper4.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper5.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper6.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper7.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper8.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper9.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper11.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper13.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper15.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper17.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper34.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper41.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper64.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper65.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper66.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper71.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper78.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper79.js"></script>
+	<script type="text/javascript" src="js/nes/mappers/mapper206.js"></script>
+	
+	<script type="text/javascript" src="js/nes/dbLookup.js"></script>
+	<script type="text/javascript" src="js/nes/gameGenie.js"></script>
+		
+	<script type="text/javascript" src="js/nes/cartridge.js"></script>
+	<script type="text/javascript" src="js/nes/renderbuffer.js"></script>
+	<script type="text/javascript" src="js/nes/mainboard.js"></script>
+
+	<script type="text/javascript" src="js/app.js"></script>
+	<script type="text/javascript" src="js/saveStateManager.js"></script>
+	<script type="text/javascript" src="js/browserStart.js"></script>
+	<!-- endbuild -->
+</body>
+</html>

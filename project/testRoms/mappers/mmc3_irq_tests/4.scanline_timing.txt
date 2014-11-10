@@ -1,0 +1,402 @@
+label_34:
+	0001  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_54:
+	0002  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	0003  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	0004  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	0005  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	0006  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_63:
+	0007  00 F7     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	0008  F7 EF     *INS $EF, X = 00               A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	0009  EF DF 00  *INS $00DF = 00                A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	000A  DF 00 00  *DCM $0000, X = 00             A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	000C  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	000D  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_46:
+	000E  00 BF     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	000F  BF 00 00  *LAX $0000, Y = 00             A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	0010  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_44:
+	0011  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	0012  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	0013  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	0014  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	0015  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	0016  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	0017  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	0018  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	0019  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_35:
+	001A  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	001B  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	001C  00 00     BRK                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+
+	9FFE  FF FF 00  *INS $00FF, X = 00             A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	A001  D0 1A     BNE $A01D                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	A003  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_42:
+	E019  A9 01     LDA #$01                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E01B  85 F8     STA $F8 = 00                   A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E01D  78        SEI                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E01E  A9 00     LDA #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E020  8D 00 20  STA $2000 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E023  20 86 E5  JSR $E586                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E026  AD A6 E1  LDA $E1A6 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E029  F0 11     BEQ $E03C                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E02B  20 63 E5  JSR $E563                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E02E  A2 01     LDX #$01                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_66:
+	E030  BD A6 E1  LDA $E1A6, X = 00              A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E033  F0 07     BEQ $E03C                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E035  20 83 E5  JSR $E583                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E038  E8        INX                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E039  4C 30 E0  JMP $E030                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_21:
+	E0B0  48        PHA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0B1  8A        TXA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0B2  48        PHA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0B3  98        TYA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0B4  48        PHA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0B5  A9 00     LDA #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0B7  8D 15 40  STA $4015 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0BA  78        SEI                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0BB  20 00 E5  JSR $E500                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0BE  A9 00     LDA #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0C0  8D 00 20  STA $2000 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0C3  8D 01 20  STA $2001 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0C6  2C 02 20  BIT $2002 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0C9  2C 02 20  BIT $2002 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0CC  10 FB     BPL $E0C9                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0CE  A0 8D     LDY #$8D                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0D0  A9 29     LDA #$29                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0D2  20 43 E2  JSR $E243                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0D5  A0 56     LDY #$56                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0D7  A9 44     LDA #$44                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0D9  20 48 E2  JSR $E248                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0DC  2C 02 20  BIT $2002 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0DF  10 F4     BPL $E0D5                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0E1  A0 1C     LDY #$1C                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0E3  A9 D3     LDA #$D3                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0E5  20 48 E2  JSR $E248                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0E8  68        PLA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0E9  A8        TAY                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0EA  68        PLA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0EB  AA        TAX                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0EC  68        PLA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0ED  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_1:
+	E0EE  A9 C8     LDA #$C8                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0F0  20 2E E2  JSR $E22E                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0F3  A9 C0     LDA #$C0                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0F5  8D 17 40  STA $4017 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0F8  A9 00     LDA #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0FA  8D 01 20  STA $2001 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E0FD  8D 00 20  STA $2000 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E100  2C 02 20  BIT $2002 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E103  8D 06 20  STA $2006 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E106  8D 06 20  STA $2006 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E109  AE FC FF  LDX $FFFC = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E10C  A9 4C     LDA #$4C                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E10E  95 00     STA $00, X = 00                A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E110  A9 00     LDA #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E112  95 01     STA $01, X = 00                A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E114  A9 07     LDA #$07                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E116  95 02     STA $02, X = 00                A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E118  AE FE FF  LDX $FFFE = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E11B  A9 4C     LDA #$4C                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E11D  95 00     STA $00, X = 00                A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E11F  A9 9A     LDA #$9A                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E121  95 01     STA $01, X = 00                A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E123  A9 E1     LDA #$E1                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E125  95 02     STA $02, X = 00                A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E127  A9 01     LDA #$01                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E129  20 41 E1  JSR $E141                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E12C  20 45 E1  JSR $E145                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E12F  A2 00     LDX #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E131  20 5C E1  JSR $E15C                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E134  20 45 E1  JSR $E145                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E137  A2 00     LDX #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E139  20 5C E1  JSR $E15C                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E13C  20 51 E1  JSR $E151                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E13F  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_5:
+	E141  8D 00 C0  STA $C000 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E144  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_6:
+	E145  A9 7B     LDA #$7B                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E147  8D 01 C0  STA $C001 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E14A  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_12:
+	E151  A9 7B     LDA #$7B                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E153  8D 00 E0  STA $E000 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E156  A9 7B     LDA #$7B                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E158  8D 01 E0  STA $E001 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E15B  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_7:
+	E15C  20 63 E1  JSR $E163                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E15F  CA        DEX                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E160  D0 FA     BNE $E15C                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E162  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_8:
+	E163  48        PHA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E164  A9 00     LDA #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E166  8D 06 20  STA $2006 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E169  8D 06 20  STA $2006 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E16C  A9 10     LDA #$10                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E16E  8D 06 20  STA $2006 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E171  8D 06 20  STA $2006 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E174  A9 00     LDA #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E176  8D 06 20  STA $2006 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E179  8D 06 20  STA $2006 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E17C  68        PLA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E17D  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+reset:
+	E1B6  20 EE E0  JSR $E0EE                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1B9  A9 00     LDA #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1BB  20 45 E5  JSR $E545                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1BE  20 15 E5  JSR $E515                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1C1  A9 00     LDA #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1C3  20 F7 E1  JSR $E1F7                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1C6  A0 05     LDY #$05                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1C8  A9 5B     LDA #$5B                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1CA  20 44 E2  JSR $E244                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1CD  A9 02     LDA #$02                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1CF  20 1E E2  JSR $E21E                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1D2  A9 01     LDA #$01                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1D4  20 F7 E1  JSR $E1F7                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1D7  A0 14     LDY #$14                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1D9  A9 17     LDA #$17                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1DB  20 46 E2  JSR $E246                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1DE  A9 04     LDA #$04                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1E0  20 1E E2  JSR $E21E                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1E3  A9 F0     LDA #$F0                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1E5  20 F7 E1  JSR $E1F7                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1E8  A0 AD     LDY #$AD                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1EA  A9 21     LDA #$21                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1EC  20 43 E2  JSR $E243                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1EF  A9 06     LDA #$06                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1F1  20 1E E2  JSR $E21E                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1F4  4C 19 E0  JMP $E019                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_20:
+	E1F7  48        PHA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1F8  20 B0 E0  JSR $E0B0                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1FB  A9 08     LDA #$08                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E1FD  8D 00 20  STA $2000 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E200  A9 18     LDA #$18                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E202  8D 01 20  STA $2001 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E205  68        PLA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E206  8D 00 C0  STA $C000 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E209  8D 01 C0  STA $C001 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E20C  8D 00 E0  STA $E000 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E20F  8D 01 E0  STA $E001 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E212  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_33:
+	E213  A2 00     LDX #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E215  58        CLI                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E216  EA        NOP                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E217  A2 01     LDX #$01                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E219  EA        NOP                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E21A  78        SEI                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E21B  A2 02     LDX #$02                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E21D  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_32:
+	E21E  85 F8     STA $F8 = 00                   A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E220  20 13 E2  JSR $E213                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E223  CA        DEX                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E224  D0 01     BNE $E227                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E226  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_2:
+	E22E  48        PHA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E22F  A9 FD     LDA #$FD                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E231  38        SEC                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E232  EA        NOP                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E233  69 FE     ADC #$FE                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E235  D0 FB     BNE $E232                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E237  68        PLA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E238  18        CLC                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E239  69 FF     ADC #$FF                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E23B  D0 F1     BNE $E22E                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E23D  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_25:
+	E243  A2 A2     LDX #$A2                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_31:
+	E244  A2 A2     LDX #$A2                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E245  A2 A2     LDX #$A2                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_37:
+	E246  A2 A2     LDX #$A2                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E247  A2 A6     LDX #$A6                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_28:
+	E248  A6 EA     LDX $EA = 00                   A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E249  EA        NOP                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E24A  AA        TAX                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E24B  CA        DEX                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E24C  D0 FD     BNE $E24B                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E24E  88        DEY                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E24F  D0 F9     BNE $E24A                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E251  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_61:
+	E252  20 00 E5  JSR $E500                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_65:
+	E255  48        PHA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E256  A9 20     LDA #$20                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E258  8D 06 20  STA $2006 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E25B  EE F0 07  INC $07F0 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E25E  AD F0 07  LDA $07F0 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E261  8D 06 20  STA $2006 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E264  A9 00     LDA #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E266  8D 05 20  STA $2005 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E269  8D 05 20  STA $2005 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E26C  68        PLA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E26D  8D 07 20  STA $2007 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E270  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_47:
+	E27F  A9 81     LDA #$81                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E281  8D F0 07  STA $07F0 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E284  20 00 E5  JSR $E500                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E287  A9 00     LDA #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E289  8D 00 20  STA $2000 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E28C  8D 01 20  STA $2001 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E28F  A9 3F     LDA #$3F                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E291  20 09 E5  JSR $E509                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E294  A9 0F     LDA #$0F                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E296  A2 30     LDX #$30                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E298  A0 08     LDY #$08                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E29A  8D 07 20  STA $2007 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E29D  8E 07 20  STX $2007 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2A0  8E 07 20  STX $2007 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2A3  8E 07 20  STX $2007 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2A6  88        DEY                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2A7  D0 F1     BNE $E29A                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2A9  A9 02     LDA #$02                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2AB  20 09 E5  JSR $E509                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2AE  A9 F0     LDA #$F0                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2B0  85 F0     STA $F0 = 00                   A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2B2  A9 E2     LDA #$E2                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2B4  85 F1     STA $F1 = 00                   A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2B6  A0 00     LDY #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2B8  A9 3B     LDA #$3B                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2BA  85 F2     STA $F2 = 00                   A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2BC  A2 08     LDX #$08                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2BE  A9 00     LDA #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2C0  8D 07 20  STA $2007 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2C3  CA        DEX                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2C4  D0 FA     BNE $E2C0                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2C6  A2 08     LDX #$08                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2C8  B1 F0     LDA ($F0), Y = 00              A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2CA  C8        INY                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2CB  8D 07 20  STA $2007 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2CE  CA        DEX                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2CF  D0 F7     BNE $E2C8                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2D1  98        TYA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2D2  D0 02     BNE $E2D6                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2D4  E6 F1     INC $F1 = 00                   A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2D6  C6 F2     DEC $F2 = 00                   A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2D8  D0 E2     BNE $E2BC                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2DA  A9 20     LDA #$20                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2DC  20 22 E5  JSR $E522                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2DF  20 00 E5  JSR $E500                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2E2  A9 00     LDA #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2E4  8D 05 20  STA $2005 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2E7  8D 05 20  STA $2005 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2EA  A9 08     LDA #$08                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2EC  8D 01 20  STA $2001 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E2EF  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_22:
+	E500  2C 02 20  BIT $2002 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E503  2C 02 20  BIT $2002 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E506  10 FB     BPL $E503                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E508  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_15:
+	E509  2C 02 20  BIT $2002 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E50C  8D 06 20  STA $2006 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E50F  A9 00     LDA #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E511  8D 06 20  STA $2006 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E514  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_18:
+	E515  A9 FF     LDA #$FF                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E517  A2 00     LDX #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E519  8D 04 20  STA $2004 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E51C  CA        DEX                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E51D  D0 FA     BNE $E519                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E51F  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_56:
+	E522  48        PHA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E523  A9 20     LDA #$20                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E525  20 09 E5  JSR $E509                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E528  68        PLA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E529  A2 F0     LDX #$F0                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E52B  8D 07 20  STA $2007 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E52E  8D 07 20  STA $2007 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E531  8D 07 20  STA $2007 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E534  8D 07 20  STA $2007 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E537  CA        DEX                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E538  D0 F1     BNE $E52B                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E53A  A9 00     LDA #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E53C  A2 20     LDX #$20                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E53E  8D 07 20  STA $2007 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E541  CA        DEX                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E542  D0 FA     BNE $E53E                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E544  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_13:
+	E545  A9 00     LDA #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E547  A0 24     LDY #$24                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E549  4C 50 E5  JMP $E550                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_14:
+	E550  AA        TAX                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E551  A9 00     LDA #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E553  20 09 E5  JSR $E509                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E556  8A        TXA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E557  A2 00     LDX #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E559  8D 07 20  STA $2007 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E55C  CA        DEX                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E55D  D0 FA     BNE $E559                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E55F  88        DEY                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E560  D0 F7     BNE $E559                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E562  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_45:
+	E563  48        PHA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E564  A9 A5     LDA #$A5                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E566  CD F1 07  CMP $07F1 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E569  F0 0E     BEQ $E579                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E56B  8D F1 07  STA $07F1 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E56E  8A        TXA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E56F  48        PHA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E570  98        TYA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E571  48        PHA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E572  20 7F E2  JSR $E27F                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E575  68        PLA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E576  A8        TAY                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E577  68        PLA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E578  AA        TAX                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E579  68        PLA                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E57A  4C 52 E2  JMP $E252                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_64:
+	E583  4C 55 E2  JMP $E255                      A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_43:
+	E586  A9 00     LDA #$00                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E588  8D F1 07  STA $07F1 = 00                 A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	E58B  60        RTS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_55:
+	FFE2  FF FF FF  *INS $FFFF, X = 00             A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	FFE5  FF FF FF  *INS $FFFF, X = 00             A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	FFE8  FF FF FF  *INS $FFFF, X = 00             A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	FFEB  FF FF FF  *INS $FFFF, X = 00             A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	FFEE  FF FF FF  *INS $FFFF, X = 00             A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_4:
+	FFF1  FF FF FF  *INS $FFFF, X = 00             A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_29:
+	FFF4  FF FF FF  *INS $FFFF, X = 00             A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_17:
+	FFF7  FF FF FF  *INS $FFFF, X = 00             A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_27:
+	FFF9  FF AF E0  *INS $E0AF, X = 00             A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_9:
+	FFFA  AF E0 B6  *LAX $B6E0 = 00                A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_3:
+	FFFB  E0 B6     CPX #$B6                       A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	FFFC  B6 E1     LDX $E1, Y = 00                A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+label_26:
+	FFFD  E1 9A     SBC ($9A, X) = 00              A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	FFFE  9A        TXS                            A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21
+	FFFF  E1 00     SBC ($00, X) = 00              A:00 X:00 Y:00 P:30 SP:00 CYC:  0 SL:-21

@@ -1,0 +1,327 @@
+	;;
+	;; nes/demos/second/second.a65
+	;;
+	;; source for second NES demo
+	;;
+
+	.p02
+	.localchar '?'
+	
+	.segment "iNESHDR"
+	.byte	"NES", $1a	; NES header sig
+	.byte	$1		; 1 16k PRG bank
+	.byte	$0		; 0  8k CHR banks
+	.byte	$0		; Mapper 0, no battery, horizontal mirror
+	.byte	$0		; Mapper 0
+	.res	8, 0		; pad out the rest of the header
+
+	.segment "PCJRHDR"
+	.incbin "header.bin"
+
+
+	.segment "PPUIO"
+ppu_ctrl1:	.byte	0
+ppu_ctrl2:	.byte	0
+ppu_stat:	.byte	0
+ppu_spraddr:	.byte	0
+ppu_sprdata:	.byte	0
+ppu_scroll:	.byte	0
+ppu_addr:	.byte	0
+ppu_data:	.byte	0
+
+
+	.segment "CPUIO"
+psg_c1a:	.byte	0
+psg_c1b:	.byte	0
+psg_c1c:	.byte	0
+psg_c1d:	.byte	0
+psg_c2a:	.byte	0
+psg_c2b:	.byte	0
+psg_c2c:	.byte	0
+psg_c2d:	.byte	0
+psg_c3a:	.byte	0
+psg_c3b:	.byte	0
+psg_c3c:	.byte	0
+psg_c3d:	.byte	0
+psg_c4a:	.byte	0
+psg_c4b:	.byte	0
+psg_c4c:	.byte	0
+psg_c4d:	.byte	0
+psg_c5a:	.byte	0
+psg_c5b:	.byte	0
+psg_c5c:	.byte	0
+psg_c5d:	.byte	0
+cpu_sprdma:	.byte	0
+psg_chanctrl:	.byte	0
+cpu_pad1data:	.byte	0
+cpu_pad2data:	.byte	0
+
+
+	.zeropage
+ptr_lo:		.byte	0
+ptr_hi:		.byte	0
+adcresult:	.byte	0
+sbcresult:	.byte	0
+
+
+	.segment "RAM"
+
+
+	.code
+
+_reset:	sei
+	ldx	#$ff
+	txs
+	cld
+
+	;; disable things like NMI on VBL...
+	lda	#$00
+	sta	ppu_ctrl1
+
+	;; we should probably wait a couple VBLs for the PPU to stabilize...
+	;; ... but we won't. it won't affect the emulator, so I don't care.
+
+	jsr	clear_cpu_memory
+	jsr	clear_ppu_memory
+ 	jsr	load_palette
+	jsr	load_patterns
+
+ 	jsr	load_names
+
+	jsr	run_tests
+	lda	#$21
+	ldy	#$68
+	jsr	set_ppu_addr
+
+	lda	#<adcsbcmsg
+	sta	ptr_lo
+	lda	#>adcsbcmsg
+	sta	ptr_hi
+	jsr	stringout
+
+	lda	#$21
+	ldy	#$89
+	jsr	set_ppu_addr
+
+	lda	adcresult
+	jsr	hexout
+
+	lda	#$21
+	ldy	#$8f
+	jsr	set_ppu_addr
+
+	lda	sbcresult
+	jsr	hexout
+	
+	jsr	clearscroll
+	
+	jsr	enable_display
+
+	clc
+foo:	bcc	foo
+
+adcsbcmsg:.byte	"ADC   SBC", 0
+
+hexout:pha
+	ror
+	ror
+	ror
+	ror
+	jsr	nybout
+	pla
+	;; fallthrough
+
+nybout:	and	#$0f
+	tax
+	lda	hexchars, X
+	sta	ppu_data
+	rts
+	
+hexchars:.byte	"0123456789abcdef"
+
+clearscroll:
+	lda	#$00
+	sta	ppu_scroll
+	sta	ppu_scroll
+	rts
+	
+enable_display:
+	lda	#$08		; BG only
+	sta	ppu_ctrl2
+	rts
+
+clear_cpu_memory:
+	lda	#$00
+	ldx	#$00
+?loop:	sta	$00, X
+	sta	$0200, X
+	sta	$0300, X
+	sta	$0400, X
+	sta	$0500, X
+	sta	$0600, X
+	sta	$0700, X
+	dex
+	bne	?loop
+	rts
+
+clear_ppu_memory:
+	lda	#$00
+	sta	ppu_addr
+	sta	ppu_addr
+	ldx	#$30
+?loop:	tay
+?loop1:	sta	ppu_data
+	dey
+	bne	?loop1
+	dex
+	bne	?loop
+	rts
+
+load_patterns:
+	lda	#$00
+	sta	ppu_addr
+	sta	ppu_addr
+
+	lda	#<ibmscii_data
+	sta	ptr_lo
+	lda	#>ibmscii_data
+	sta	ptr_hi
+
+	ldx	#$00
+	ldy	#$00
+
+?loop1:	lda	(ptr_lo), Y
+	sta	ppu_data
+	iny
+	cpy	#$08
+	bne	?loop1
+	
+	lda	#$00
+?loop2:	sta	ppu_data
+	dey
+	bne	?loop2
+
+	lda	ptr_lo
+	clc
+	adc	#$08
+	sta	ptr_lo
+	bcc	?nocarry
+	inc	ptr_hi
+?nocarry:
+	dex
+	bne	?loop1
+	
+	rts
+
+ibmscii_data:
+	;; 0x800 bytes of ibmscii charset stolen from the DrPCJr BIOS
+	.incbin	"charset.bin"
+	
+load_palette:
+	lda	#$3f
+	sta	ppu_addr
+	lda	#$00
+	sta	ppu_addr
+	lda	#$0e
+	sta	ppu_data
+	lda	#$30
+	sta	ppu_data
+	lda	#$00
+	sta	ppu_data
+	sta	ppu_data
+	rts
+
+set_ppu_addr:
+	sta	ppu_addr
+	sty	ppu_addr
+	rts
+
+stringout:
+	ldy	#$00
+?loop:	lda	(ptr_lo), Y
+	beq	?done
+	iny
+	sta	ppu_data
+	jmp	?loop
+?done:	rts
+	
+
+load_names:
+	lda	#$21
+	ldy	#$22
+	jsr	set_ppu_addr
+
+	lda	#<hellomsg
+	sta	ptr_lo
+	lda	#>hellomsg
+	sta	ptr_hi
+	jmp	stringout
+
+hellomsg:	.byte	"Overflow test results:", 0
+
+_nmi:	rti
+
+_irq:	rti
+
+run_tests:
+;     /* ADC tests checked via "800:18 a9 start_a 69 value 00 N 800G" */
+	.macro adctest src1, src2, overflow, testnum
+	.proc
+	clc
+	lda	#src2
+	adc	#src1
+	.if	overflow = 0
+	bvc	pass
+	.else
+	bvs	pass
+	.endif
+	lda	adcresult
+	ora	#(1 .SHL testnum)
+	sta	adcresult
+pass:
+	.endproc
+	.endmacro
+
+	adctest $00, $00, 0, 0
+	adctest $ff, $00, 0, 1
+	adctest $01, $00, 0, 2
+	adctest $00, $7f, 0, 3
+	adctest $00, $80, 0, 4
+	adctest $01, $7f, 1, 5
+	adctest $ff, $80, 1, 6
+
+
+;     /* SBC tests checked via "800:38 a9 start_a e9 value 00 N 800G" */
+	.macro sbctest src1, src2, overflow, testnum
+	.proc
+	sec
+	lda	#src2
+	sbc	#src1
+	.if	overflow = 0
+	bvc	pass
+	.else
+	bvs	pass
+	.endif
+	lda	sbcresult
+	ora	#(1 .SHL testnum)
+	sta	sbcresult
+pass:
+	.endproc
+	.endmacro
+
+	sbctest $00, $00, 0, 0
+	sbctest $ff, $ff, 0, 1
+	sbctest $01, $00, 0, 2
+	sbctest $00, $7f, 0, 3
+	sbctest $00, $80, 0, 4
+	sbctest $01, $80, 1, 5
+	sbctest $ff, $7f, 1, 6
+
+	rts
+
+	.segment "VECTORS"
+	.word	_nmi		; NMI vector
+	.word	_reset		; reset vector
+	.word	_irq		; IRQ vector
+
+	;; EOF

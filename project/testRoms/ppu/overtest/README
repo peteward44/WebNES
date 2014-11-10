@@ -1,0 +1,18 @@
+#
+# README for overtest
+#
+
+This code will test the behavior of the 6502's overflow flag for ADC and
+SBC in binary mode. The two result bytes will be non-zero if any test
+for the corresponding instruction fails. The actual value indicates
+which tests failed (they're bitvectors).
+
+If you want to actually compile this, you'll need at least the assmebler
+and linker from cc65. You might even need version 2.4.1 in particular.
+
+Font stolen without permission from a Dr PC Jr BIOS image. Don't you feel
+so much better knowing that?
+
+ -- Alastair Bridgewater, 2001 Oct 19.
+
+# EOF
