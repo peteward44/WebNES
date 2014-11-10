@@ -10,6 +10,9 @@ WebNES supports the following features:
 - Save state support through quick save / quick load
 - Game genie database - If a game is loaded which has known game genie codes, the player can click the star on the toolbar to be able to activate / deactivate GG codes
 - Screenshots
+- Game pad support
+- NTSC / PAL support
+- Zip file support to load ROMs
 - Game speed can be slowed down / sped up
 - Debugging for ROM authors or other emulator authors - Trace logs can be generated for CPU instructions and PPU events
 
