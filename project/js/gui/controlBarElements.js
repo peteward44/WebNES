@@ -339,6 +339,7 @@ this.Gui = this.Gui || {};
 		var that = this;
 		this._buttonObject = buttonObject;
 		this._options = options;
+		this._allowAutoHide = false;
 
 		this._dialog = $( "#" + jqId ).dialog({
 				'dialogClass': "no-close controlBarSlider",
@@ -379,13 +380,16 @@ this.Gui = this.Gui || {};
 		// hide menu when clicked somewhere else
 		if ( this.isVisible() ) {
 			if ( !isClickWithinElementBounds( this._dialog, e.clientX, e.clientY ) ) {
-				this.hide();
+				if ( this._allowAutoHide ) {
+					this.hide();
+				}
 			}
 		}
 	};
 	
 	
 	ControlBarMessage.prototype.show = function() {
+		var that = this;
 		this._dialog.dialog( "option", "position", {
 				'my': "right top",
 				'at': "right bottom",
@@ -393,6 +397,10 @@ this.Gui = this.Gui || {};
 			} );
 		this._dialog.dialog( "open" );
 		this._buttonObject.alert( true );
+		this._allowAutoHide = false;
+		setTimeout( function() {
+			that._allowAutoHide = true;
+		}, 300 );
 	};
 	
 	

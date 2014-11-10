@@ -190,7 +190,7 @@ this.Gui = this.Gui || {};
 	
 	
 	ControlBar.prototype._onPauseChange = function( isPaused ) {
-	
+
 		this._playButton.toggleIcon( isPaused );
 	};
 	
@@ -264,9 +264,11 @@ this.Gui = this.Gui || {};
 		this._debugEnabled = !this._debugEnabled;
 		this._debugButton.highlight( this._debugEnabled );
 		if ( this._debugEnabled ) {
-			this._debugBar.show(); 
+			this._debugBar.show();
+			this._app.showFpsMeter( true );
 		} else {
 			this._debugBar.hide(); 
+			this._app.showFpsMeter( false );
 		}
 	};
 	

@@ -24,6 +24,7 @@ var animateFunction;
 
 	
 	var App = function() {
+		var that = this;
 		
 		this._cart = null;
 		this._romLoaded = false;
@@ -49,6 +50,8 @@ var animateFunction;
 		this._pauseOnFrame = -1;
 		
 		this._options = {};
+		
+		window.onerror = function(e) { that._showError( e ); };
 	};
 	
 	
@@ -83,6 +86,7 @@ var animateFunction;
 			window.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
 			
 			this._fpsMeter = new FPSMeter( null, { top: '10%', left: '80%' } );
+			this._fpsMeter.hide();
 			Gui.hookDragDropEvents( function( name, binaryString ) { that._loadRomCallback( name, binaryString ); } );
 
 			this._canvasParent = new Gui.CanvasParent();
@@ -227,6 +231,15 @@ var animateFunction;
 			return true;
 		} else {
 			return false;
+		}
+	};
+	
+	
+	App.prototype.showFpsMeter = function( show ) {
+		if ( show ) {
+			this._fpsMeter.show();
+		} else {
+			this._fpsMeter.hide();
 		}
 	};
 		
