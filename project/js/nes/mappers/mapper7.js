@@ -41,7 +41,7 @@ mapper7.prototype.reset = function() {
 mapper7.prototype.write8PrgRom = function( offset, data ) {
 
 	this.mainboard.synchroniser.synchronise();
-	this.switch32kPrgBank( data & 0x7 );
+	this.switch32kPrgBank( data & 0xFF );
 	
 	var mirroringMethod;
 	if ( ( data & 0x10 ) > 0 )

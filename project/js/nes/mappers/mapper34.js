@@ -62,7 +62,7 @@ mapper34.prototype.write8SRam = function( offset, data ) {
 mapper34.prototype.write8PrgRom = function( offset, data ) {
 	if ( !this._isNinaBoard ) {
 		this.mainboard.synchroniser.synchronise();
-		this.switch32kPrgBank( data & 0x3 );
+		this.switch32kPrgBank( data & 0xFF );
 	} else {
 		Nes.basemapper.prototype.write8PrgRom.call( this, offset, data );
 	}
