@@ -375,7 +375,7 @@ Nes.createMapper = function( mapperId, mainboard, mirroringMethod ) {
 
 	var mapperClass = Nes.mappers[ mapperId ];
 	if ( mapperClass === undefined ) {
-		throw( 'mapper id ' + mapperId + ' is not supported' );
+		throw new Error( 'Mapper id ' + mapperId + ' is not supported' );
 	}
 	var mapper = new mapperClass();
 	mapper.construct( mainboard, mirroringMethod );

@@ -361,7 +361,20 @@ var animateFunction;
 	App.prototype._showError = function( err ) {
 	
 		console.log( err );
-		this._eventBus.invoke( 'romLoadFailure', err.toString() );
+		var errorType = typeof err;
+		var msg = '';
+		if ( errorType === 'string' ) {
+			msg = err;
+		} else if ( errorType === 'object' ) {
+			if ( err.message ) {
+				msg = err.message;
+			} else {
+				msg = err.toString();
+			}
+		} else {
+			msg = err.toString();
+		}
+		this._eventBus.invoke( 'romLoadFailure', msg );
 	};
 	
 	

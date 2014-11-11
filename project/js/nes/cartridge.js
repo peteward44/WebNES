@@ -181,7 +181,7 @@ cartridge.prototype._loadData = function( name, binaryString, completeCallback )
 		for ( var i=0; i<correctHeader.length; ++i )
 		{
 			if ( correctHeader[ i ] !== binaryString[ stringIndex++ ] )
-				throw( 'Invalid NES header for file!' );
+				throw new Error( 'Invalid NES header for file!' );
 		}
 
 		var prgPageCount = binaryString[ stringIndex++ ];
@@ -217,44 +217,53 @@ cartridge.prototype._loadData = function( name, binaryString, completeCallback )
 		console.log( "SHA1: " + this._sha1 );
 	
 		Nes.dbLookup( this._sha1, function( err, data ) {
-			that._dbData = data;
-
-			if ( that._dbData ) {
-				that._name = that._dbData['$']['name'];
-				console.log( "Game found in database: " + that._name );
-			} else {
-				console.log( "Game not found in database" );
+			if ( err ) {
+				completeCallback( err );
+				return;
 			}
-		
-			var mapperFromDb = that._getMapperFromDatabase( mapperId );
+			try {
+				that._dbData = data;
 
-			if ( mapperFromDb !== null && mapperFromDb !== mapperId ) {
-				console.log( "Game has different mapper in database [" + mapperFromDb + "] from the iNes file [" + mapperId + "]. Using value from database..." );
-				mapperId = mapperFromDb;
+				if ( that._dbData ) {
+					that._name = that._dbData['$']['name'];
+					console.log( "Game found in database: " + that._name );
+				} else {
+					console.log( "Game not found in database" );
+				}
+			
+				var mapperFromDb = that._getMapperFromDatabase( mapperId );
+
+				if ( mapperFromDb !== null && mapperFromDb !== mapperId ) {
+					console.log( "Game has different mapper in database [" + mapperFromDb + "] from the iNes file [" + mapperId + "]. Using value from database..." );
+					mapperId = mapperFromDb;
+				}
+
+				that.memoryMapper = Nes.createMapper( mapperId, that.mainboard, mirroringMethod );
+				
+				// read in program code
+				var prg8kChunkCount = prgPageCount * 2; // read in 8k chunks, prgPageCount is 16k chunks
+				var prgSize = 0x2000 * prg8kChunkCount;
+				that.memoryMapper.setPrgData( create32IntArray( binaryString.subarray( stringIndex, stringIndex + prgSize ), prgSize ), prg8kChunkCount );
+				stringIndex += prgSize;
+				
+				// read in character maps
+				var chr1kChunkCount = chrPageCount * 8; // 1kb per pattern table, chrPageCount is the 8kb count
+				var chrSize = 0x400 * chr1kChunkCount;
+				that.memoryMapper.setChrData( create32IntArray( binaryString.subarray( stringIndex, stringIndex + chrSize ), chrSize ), chr1kChunkCount );
+				stringIndex += chrSize;
+				
+				// determine NTSC or PAL
+				that._determineColourEncodingType( name );
+				setColourEncodingType( that._colourEncodingType );
+				var prgKb = prg8kChunkCount * 8;
+				console.log( 'Cartridge \'' + name + '\' loaded. Mapper ' + mapperId + ', ' + Nes.mirroringMethodToString( mirroringMethod ) + ' mirroring, ' + prgKb + 'kb PRG, ' + chr1kChunkCount + 'kb CHR' );
+				console.log( 'Encoding: ' + that._colourEncodingType );
+				
+				completeCallback();
 			}
-
-			that.memoryMapper = Nes.createMapper( mapperId, that.mainboard, mirroringMethod );
-			
-			// read in program code
-			var prg8kChunkCount = prgPageCount * 2; // read in 8k chunks, prgPageCount is 16k chunks
-			var prgSize = 0x2000 * prg8kChunkCount;
-			that.memoryMapper.setPrgData( create32IntArray( binaryString.subarray( stringIndex, stringIndex + prgSize ), prgSize ), prg8kChunkCount );
-			stringIndex += prgSize;
-			
-			// read in character maps
-			var chr1kChunkCount = chrPageCount * 8; // 1kb per pattern table, chrPageCount is the 8kb count
-			var chrSize = 0x400 * chr1kChunkCount;
-			that.memoryMapper.setChrData( create32IntArray( binaryString.subarray( stringIndex, stringIndex + chrSize ), chrSize ), chr1kChunkCount );
-			stringIndex += chrSize;
-			
-			// determine NTSC or PAL
-			that._determineColourEncodingType( name );
-			setColourEncodingType( that._colourEncodingType );
-			var prgKb = prg8kChunkCount * 8;
-			console.log( 'Cartridge \'' + name + '\' loaded. Mapper ' + mapperId + ', ' + Nes.mirroringMethodToString( mirroringMethod ) + ' mirroring, ' + prgKb + 'kb PRG, ' + chr1kChunkCount + 'kb CHR' );
-			console.log( 'Encoding: ' + that._colourEncodingType );
-			
-			completeCallback();
+			catch ( err2 ) {
+				completeCallback( err2 );
+			}
 		} );
 	}
 	catch ( err ) {
