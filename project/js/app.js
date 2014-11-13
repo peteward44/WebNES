@@ -90,7 +90,14 @@ var animateFunction;
 			Gui.hookDragDropEvents( function( name, binaryString ) { that._loadRomCallback( name, binaryString ); } );
 
 			this._canvasParent = new Gui.CanvasParent();
-			this._renderSurface = new Gui.CanvasRenderSurface( this._canvasParent );
+			this._renderSurface = null;
+			if ( Gui.WebGlSupported() ) {
+				console.log( "Using WebGL for rendering..." );
+				this._renderSurface = new Gui.WebGlRenderSurface( this._canvasParent );
+			} else {
+				console.log( "WebGL not supported. Using canvas for rendering..." );
+				this._renderSurface = new Gui.CanvasRenderSurface( this._canvasParent );
+			}
 		} else {
 			this._renderSurface = new Test.TestRenderSurface();
 		}

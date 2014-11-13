@@ -2,6 +2,7 @@
   "name": "nesulator-online",
   "version": "0.0.1",
   "dependencies": {
+    "gl-matrix": "latest",
     "jszip": "latest",
     "jsziptools": "latest",
     "jquery": "latest",
