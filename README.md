@@ -7,6 +7,7 @@ WebNES supports the following features:
 
 - Supports all common NES mapper formats, approximately 98% of games should work
 - Audio support using the HTML5 WebAudio API
+- WebGL support with canvas fallback on platforms which do not support it
 - Save state support through quick save / quick load
 - Game genie database - If a game is loaded which has known game genie codes, the player can click the star on the toolbar to be able to activate / deactivate GG codes
 - Screenshots
