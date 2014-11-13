@@ -20,7 +20,7 @@
 	  var js, fjs = d.getElementsByTagName(s)[0];
 	  if (d.getElementById(id)) return;
 	  js = d.createElement(s); js.id = id;
-	  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.0";
+	  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.0&appId=310800822454793";
 	  fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));</script>
 	
@@ -124,6 +124,28 @@
 			<div id="gameGenieDialog_contents"></div>
 		</div>
 	</div>
+	
+	<!-- shaders required by WebGL -->
+	<script id="shader-fs" type="x-shader/x-fragment">
+		precision mediump float;
+		varying vec2 vTextureCoord;
+		uniform sampler2D uSampler;
+		void main(void) {
+			gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+		}
+	</script>
+
+	<script id="shader-vs" type="x-shader/x-vertex">
+		attribute vec3 aVertexPosition;
+		attribute vec2 aTextureCoord;
+		uniform mat4 uMVMatrix;
+		uniform mat4 uPMatrix;
+		varying vec2 vTextureCoord;
+		void main(void) {
+			gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+			vTextureCoord = aTextureCoord;
+		}
+	</script>
 
 	<script src="js/nes.components.min.js"></script>
 		
