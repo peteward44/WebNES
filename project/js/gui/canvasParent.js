@@ -21,10 +21,11 @@ this.Gui = this.Gui || {};
 	"use strict";
 	
 	
-	var CanvasParent = function() {
+	var CanvasParent = function( renderSurface ) {
 	
 		var that = this;
 
+		this._eventBus = new Nes.EventBus();
 		this._parent = $( "#content" );
 		this._element = $( "#canvasWrapper" );
 		
@@ -38,6 +39,12 @@ this.Gui = this.Gui || {};
 			that._setPosition();
 		});
 		this._setPosition();
+	};
+	
+	
+	CanvasParent.prototype.connect = function( name, cb ) {
+		
+		this._eventBus.connect( name, cb );
 	};
 	
 	
@@ -60,7 +67,8 @@ this.Gui = this.Gui || {};
 		
 			this._canvasElement.width = Math.floor( newWidth );
 			this._canvasElement.height = parentHeight;
-			//this._canvasElement.getContext("2d").imageSmoothingEnabled = false;
+
+			this._eventBus.invoke( 'resize' );
 		}
 	};
 	
