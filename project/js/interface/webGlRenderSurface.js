@@ -105,9 +105,6 @@ this.Gui = this.Gui || {};
 		this._glContext.bindTexture(this._glContext.TEXTURE_2D, this._texture);
 		this._glContext.pixelStorei(this._glContext.UNPACK_FLIP_Y_WEBGL, true);
 		this._glContext.texImage2D(this._glContext.TEXTURE_2D, 0, this._glContext.RGBA, TEXTURE_WIDTH, TEXTURE_HEIGHT, 0, this._glContext.RGBA, this._glContext.UNSIGNED_BYTE, null );
-		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MAG_FILTER, this._glContext.NEAREST);
-		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MIN_FILTER, this._glContext.NEAREST);
-	//	this._glContext.bindTexture(this._glContext.TEXTURE_2D, null);
 	};
 	
 
@@ -246,8 +243,10 @@ this.Gui = this.Gui || {};
 		//this._glContext.texImage2D( this._glContext.TEXTURE_2D, 0, this._glContext.RGBA, 256, 256, 0, this._glContext.RGBA, this._glContext.UNSIGNED_BYTE, this._offscreen8BitView );
 		this._glContext.texSubImage2D( this._glContext.TEXTURE_2D, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, this._glContext.RGBA, this._glContext.UNSIGNED_BYTE, this._offscreen8BitView );
   
-		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MAG_FILTER, this._glContext.NEAREST);
-		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MIN_FILTER, this._glContext.NEAREST);
+		var filtering = this._glContext.LINEAR; // NEAREST
+  
+		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MAG_FILTER, filtering);
+		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MIN_FILTER, filtering);
 
 		this._glContext.uniform1i(this._shaderProgram.samplerUniform, 0);
 
