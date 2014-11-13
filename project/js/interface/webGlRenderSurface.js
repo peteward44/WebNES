@@ -24,12 +24,16 @@ this.Gui = this.Gui || {};
 	var WebGlRenderSurface = function( canvasParent ) {
 	
 		var that = this;
-	
+			
+		this._cubeVertexPositionBuffer = null;
+		this._cubeVertexTextureCoordBuffer = null;
+		this._cubeVertexIndexBuffer = null;
+
 		this._clearArray = new Uint32Array( SCREEN_WIDTH * SCREEN_HEIGHT );
 		this._clearArrayColour = this._clearArray[0];
 
 		this._bufferIndexArray = new Int32Array( SCREEN_WIDTH * SCREEN_HEIGHT );
-		this._offscreen32BitView = new Uint32Array( this._clearArray.length );
+		this._offscreen32BitView = new Uint32Array( 256 * 256 );
 		this._offscreen8BitView = new Uint8Array( this._offscreen32BitView.buffer );
 
 		this._element = canvasParent.getCanvasElement();
@@ -48,119 +52,61 @@ this.Gui = this.Gui || {};
 
 		canvasParent.connect( 'resize', function() { that._onResize(); } );
 	};
-	
-	var cubeVertexPositionBuffer;
-	var cubeVertexTextureCoordBuffer;
-	var cubeVertexIndexBuffer;
 
+	
 	WebGlRenderSurface.prototype._initBuffers = function() {
 
-		cubeVertexPositionBuffer = this._glContext.createBuffer();
-		this._glContext.bindBuffer(this._glContext.ARRAY_BUFFER, cubeVertexPositionBuffer);
-		var vertices = [
-		// Front face
-		-1.0, -1.0,  1.0,
-		1.0, -1.0,  1.0,
-		1.0,  1.0,  1.0,
-		-1.0,  1.0,  1.0,
+		this._cubeVertexPositionBuffer = this._glContext.createBuffer();
+		this._glContext.bindBuffer(this._glContext.ARRAY_BUFFER, this._cubeVertexPositionBuffer);
+		var vertices = new Float32Array( [
+			-1.0, -1.0,  1.0,
+			1.0, -1.0,  1.0,
+			1.0,  1.0,  1.0,
+			-1.0,  1.0,  1.0
+		] );
+		this._glContext.bufferData(this._glContext.ARRAY_BUFFER, vertices, this._glContext.STATIC_DRAW);
+		this._cubeVertexPositionBuffer.itemSize = 3;
+		this._cubeVertexPositionBuffer.numItems = 4;
 
-		// Back face
-		-1.0, -1.0, -1.0,
-		-1.0,  1.0, -1.0,
-		1.0,  1.0, -1.0,
-		1.0, -1.0, -1.0,
+		this._cubeVertexTextureCoordBuffer = this._glContext.createBuffer();
+		this._glContext.bindBuffer(this._glContext.ARRAY_BUFFER, this._cubeVertexTextureCoordBuffer);
+		var textureCoords = new Float32Array( [
+			0.0, 0.0,
+			1.0, 0.0,
+			1.0, 1.0,
+			0.0, 1.0
+		] );
+		this._glContext.bufferData(this._glContext.ARRAY_BUFFER, textureCoords, this._glContext.STATIC_DRAW);
+		this._cubeVertexTextureCoordBuffer.itemSize = 2;
+		this._cubeVertexTextureCoordBuffer.numItems = 4;
 
-		// Top face
-		-1.0,  1.0, -1.0,
-		-1.0,  1.0,  1.0,
-		1.0,  1.0,  1.0,
-		1.0,  1.0, -1.0,
-
-		// Bottom face
-		-1.0, -1.0, -1.0,
-		1.0, -1.0, -1.0,
-		1.0, -1.0,  1.0,
-		-1.0, -1.0,  1.0,
-
-		// Right face
-		1.0, -1.0, -1.0,
-		1.0,  1.0, -1.0,
-		1.0,  1.0,  1.0,
-		1.0, -1.0,  1.0,
-
-		// Left face
-		-1.0, -1.0, -1.0,
-		-1.0, -1.0,  1.0,
-		-1.0,  1.0,  1.0,
-		-1.0,  1.0, -1.0,
-		];
-		this._glContext.bufferData(this._glContext.ARRAY_BUFFER, new Float32Array(vertices), this._glContext.STATIC_DRAW);
-		cubeVertexPositionBuffer.itemSize = 3;
-		cubeVertexPositionBuffer.numItems = 24;
-
-		cubeVertexTextureCoordBuffer = this._glContext.createBuffer();
-		this._glContext.bindBuffer(this._glContext.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
-		var textureCoords = [
-		// Front face
-		0.0, 0.0,
-		1.0, 0.0,
-		1.0, 1.0,
-		0.0, 1.0,
-
-		// Back face
-		1.0, 0.0,
-		1.0, 1.0,
-		0.0, 1.0,
-		0.0, 0.0,
-
-		// Top face
-		0.0, 1.0,
-		0.0, 0.0,
-		1.0, 0.0,
-		1.0, 1.0,
-
-		// Bottom face
-		1.0, 1.0,
-		0.0, 1.0,
-		0.0, 0.0,
-		1.0, 0.0,
-
-		// Right face
-		1.0, 0.0,
-		1.0, 1.0,
-		0.0, 1.0,
-		0.0, 0.0,
-
-		// Left face
-		0.0, 0.0,
-		1.0, 0.0,
-		1.0, 1.0,
-		0.0, 1.0,
-		];
-		this._glContext.bufferData(this._glContext.ARRAY_BUFFER, new Float32Array(textureCoords), this._glContext.STATIC_DRAW);
-		cubeVertexTextureCoordBuffer.itemSize = 2;
-		cubeVertexTextureCoordBuffer.numItems = 24;
-
-		cubeVertexIndexBuffer = this._glContext.createBuffer();
-		this._glContext.bindBuffer(this._glContext.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
-		var cubeVertexIndices = [
-		0, 1, 2,      0, 2, 3,    // Front face
-		4, 5, 6,      4, 6, 7,    // Back face
-		8, 9, 10,     8, 10, 11,  // Top face
-		12, 13, 14,   12, 14, 15, // Bottom face
-		16, 17, 18,   16, 18, 19, // Right face
-		20, 21, 22,   20, 22, 23  // Left face
-		];
-		this._glContext.bufferData(this._glContext.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), this._glContext.STATIC_DRAW);
-		cubeVertexIndexBuffer.itemSize = 1;
-		cubeVertexIndexBuffer.numItems = 36;
+		this._cubeVertexIndexBuffer = this._glContext.createBuffer();
+		this._glContext.bindBuffer(this._glContext.ELEMENT_ARRAY_BUFFER, this._cubeVertexIndexBuffer);
+		var cubeVertexIndices = new Uint16Array( [
+			0, 1, 2,      0, 2, 3
+		] );
+		this._glContext.bufferData(this._glContext.ELEMENT_ARRAY_BUFFER, cubeVertexIndices, this._glContext.STATIC_DRAW);
+		this._cubeVertexIndexBuffer.itemSize = 1;
+		this._cubeVertexIndexBuffer.numItems = 6;
 	};
 	
+	WebGlRenderSurface.prototype._handleLoadedTexture = function() {
+        this._glContext.bindTexture(this._glContext.TEXTURE_2D, this._texture);
+        this._glContext.pixelStorei(this._glContext.UNPACK_FLIP_Y_WEBGL, true);
+        this._glContext.texImage2D(this._glContext.TEXTURE_2D, 0, this._glContext.RGBA, this._glContext.RGBA, this._glContext.UNSIGNED_BYTE, this._texture.image);
+        this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MAG_FILTER, this._glContext.NEAREST);
+        this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MIN_FILTER, this._glContext.NEAREST);
+        this._glContext.bindTexture(this._glContext.TEXTURE_2D, null);
+		this._loaded = true;
+    }
 	
 	WebGlRenderSurface.prototype._initTexture = function() {
 	
+		var that = this;
 		this._texture = this._glContext.createTexture();
+		
 		this._glContext.bindTexture(this._glContext.TEXTURE_2D, this._texture);
+		this._glContext.pixelStorei(this._glContext.UNPACK_FLIP_Y_WEBGL, true);
 	//	this._glContext.pixelStorei(this._glContext.UNPACK_FLIP_Y_WEBGL, true);
 	//	this._glContext.texImage2D(this._glContext.TEXTURE_2D, 0, this._glContext.RGBA, this._glContext.RGBA, this._glContext.UNSIGNED_BYTE, texture.image);
 		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MAG_FILTER, this._glContext.NEAREST);
@@ -169,7 +115,7 @@ this.Gui = this.Gui || {};
 	};
 	
 
-	WebGlRenderSurface.prototype.setMatrixUniforms = function() {
+	WebGlRenderSurface.prototype._setMatrixUniforms = function() {
 		this._glContext.uniformMatrix4fv(this._shaderProgram.pMatrixUniform, false, this._pMatrix);
 		this._glContext.uniformMatrix4fv(this._shaderProgram.mvMatrixUniform, false, this._mvMatrix);
 	}
@@ -185,16 +131,16 @@ this.Gui = this.Gui || {};
 		var str = "";
 		var k = shaderScript.firstChild;
 		while (k) {
-			if (k.nodeType == 3) {
+			if (k.nodeType === 3) {
 				str += k.textContent;
 			}
 			k = k.nextSibling;
 		}
 
 		var shader;
-		if (shaderScript.type == "x-shader/x-fragment") {
+		if (shaderScript.type === "x-shader/x-fragment") {
 			shader = this._glContext.createShader(this._glContext.FRAGMENT_SHADER);
-		} else if (shaderScript.type == "x-shader/x-vertex") {
+		} else if (shaderScript.type === "x-shader/x-vertex") {
 			shader = this._glContext.createShader(this._glContext.VERTEX_SHADER);
 		} else {
 			return null;
@@ -265,10 +211,9 @@ this.Gui = this.Gui || {};
 	
 	WebGlRenderSurface.prototype.clearBuffers = function( backgroundColour ) {
 	
-		var i=0;
 		// update clear array if background colour changes
 		if ( backgroundColour !== this._clearArrayColour ) {
-			for ( i=0; i<this._clearArray.length; ++i ) {
+			for ( var i=0; i<this._clearArray.length; ++i ) {
 				this._clearArray[ i ] = 0xFF000000 | backgroundColour;
 			}
 			this._clearArrayColour = backgroundColour;
@@ -284,10 +229,39 @@ this.Gui = this.Gui || {};
 	
 	WebGlRenderSurface.prototype.render = function( mainboard ) {
 
+	
+		this._glContext.viewport(0, 0, this._glContext.viewportWidth, this._glContext.viewportHeight);
+		this._glContext.clear(this._glContext.COLOR_BUFFER_BIT | this._glContext.DEPTH_BUFFER_BIT);
+
+		mat4.perspective(this._pMatrix, 45, this._glContext.viewportWidth / this._glContext.viewportHeight, 0.1, 100.0);
+	//	mat4.ortho(this._pMatrix, 0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, 0, 100)
+
+		mat4.identity(this._mvMatrix);
+
+		mat4.translate(this._mvMatrix, this._mvMatrix, [0.0, 0.0, -5.0]);
+
+		this._glContext.bindBuffer(this._glContext.ARRAY_BUFFER, this._cubeVertexPositionBuffer);
+		this._glContext.vertexAttribPointer(this._shaderProgram.vertexPositionAttribute, this._cubeVertexPositionBuffer.itemSize, this._glContext.FLOAT, false, 0, 0);
+
+		this._glContext.bindBuffer(this._glContext.ARRAY_BUFFER, this._cubeVertexTextureCoordBuffer);
+		this._glContext.vertexAttribPointer(this._shaderProgram.textureCoordAttribute, this._cubeVertexTextureCoordBuffer.itemSize, this._glContext.FLOAT, false, 0, 0);
+
+		this._glContext.activeTexture(this._glContext.TEXTURE0);
+		this._glContext.bindTexture( this._glContext.TEXTURE_2D, this._texture );
+		//this._glContext.texImage2D(this._glContext.TEXTURE_2D, 0, this._glContext.RGBA, this._glContext.RGBA, this._glContext.UNSIGNED_BYTE, this._texture.image);
+		this._glContext.texImage2D( this._glContext.TEXTURE_2D, 0, this._glContext.RGBA, 256, 256, 0, this._glContext.RGBA, this._glContext.UNSIGNED_BYTE, this._offscreen8BitView );
+
+		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MAG_FILTER, this._glContext.NEAREST);
+		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MIN_FILTER, this._glContext.NEAREST);
+
+		this._glContext.uniform1i(this._shaderProgram.samplerUniform, 0);
+
+		this._glContext.bindBuffer(this._glContext.ELEMENT_ARRAY_BUFFER, this._cubeVertexIndexBuffer);
+		this._setMatrixUniforms();
+		this._glContext.drawElements(this._glContext.TRIANGLES, this._cubeVertexIndexBuffer.numItems, this._glContext.UNSIGNED_SHORT, 0);
+
 		//texSubImage2D(enum target, int level, int xoffset, int yoffset, long width, long height, enum format, enum type, Object pixels);
 		// TODO: Would this._glContext.BGRA be faster?
-		this._glContext.bindTexture( this._glContext.TEXTURE_2D, this._texture );
-		this._glContext.texImage2D( this._glContext.TEXTURE_2D, 0, this._glContext.RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, this._glContext.RGBA, this._glContext.UNSIGNED_BYTE, this._offscreen8BitView );
 	};
 		
 	
