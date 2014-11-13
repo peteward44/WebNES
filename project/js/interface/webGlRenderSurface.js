@@ -20,6 +20,10 @@ this.Gui = this.Gui || {};
 (function(){
 	"use strict";
 	
+	// Must be power of 2
+	var TEXTURE_WIDTH = 256;
+	var TEXTURE_HEIGHT = 256;
+	
 		
 	var WebGlRenderSurface = function( canvasParent ) {
 	
@@ -33,7 +37,7 @@ this.Gui = this.Gui || {};
 		this._clearArrayColour = this._clearArray[0];
 
 		this._bufferIndexArray = new Int32Array( SCREEN_WIDTH * SCREEN_HEIGHT );
-		this._offscreen32BitView = new Uint32Array( 256 * 256 );
+		this._offscreen32BitView = new Uint32Array( TEXTURE_WIDTH * TEXTURE_HEIGHT );
 		this._offscreen8BitView = new Uint8Array( this._offscreen32BitView.buffer );
 
 		this._element = canvasParent.getCanvasElement();
@@ -59,10 +63,10 @@ this.Gui = this.Gui || {};
 		this._cubeVertexPositionBuffer = this._glContext.createBuffer();
 		this._glContext.bindBuffer(this._glContext.ARRAY_BUFFER, this._cubeVertexPositionBuffer);
 		var vertices = new Float32Array( [
-			-1.0, -1.0,  1.0,
-			1.0, -1.0,  1.0,
-			1.0,  1.0,  1.0,
-			-1.0,  1.0,  1.0
+			0, 0,							0.0,
+			SCREEN_WIDTH,	0,				0.0,
+			SCREEN_WIDTH,	SCREEN_HEIGHT,	0.0,
+			0,				SCREEN_HEIGHT,	0.0
 		] );
 		this._glContext.bufferData(this._glContext.ARRAY_BUFFER, vertices, this._glContext.STATIC_DRAW);
 		this._cubeVertexPositionBuffer.itemSize = 3;
@@ -70,11 +74,13 @@ this.Gui = this.Gui || {};
 
 		this._cubeVertexTextureCoordBuffer = this._glContext.createBuffer();
 		this._glContext.bindBuffer(this._glContext.ARRAY_BUFFER, this._cubeVertexTextureCoordBuffer);
+		var t = SCREEN_WIDTH / TEXTURE_WIDTH;
+		var u = SCREEN_HEIGHT / TEXTURE_HEIGHT;
 		var textureCoords = new Float32Array( [
-			0.0, 0.0,
-			1.0, 0.0,
-			1.0, 1.0,
-			0.0, 1.0
+			0.0,	0.0,
+			t,		0.0,
+			t,		u,
+			0.0,	u
 		] );
 		this._glContext.bufferData(this._glContext.ARRAY_BUFFER, textureCoords, this._glContext.STATIC_DRAW);
 		this._cubeVertexTextureCoordBuffer.itemSize = 2;
@@ -83,23 +89,14 @@ this.Gui = this.Gui || {};
 		this._cubeVertexIndexBuffer = this._glContext.createBuffer();
 		this._glContext.bindBuffer(this._glContext.ELEMENT_ARRAY_BUFFER, this._cubeVertexIndexBuffer);
 		var cubeVertexIndices = new Uint16Array( [
-			0, 1, 2,      0, 2, 3
+			0, 1, 2,	0, 2, 3
 		] );
 		this._glContext.bufferData(this._glContext.ELEMENT_ARRAY_BUFFER, cubeVertexIndices, this._glContext.STATIC_DRAW);
 		this._cubeVertexIndexBuffer.itemSize = 1;
 		this._cubeVertexIndexBuffer.numItems = 6;
 	};
 	
-	WebGlRenderSurface.prototype._handleLoadedTexture = function() {
-        this._glContext.bindTexture(this._glContext.TEXTURE_2D, this._texture);
-        this._glContext.pixelStorei(this._glContext.UNPACK_FLIP_Y_WEBGL, true);
-        this._glContext.texImage2D(this._glContext.TEXTURE_2D, 0, this._glContext.RGBA, this._glContext.RGBA, this._glContext.UNSIGNED_BYTE, this._texture.image);
-        this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MAG_FILTER, this._glContext.NEAREST);
-        this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MIN_FILTER, this._glContext.NEAREST);
-        this._glContext.bindTexture(this._glContext.TEXTURE_2D, null);
-		this._loaded = true;
-    }
-	
+
 	WebGlRenderSurface.prototype._initTexture = function() {
 	
 		var that = this;
@@ -107,8 +104,7 @@ this.Gui = this.Gui || {};
 		
 		this._glContext.bindTexture(this._glContext.TEXTURE_2D, this._texture);
 		this._glContext.pixelStorei(this._glContext.UNPACK_FLIP_Y_WEBGL, true);
-	//	this._glContext.pixelStorei(this._glContext.UNPACK_FLIP_Y_WEBGL, true);
-	//	this._glContext.texImage2D(this._glContext.TEXTURE_2D, 0, this._glContext.RGBA, this._glContext.RGBA, this._glContext.UNSIGNED_BYTE, texture.image);
+		this._glContext.texImage2D(this._glContext.TEXTURE_2D, 0, this._glContext.RGBA, TEXTURE_WIDTH, TEXTURE_HEIGHT, 0, this._glContext.RGBA, this._glContext.UNSIGNED_BYTE, null );
 		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MAG_FILTER, this._glContext.NEAREST);
 		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MIN_FILTER, this._glContext.NEAREST);
 	//	this._glContext.bindTexture(this._glContext.TEXTURE_2D, null);
@@ -186,7 +182,8 @@ this.Gui = this.Gui || {};
 
 
 	WebGlRenderSurface.prototype._onResize = function() {
-	
+		this._glContext.viewportWidth = this._element.width;
+		this._glContext.viewportHeight = this._element.height;
 		this._glContext.viewport(0, 0, this._element.width, this._element.height);
 	};
 	
@@ -232,13 +229,11 @@ this.Gui = this.Gui || {};
 	
 		this._glContext.viewport(0, 0, this._glContext.viewportWidth, this._glContext.viewportHeight);
 		this._glContext.clear(this._glContext.COLOR_BUFFER_BIT | this._glContext.DEPTH_BUFFER_BIT);
-
-		mat4.perspective(this._pMatrix, 45, this._glContext.viewportWidth / this._glContext.viewportHeight, 0.1, 100.0);
-	//	mat4.ortho(this._pMatrix, 0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, 0, 100)
+		
+		mat4.ortho(this._pMatrix, 0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, 0.1, 100)
 
 		mat4.identity(this._mvMatrix);
-
-		mat4.translate(this._mvMatrix, this._mvMatrix, [0.0, 0.0, -5.0]);
+		mat4.translate(this._mvMatrix, this._mvMatrix, [0.0, 0.0, -0.1]);
 
 		this._glContext.bindBuffer(this._glContext.ARRAY_BUFFER, this._cubeVertexPositionBuffer);
 		this._glContext.vertexAttribPointer(this._shaderProgram.vertexPositionAttribute, this._cubeVertexPositionBuffer.itemSize, this._glContext.FLOAT, false, 0, 0);
@@ -248,9 +243,9 @@ this.Gui = this.Gui || {};
 
 		this._glContext.activeTexture(this._glContext.TEXTURE0);
 		this._glContext.bindTexture( this._glContext.TEXTURE_2D, this._texture );
-		//this._glContext.texImage2D(this._glContext.TEXTURE_2D, 0, this._glContext.RGBA, this._glContext.RGBA, this._glContext.UNSIGNED_BYTE, this._texture.image);
-		this._glContext.texImage2D( this._glContext.TEXTURE_2D, 0, this._glContext.RGBA, 256, 256, 0, this._glContext.RGBA, this._glContext.UNSIGNED_BYTE, this._offscreen8BitView );
-
+		//this._glContext.texImage2D( this._glContext.TEXTURE_2D, 0, this._glContext.RGBA, 256, 256, 0, this._glContext.RGBA, this._glContext.UNSIGNED_BYTE, this._offscreen8BitView );
+		this._glContext.texSubImage2D( this._glContext.TEXTURE_2D, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, this._glContext.RGBA, this._glContext.UNSIGNED_BYTE, this._offscreen8BitView );
+  
 		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MAG_FILTER, this._glContext.NEAREST);
 		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MIN_FILTER, this._glContext.NEAREST);
 
@@ -259,9 +254,6 @@ this.Gui = this.Gui || {};
 		this._glContext.bindBuffer(this._glContext.ELEMENT_ARRAY_BUFFER, this._cubeVertexIndexBuffer);
 		this._setMatrixUniforms();
 		this._glContext.drawElements(this._glContext.TRIANGLES, this._cubeVertexIndexBuffer.numItems, this._glContext.UNSIGNED_SHORT, 0);
-
-		//texSubImage2D(enum target, int level, int xoffset, int yoffset, long width, long height, enum format, enum type, Object pixels);
-		// TODO: Would this._glContext.BGRA be faster?
 	};
 		
 	
