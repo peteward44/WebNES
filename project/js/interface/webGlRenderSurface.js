@@ -81,10 +81,6 @@ this.Gui = this.Gui || {};
 	var WebGlRenderSurface = function( canvasParent ) {
 	
 		var that = this;
-			
-		this._cubeVertexPositionBuffer = null;
-		this._cubeVertexTextureCoordBuffer = null;
-		this._cubeVertexIndexBuffer = null;
 
 		this._clearArray = new Uint32Array( SCREEN_WIDTH * SCREEN_HEIGHT );
 		this._clearArrayColour = this._clearArray[0];
@@ -102,7 +98,7 @@ this.Gui = this.Gui || {};
 		this._initView();
 		
 		this._vertexBuffer.bind( this._shaderProgram.vertexPositionAttribute );
-		this._textureCoordBuffer.bind( this._shaderProgram._cubeVertexTextureCoordBuffer );
+		this._textureCoordBuffer.bind( this._shaderProgram.textureCoordAttribute );
 		this._indexBuffer.bind();
 
 		this._glContext.activeTexture(this._glContext.TEXTURE0);
@@ -124,7 +120,7 @@ this.Gui = this.Gui || {};
 		var mvMatrix = mat4.create();
 		var pMatrix = mat4.create();
 
-		mat4.ortho(pMatrix, 0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, 0.1, 100)
+		mat4.ortho(pMatrix, 0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, 0.1, 100);
 		mat4.identity(mvMatrix);
 		mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -0.1]);
 
@@ -134,29 +130,31 @@ this.Gui = this.Gui || {};
 
 	
 	WebGlRenderSurface.prototype._initBuffers = function() {
-	
-		this._vertexBuffer = new WebGlVertexBuffer( this._glContext );
-		this._vertexBuffer.setData( new Float32Array( [
+		var t = SCREEN_WIDTH / TEXTURE_WIDTH;
+		var u = SCREEN_HEIGHT / TEXTURE_HEIGHT;
+		
+		var vertices = new Float32Array( [
 				0, 0,							0.0,
 				SCREEN_WIDTH,	0,				0.0,
 				SCREEN_WIDTH,	SCREEN_HEIGHT,	0.0,
 				0,				SCREEN_HEIGHT,	0.0
-			] ), 3, 4 );
-			
-		this._textureCoordBuffer = new WebGlVertexBuffer( this._glContext );
-		var t = SCREEN_WIDTH / TEXTURE_WIDTH;
-		var u = SCREEN_HEIGHT / TEXTURE_HEIGHT;
-		this._textureCoordBuffer.setData( new Float32Array( [
+			] );
+		var texCoords = new Float32Array( [
 				0.0,	0.0,
 				t,		0.0,
 				t,		u,
 				0.0,	u
-			] ), 2, 4 );
-			
+			] );
+		var indices = new Uint16Array( [ 0, 1, 2,	0, 2, 3 ] );
+	
+		this._vertexBuffer = new WebGlVertexBuffer( this._glContext );
+		this._vertexBuffer.setData( vertices, 3, 4 );
+
+		this._textureCoordBuffer = new WebGlVertexBuffer( this._glContext );
+		this._textureCoordBuffer.setData( texCoords, 2, 4 );
+
 		this._indexBuffer = new WebGlIndexBuffer( this._glContext );
-		this._indexBuffer.setData( new Uint16Array( [
-			0, 1, 2,	0, 2, 3
-		] ), 6 );
+		this._indexBuffer.setData( indices, 6 );
 	};
 	
 
