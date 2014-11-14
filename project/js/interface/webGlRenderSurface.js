@@ -16,6 +16,7 @@ along with WebNES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 this.Gui = this.Gui || {};
+this.WebGl = this.WebGl || {};
 
 (function(){
 	"use strict";

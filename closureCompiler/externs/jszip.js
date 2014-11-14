@@ -8,6 +8,11 @@ var Gui = function() {};
  */
 var Nes = function() {};
 
+/**
+ * @constructor
+ */
+var WebGl = function() {};
+
 
 /**
  * @constructor
