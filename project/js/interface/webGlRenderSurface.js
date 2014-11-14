@@ -254,23 +254,37 @@ this.Gui = this.Gui || {};
 		this._setMatrixUniforms();
 		this._glContext.drawElements(this._glContext.TRIANGLES, this._cubeVertexIndexBuffer.numItems, this._glContext.UNSIGNED_SHORT, 0);
 	};
+	
+	
+	WebGlRenderSurface.prototype._createCanvasWithScreenshotOn = function() {
+	
+		// create copy of offscreen buffer into a new canvas element
+		var element = document.createElement('canvas');
+		element.width = SCREEN_WIDTH;
+		element.height = SCREEN_HEIGHT;
+		var canvas = element.getContext( "2d" );
+		var imgData = canvas.getImageData( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+		for ( var i=0; i<imgData.data.length; ++i ) {
+			imgData.data[i] = this._offscreen8BitView[i];
+		}
+		canvas.putImageData( imgData, 0, 0 );
+		return element;
+	};
 		
 	
 	WebGlRenderSurface.prototype.screenshotToFile = function() {
-
-		this._element.toBlob( function( blob ) {
+	
+		var element = this._createCanvasWithScreenshotOn();
+		element.toBlob( function( blob ) {
 			saveAs( blob, "screenshot.png" );
 		});
 	};
 	
 	
 	WebGlRenderSurface.prototype.screenshotToString = function() {
-
-		// Note: This returns the image at the size of the image
-		// as it is in the browser, so this is a lot bigger than it needs to be.
-		// TODO: Find a way to resize the data url to 256x240
-		var url = this._element.toDataURL("image/png");
-		return url;
+		
+		var element = this._createCanvasWithScreenshotOn();
+		return element.toDataURL("image/png");
 	};
 	
 	
