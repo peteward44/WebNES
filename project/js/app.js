@@ -278,8 +278,6 @@ var animateFunction;
 	App.prototype._animate = function() {
 		
 		var that = this;
-		
-		this._saveStateManager.onFrame();
 
 		if ( this._newRomWaiting ) {
 			this._doRomLoad( this._newRomLoaded.name, this._newRomLoaded.binaryString );
@@ -329,6 +327,8 @@ var animateFunction;
 				this._pauseOnFrame = -1;
 				this.pause( true );
 			}
+		
+			this._saveStateManager.onFrame();
 
 			// Note: Use setImmediate polyfill instead of homemade message implementation, as it doesn't work on firefox
 			setImmediate( animateFunction );

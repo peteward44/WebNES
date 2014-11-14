@@ -258,16 +258,19 @@ this.Gui = this.Gui || {};
 	
 	WebGlRenderSurface.prototype.screenshotToFile = function() {
 
-		// this._offscreenElement.toBlob( function( blob ) {
-			// saveAs( blob, "screenshot.png" );
-		// });
+		this._element.toBlob( function( blob ) {
+			saveAs( blob, "screenshot.png" );
+		});
 	};
 	
 	
 	WebGlRenderSurface.prototype.screenshotToString = function() {
 
-		//return this._offscreenElement.toDataURL("image/png");
-		return '';
+		// Note: This returns the image at the size of the image
+		// as it is in the browser, so this is a lot bigger than it needs to be.
+		// TODO: Find a way to resize the data url to 256x240
+		var url = this._element.toDataURL("image/png");
+		return url;
 	};
 	
 	

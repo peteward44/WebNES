@@ -75,13 +75,14 @@ this.Gui = this.Gui || {};
 			var slotName = keyNames[ keyIndex ];
 			var slot = meta.slots[ slotName ];
 			html += "<div class='loadSaveDiv'>";
+			html += "<button type='button' onclick='Gui.loadSaveDialog_onclick( \"" + slotName + "\" );'>";
 			if ( slot.screen ) {
-				html += "<button type='button' onclick='Gui.loadSaveDialog_onclick( \"" + slotName + "\" );'>";
-				html += "<img src='" + slot.screen + "'/><br/>";
-				html += "<span>" + slotName + "</span><br/>";
-				html += "<span>" + formatDate( slot.date ) + "</span>";
-				html += "</button>";
+				html += "<img src='" + slot.screen + "' width='" + SCREEN_WIDTH + "' height='" + SCREEN_HEIGHT + "'/><br/>";
+			//	html += "<img src='" + slot.screen + "'/><br/>";
 			}
+			html += "<span>" + slotName + "</span><br/>";
+			html += "<span>" + formatDate( slot.date ) + "</span>";
+			html += "</button>";
 			html += "</div>";
 		}
 		this._contentsDiv[0].innerHTML = html;
