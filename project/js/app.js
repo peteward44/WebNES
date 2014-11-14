@@ -91,7 +91,7 @@ var animateFunction;
 
 			this._canvasParent = new Gui.CanvasParent();
 			this._renderSurface = null;
-			if ( Gui.WebGlSupported() ) {
+			if ( WebGl.webGlSupported() ) {
 				console.log( "Using WebGL for rendering..." );
 				this._renderSurface = new Gui.WebGlRenderSurface( this._canvasParent );
 			} else {

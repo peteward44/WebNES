@@ -25,59 +25,6 @@ this.Gui = this.Gui || {};
 	var TEXTURE_HEIGHT = 256;
 	
 	
-	var getGlContext = function( canvas ) {
-		return canvas.getContext("webgl") || canvas.getContext("experimental-webgl")
-	};
-	
-	
-	var WebGlVertexBuffer = function( glContext ) {
-	
-		this._glContext = glContext;
-		this._itemSize = 0;
-		this._itemCount = 0;
-		this._buffer = this._glContext.createBuffer();
-	};
-	
-	WebGlVertexBuffer.prototype.setData = function( vertices, itemSize, itemCount ) {
-	
-		// ELEMENT_ARRAY_BUFFER is used by index buffer, ARRAY_BUFFER by vertex and tex coord buffers
-		this._itemSize = itemSize;
-		this._itemCount = itemCount;
-		this._glContext.bindBuffer( this._glContext.ARRAY_BUFFER, this._buffer );
-		this._glContext.bufferData( this._glContext.ARRAY_BUFFER, vertices, this._glContext.STATIC_DRAW );
-	};
-	
-	
-	WebGlVertexBuffer.prototype.bind = function( positionAttribute ) {
-		this._glContext.bindBuffer( this._glContext.ARRAY_BUFFER, this._buffer );
-		this._glContext.vertexAttribPointer( positionAttribute, this._itemSize, this._glContext.FLOAT, false, 0, 0 );
-	};
-	
-	
-	
-	var WebGlIndexBuffer = function( glContext ) {
-	
-		this._glContext = glContext;
-		this._itemCount = 0;
-		this._buffer = this._glContext.createBuffer();
-	};
-	
-	WebGlIndexBuffer.prototype.setData = function( indices, itemCount ) {
-		this._itemCount = itemCount;
-		this._glContext.bindBuffer( this._glContext.ELEMENT_ARRAY_BUFFER, this._buffer );
-		this._glContext.bufferData( this._glContext.ELEMENT_ARRAY_BUFFER, indices, this._glContext.STATIC_DRAW );
-	};
-	
-	WebGlIndexBuffer.prototype.bind = function() {
-		this._glContext.bindBuffer(this._glContext.ELEMENT_ARRAY_BUFFER, this._buffer);
-	};
-	
-	WebGlIndexBuffer.prototype.draw = function() {
-		this._glContext.drawElements(this._glContext.TRIANGLES, this._itemCount, this._glContext.UNSIGNED_SHORT, 0);
-	};
-	
-
-	
 	var WebGlRenderSurface = function( canvasParent ) {
 	
 		var that = this;
@@ -90,42 +37,25 @@ this.Gui = this.Gui || {};
 		this._offscreen8BitView = new Uint8Array( this._offscreen32BitView.buffer );
 
 		this._element = canvasParent.getCanvasElement();
-		this._glContext = getGlContext( this._element );
+		this._glContext = WebGl.getGlContext( this._element );
 
 		this._initShaders();
 		this._initBuffers();
-		this._initTexture();
-		this._initView();
+
+		this._camera = new WebGl.OrthoCamera( this._glContext );
+		this._camera.setup( SCREEN_WIDTH, SCREEN_HEIGHT );
+		this._camera.setMatrices( this._pMatrixUniform, this._mvMatrixUniform );
 		
-		this._vertexBuffer.bind( this._shaderProgram.vertexPositionAttribute );
-		this._textureCoordBuffer.bind( this._shaderProgram.textureCoordAttribute );
+		this._texture = new WebGl.FillableTexture( this._glContext, TEXTURE_WIDTH, TEXTURE_HEIGHT );
+		
+		this._vertexBuffer.bind( this._vertexPositionAttribute );
+		this._textureCoordBuffer.bind( this._textureCoordAttribute );
 		this._indexBuffer.bind();
+		this._texture.bind();
 
-		this._glContext.activeTexture(this._glContext.TEXTURE0);
-		this._glContext.bindTexture( this._glContext.TEXTURE_2D, this._texture );
-		  
-		var filtering = this._glContext.LINEAR; // NEAREST for block quality, LINEAR for softer texture
-  
-		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MAG_FILTER, filtering);
-		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MIN_FILTER, filtering);
-
-		this._glContext.uniform1i(this._shaderProgram.samplerUniform, 0);
+		this._glContext.uniform1i(this._samplerUniform, 0);
 
 		canvasParent.connect( 'resize', function() { that._onResize(); } );
-	};
-	
-	
-	WebGlRenderSurface.prototype._initView = function() {
-	
-		var mvMatrix = mat4.create();
-		var pMatrix = mat4.create();
-
-		mat4.ortho(pMatrix, 0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, 0.1, 100);
-		mat4.identity(mvMatrix);
-		mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -0.1]);
-
-		this._glContext.uniformMatrix4fv(this._shaderProgram.pMatrixUniform, false, pMatrix);
-		this._glContext.uniformMatrix4fv(this._shaderProgram.mvMatrixUniform, false, mvMatrix);
 	};
 
 	
@@ -147,86 +77,29 @@ this.Gui = this.Gui || {};
 			] );
 		var indices = new Uint16Array( [ 0, 1, 2,	0, 2, 3 ] );
 	
-		this._vertexBuffer = new WebGlVertexBuffer( this._glContext );
+		this._vertexBuffer = new WebGl.VertexBuffer( this._glContext );
 		this._vertexBuffer.setData( vertices, 3, 4 );
 
-		this._textureCoordBuffer = new WebGlVertexBuffer( this._glContext );
+		this._textureCoordBuffer = new WebGl.VertexBuffer( this._glContext );
 		this._textureCoordBuffer.setData( texCoords, 2, 4 );
 
-		this._indexBuffer = new WebGlIndexBuffer( this._glContext );
+		this._indexBuffer = new WebGl.IndexBuffer( this._glContext );
 		this._indexBuffer.setData( indices, 6 );
 	};
 	
 
-	WebGlRenderSurface.prototype._initTexture = function() {
-	
-		this._texture = this._glContext.createTexture();
-		this._glContext.bindTexture(this._glContext.TEXTURE_2D, this._texture);
-		this._glContext.pixelStorei(this._glContext.UNPACK_FLIP_Y_WEBGL, true);
-		this._glContext.texImage2D(this._glContext.TEXTURE_2D, 0, this._glContext.RGBA, TEXTURE_WIDTH, TEXTURE_HEIGHT, 0, this._glContext.RGBA, this._glContext.UNSIGNED_BYTE, null );
-	};
-	
-
-	WebGlRenderSurface.prototype._compileShader = function(id) {
-		var shaderScript = document.getElementById(id);
-		if (!shaderScript) {
-			throw new Error( "Could not find shader script for DOM element '" + id + "'" );
-		}
-
-		var str = "";
-		var k = shaderScript.firstChild;
-		while (k) {
-			if (k.nodeType === 3) {
-				str += k.textContent;
-			}
-			k = k.nextSibling;
-		}
-
-		var shader;
-		if (shaderScript.type === "x-shader/x-fragment") {
-			shader = this._glContext.createShader(this._glContext.FRAGMENT_SHADER);
-		} else if (shaderScript.type === "x-shader/x-vertex") {
-			shader = this._glContext.createShader(this._glContext.VERTEX_SHADER);
-		} else {
-			throw new Error( "Could not find shader script for DOM element '" + id + "'" );
-		}
-
-		this._glContext.shaderSource(shader, str);
-		this._glContext.compileShader(shader);
-
-		if (!this._glContext.getShaderParameter(shader, this._glContext.COMPILE_STATUS)) {
-			throw new Error( "Error compiling shader script '" + id + "' " + this._glContext.getShaderInfoLog(shader) );
-		}
-
-		return shader;
-	};
-
-
 	WebGlRenderSurface.prototype._initShaders = function() {
 	
-		var fragmentShader = this._compileShader( "shader-fs" );
-		var vertexShader = this._compileShader( "shader-vs" );
+		this._shader = new WebGl.ShaderProgram( this._glContext );
+		this._shader.loadAndLink( "shader-fs", "shader-vs" );
+		this._shader.use();
 
-		this._shaderProgram = this._glContext.createProgram();
-		this._glContext.attachShader(this._shaderProgram, vertexShader);
-		this._glContext.attachShader(this._shaderProgram, fragmentShader);
-		this._glContext.linkProgram(this._shaderProgram);
+		this._vertexPositionAttribute = this._shader.getAttrib( "aVertexPosition" );
+		this._textureCoordAttribute = this._shader.getAttrib( "aTextureCoord" );
 
-		if (!this._glContext.getProgramParameter(this._shaderProgram, this._glContext.LINK_STATUS)) {
-			throw new Error("Could not initialise shaders");
-		}
-
-		this._glContext.useProgram(this._shaderProgram);
-
-		this._shaderProgram.vertexPositionAttribute = this._glContext.getAttribLocation(this._shaderProgram, "aVertexPosition");
-		this._glContext.enableVertexAttribArray(this._shaderProgram.vertexPositionAttribute);
-
-		this._shaderProgram.textureCoordAttribute = this._glContext.getAttribLocation(this._shaderProgram, "aTextureCoord");
-		this._glContext.enableVertexAttribArray(this._shaderProgram.textureCoordAttribute);
-
-		this._shaderProgram.pMatrixUniform = this._glContext.getUniformLocation(this._shaderProgram, "uPMatrix");
-		this._shaderProgram.mvMatrixUniform = this._glContext.getUniformLocation(this._shaderProgram, "uMVMatrix");
-		this._shaderProgram.samplerUniform = this._glContext.getUniformLocation(this._shaderProgram, "uSampler");
+		this._pMatrixUniform = this._shader.getUniformLocation("uPMatrix");
+		this._mvMatrixUniform = this._shader.getUniformLocation("uMVMatrix");
+		this._samplerUniform = this._shader.getUniformLocation("uSampler");
 	};
 
 
@@ -275,7 +148,7 @@ this.Gui = this.Gui || {};
 	WebGlRenderSurface.prototype.render = function( mainboard ) {
 
 		this._glContext.clear(this._glContext.COLOR_BUFFER_BIT);
-		this._glContext.texSubImage2D( this._glContext.TEXTURE_2D, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, this._glContext.RGBA, this._glContext.UNSIGNED_BYTE, this._offscreen8BitView );
+		this._texture.fill( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, this._offscreen8BitView );
 		this._indexBuffer.draw();
 	};
 	
@@ -309,18 +182,7 @@ this.Gui = this.Gui || {};
 		return element.toDataURL("image/png");
 	};
 	
-	
-	Gui.WebGlSupported = function() {
-		try {
-			var canvas = document.createElement('canvas');
-			var ctx = getGlContext( canvas );
-			return ctx !== null;
-		}
-		catch (e) {
-			return false;
-		}
-	};
-	
+
 	Gui.WebGlRenderSurface = WebGlRenderSurface;
 	
 }());
