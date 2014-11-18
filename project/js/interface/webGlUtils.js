@@ -75,6 +75,8 @@ this.WebGl = this.WebGl || {};
 	var ShaderProgram = function( glContext ) {
 	
 		this._glContext = glContext;
+		this._uniformLocationCache = {};
+		this._attribCache = {};
 		this._shaderProgram = this._glContext.createProgram();
 	};
 	
@@ -116,6 +118,9 @@ this.WebGl = this.WebGl || {};
 	
 	ShaderProgram.prototype.loadAndLink = function( fragmentName, vertexName ) {
 	
+		this._uniformLocationCache = {};
+		this._attribCache = {};
+		
 		var fragmentShader = this._compileShader( fragmentName );
 		var vertexShader = this._compileShader( vertexName );
 
@@ -135,18 +140,23 @@ this.WebGl = this.WebGl || {};
 	};
 	
 	
-	ShaderProgram.prototype.getAttrib = function( name ) {
-		var attrib = this._glContext.getAttribLocation(this._shaderProgram, name);
-		this._glContext.enableVertexAttribArray( attrib );
-		return attrib;
-	};
-	
-	
 	ShaderProgram.prototype.getUniformLocation = function( name ) {
 	
-		return this._glContext.getUniformLocation(this._shaderProgram, name);
+		if ( !this._uniformLocationCache.hasOwnProperty( name ) ) {
+			 this._uniformLocationCache[ name ] = this._glContext.getUniformLocation(this._shaderProgram, name);
+		}
+		return this._uniformLocationCache[ name ];
 	};
+		
 	
+	ShaderProgram.prototype.getAttrib = function( name ) {
+	
+		if ( !this._attribCache.hasOwnProperty( name ) ) {
+			this._attribCache[ name ] = this._glContext.getAttribLocation(this._shaderProgram, name);
+			this._glContext.enableVertexAttribArray( this._attribCache[ name ] );
+		}
+		return this._attribCache[ name ];
+	};
 	
 	
 	var FillableTexture = function( glContext, width, height ) {
@@ -190,12 +200,10 @@ this.WebGl = this.WebGl || {};
 		mat4.translate(this._mvMatrix, this._mvMatrix, [0.0, 0.0, -0.1]);
 	};
 	
-	OrthoCamera.prototype.setMatrices = function( pMatrixUniform, mvMatrixUniform, combinedUniform ) {
-		this._glContext.uniformMatrix4fv(pMatrixUniform, false, this._pMatrix);
-		this._glContext.uniformMatrix4fv(mvMatrixUniform, false, this._mvMatrix);
+	OrthoCamera.prototype.getMVPMatrix = function() {
 		var combined = mat4.create();
 		mat4.multiply( combined, this._pMatrix, this._mvMatrix );
-		this._glContext.uniformMatrix4fv(combinedUniform, false, combined);
+		return combined;
 	};
 	
 	

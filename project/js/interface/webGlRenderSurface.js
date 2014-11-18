@@ -45,16 +45,17 @@ this.WebGl = this.WebGl || {};
 
 		this._camera = new WebGl.OrthoCamera( this._glContext );
 		this._camera.setup( SCREEN_WIDTH, SCREEN_HEIGHT );
-		this._camera.setMatrices( this._pMatrixUniform, this._mvMatrixUniform, this._combinedMatrixUniform );
+		
+		this._glContext.uniformMatrix4fv( this._shader.getUniformLocation("aModelViewProjectionMatrix"), false, this._camera.getMVPMatrix() );
 		
 		this._texture = new WebGl.FillableTexture( this._glContext, TEXTURE_WIDTH, TEXTURE_HEIGHT );
 		
-		this._vertexBuffer.bind( this._vertexPositionAttribute );
-		this._textureCoordBuffer.bind( this._textureCoordAttribute );
+		this._vertexBuffer.bind( this._shader.getAttrib( "aVertexPosition" ) );
+		this._textureCoordBuffer.bind( this._shader.getAttrib( "aTextureCoord" ) );
 		this._indexBuffer.bind();
 		this._texture.bind();
 
-		this._glContext.uniform1i(this._samplerUniform, 0);
+		this._glContext.uniform1i(this._shader.getUniformLocation("rubyTexture"), 0);
 
 		canvasParent.connect( 'resize', function() { that._onResize(); } );
 	};
@@ -95,21 +96,9 @@ this.WebGl = this.WebGl || {};
 		this._shader.loadAndLink( "shader-fs", "shader-vs" );
 		this._shader.use();
 
-		this._vertexPositionAttribute = this._shader.getAttrib( "aVertexPosition" );
-		this._textureCoordAttribute = this._shader.getAttrib( "aTextureCoord" );
-
-		this._pMatrixUniform = this._shader.getUniformLocation("uPMatrix");
-		this._mvMatrixUniform = this._shader.getUniformLocation("uMVMatrix");
-		this._combinedMatrixUniform = this._shader.getUniformLocation("aModelViewProjectionMatrix");
-		this._samplerUniform = this._shader.getUniformLocation("rubyTexture");
-		
-		var inputSize = this._shader.getUniformLocation("rubyInputSize");
-		var outputSize = this._shader.getUniformLocation("rubyOutputSize");
-		var texSize = this._shader.getUniformLocation("rubyTextureSize");
-		
-		this._glContext.uniform2fv(inputSize, new Float32Array( [ 256, 240 ] ) );
-		this._glContext.uniform2fv(outputSize, new Float32Array( [ 256, 240 ] ) );
-		this._glContext.uniform2fv(texSize, new Float32Array( [ 256, 240 ] )  );
+		this._glContext.uniform2fv(this._shader.getUniformLocation("rubyInputSize"), new Float32Array( [ 256, 240 ] ) );
+		this._glContext.uniform2fv(this._shader.getUniformLocation("rubyOutputSize"), new Float32Array( [ 256, 240 ] ) );
+		this._glContext.uniform2fv(this._shader.getUniformLocation("rubyTextureSize"), new Float32Array( [ 256, 240 ] )  );
 	};
 
 
