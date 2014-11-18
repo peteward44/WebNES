@@ -45,7 +45,7 @@ this.WebGl = this.WebGl || {};
 
 		this._camera = new WebGl.OrthoCamera( this._glContext );
 		this._camera.setup( SCREEN_WIDTH, SCREEN_HEIGHT );
-		this._camera.setMatrices( this._pMatrixUniform, this._mvMatrixUniform );
+		this._camera.setMatrices( this._pMatrixUniform, this._mvMatrixUniform, this._combinedMatrixUniform );
 		
 		this._texture = new WebGl.FillableTexture( this._glContext, TEXTURE_WIDTH, TEXTURE_HEIGHT );
 		
@@ -100,7 +100,16 @@ this.WebGl = this.WebGl || {};
 
 		this._pMatrixUniform = this._shader.getUniformLocation("uPMatrix");
 		this._mvMatrixUniform = this._shader.getUniformLocation("uMVMatrix");
-		this._samplerUniform = this._shader.getUniformLocation("uSampler");
+		this._combinedMatrixUniform = this._shader.getUniformLocation("aModelViewProjectionMatrix");
+		this._samplerUniform = this._shader.getUniformLocation("rubyTexture");
+		
+		var inputSize = this._shader.getUniformLocation("rubyInputSize");
+		var outputSize = this._shader.getUniformLocation("rubyOutputSize");
+		var texSize = this._shader.getUniformLocation("rubyTextureSize");
+		
+		this._glContext.uniform2fv(inputSize, new Float32Array( [ 256, 240 ] ) );
+		this._glContext.uniform2fv(outputSize, new Float32Array( [ 256, 240 ] ) );
+		this._glContext.uniform2fv(texSize, new Float32Array( [ 256, 240 ] )  );
 	};
 
 

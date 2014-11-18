@@ -109,7 +109,7 @@ this.WebGl = this.WebGl || {};
 		if (!this._glContext.getShaderParameter(shader, this._glContext.COMPILE_STATUS)) {
 			throw new Error( "Error compiling shader script '" + id + "' " + this._glContext.getShaderInfoLog(shader) );
 		}
-
+		
 		return shader;
 	};
 	
@@ -124,7 +124,7 @@ this.WebGl = this.WebGl || {};
 		this._glContext.linkProgram(this._shaderProgram);
 
 		if (!this._glContext.getProgramParameter(this._shaderProgram, this._glContext.LINK_STATUS)) {
-			throw new Error("Could not initialise shaders");
+			throw new Error( this._glContext.getProgramInfoLog( this._shaderProgram ) );
 		}
 	};
 	
@@ -190,9 +190,12 @@ this.WebGl = this.WebGl || {};
 		mat4.translate(this._mvMatrix, this._mvMatrix, [0.0, 0.0, -0.1]);
 	};
 	
-	OrthoCamera.prototype.setMatrices = function( pMatrixUniform, mvMatrixUniform ) {
+	OrthoCamera.prototype.setMatrices = function( pMatrixUniform, mvMatrixUniform, combinedUniform ) {
 		this._glContext.uniformMatrix4fv(pMatrixUniform, false, this._pMatrix);
 		this._glContext.uniformMatrix4fv(mvMatrixUniform, false, this._mvMatrix);
+		var combined = mat4.create();
+		mat4.multiply( combined, this._pMatrix, this._mvMatrix );
+		this._glContext.uniformMatrix4fv(combinedUniform, false, combined);
 	};
 	
 	
