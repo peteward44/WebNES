@@ -25,6 +25,45 @@ this.WebGl = this.WebGl || {};
 	};
 	
 	
+	var MultiCallback = function() {
+	
+		this._allCallback = null;
+		this._dueCount = 0;
+		this._completeCount = 0;
+	};
+	
+		
+	MultiCallback.prototype._callbackComplete = function() {
+	
+		this._completeCount++;
+		this._checkComplete();
+	};
+	
+	
+	MultiCallback.prototype._checkComplete = function() {
+	
+		if ( this._completeCount === this._dueCount ) {
+			this._allCallback();
+		}
+	};
+	
+	
+	MultiCallback.prototype.callback = function() {
+		
+		this._dueCount++;
+		var that = this;
+		return function() { that._callbackComplete(); }
+	};
+	
+	
+	MultiCallback.prototype.start = function( allCallback ) {
+	
+		this._allCallback = allCallback;
+		this._checkComplete();
+	};
+	
+	
+	
 	var VertexBuffer = function( glContext ) {
 	
 		this._glContext = glContext;
@@ -81,56 +120,51 @@ this.WebGl = this.WebGl || {};
 	};
 	
 
-	ShaderProgram.prototype._compileShader = function(id) {
-		var shaderScript = document.getElementById(id);
-		if (!shaderScript) {
-			throw new Error( "Could not find shader script for DOM element '" + id + "'" );
-		}
-
-		var str = "";
-		var k = shaderScript.firstChild;
-		while (k) {
-			if (k.nodeType === 3) {
-				str += k.textContent;
-			}
-			k = k.nextSibling;
-		}
-
-		var shader;
-		if (shaderScript.type === "x-shader/x-fragment") {
-			shader = this._glContext.createShader(this._glContext.FRAGMENT_SHADER);
-		} else if (shaderScript.type === "x-shader/x-vertex") {
-			shader = this._glContext.createShader(this._glContext.VERTEX_SHADER);
-		} else {
-			throw new Error( "Could not find shader script for DOM element '" + id + "'" );
-		}
+	ShaderProgram.prototype._compileShader = function( glType, str ) {
+	
+		var shader = this._glContext.createShader( glType );
 
 		this._glContext.shaderSource(shader, str);
 		this._glContext.compileShader(shader);
 
 		if (!this._glContext.getShaderParameter(shader, this._glContext.COMPILE_STATUS)) {
-			throw new Error( "Error compiling shader script '" + id + "' " + this._glContext.getShaderInfoLog(shader) );
+			throw new Error( "Error compiling shader script " + this._glContext.getShaderInfoLog(shader) );
 		}
 		
-		return shader;
+		this._glContext.attachShader(this._shaderProgram, shader);
 	};
 	
 	
-	ShaderProgram.prototype.loadAndLink = function( fragmentName, vertexName ) {
+	ShaderProgram.prototype._shaderLoadSuccess = function( xmlRaw, callback ) {
+		
+		var xmlDoc = $( xmlRaw );
+		var fragmentStr = xmlDoc.find( 'fragment' ).text();
+		var vertexStr = xmlDoc.find( 'vertex' ).text();
+		
+		this._compileShader( this._glContext.FRAGMENT_SHADER, fragmentStr );
+		this._compileShader( this._glContext.VERTEX_SHADER, vertexStr );
+		
+		this._glContext.linkProgram( this._shaderProgram );
+
+		if (!this._glContext.getProgramParameter( this._shaderProgram, this._glContext.LINK_STATUS )) {
+			throw new Error( this._glContext.getProgramInfoLog( this._shaderProgram ) );
+		}
+		
+		callback( null );
+	};
+	
+	
+	ShaderProgram.prototype.loadAndLink = function( shaderName, callback ) {
 	
 		this._uniformLocationCache = {};
 		this._attribCache = {};
-		
-		var fragmentShader = this._compileShader( fragmentName );
-		var vertexShader = this._compileShader( vertexName );
-
-		this._glContext.attachShader(this._shaderProgram, vertexShader);
-		this._glContext.attachShader(this._shaderProgram, fragmentShader);
-		this._glContext.linkProgram(this._shaderProgram);
-
-		if (!this._glContext.getProgramParameter(this._shaderProgram, this._glContext.LINK_STATUS)) {
-			throw new Error( this._glContext.getProgramInfoLog( this._shaderProgram ) );
-		}
+			
+		var that = this;
+		$['ajax']({
+			'url': 'shaders/' + shaderName + '.xml',
+			'success': function( xmlDoc ) { that._shaderLoadSuccess( xmlDoc, callback ); },
+			'dataType': 'xml'
+		});
 	};
 	
 	
@@ -177,6 +211,8 @@ this.WebGl = this.WebGl || {};
   
 		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MAG_FILTER, filtering);
 		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MIN_FILTER, filtering);
+		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_WRAP_S, this._glContext.CLAMP_TO_EDGE);
+		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_WRAP_T, this._glContext.CLAMP_TO_EDGE);
 	};
 	
 	FillableTexture.prototype.fill = function( x, y, width, height, array ) {
