@@ -198,7 +198,13 @@ this.WebGl = this.WebGl || {};
 		return element.toDataURL("image/png");
 	};
 	
+	
+	WebGlRenderSurface.prototype.loadShaderFromUrl = function( url ) {
+	
+		this.loadShader( url, function() {} );
+	};
 
+	
 	Gui.WebGlRenderSurface = WebGlRenderSurface;
 	
 }());

@@ -113,6 +113,9 @@ this.WebGl = this.WebGl || {};
 	
 	var ShaderProgram = function( glContext ) {
 	
+		this._fragment = null;
+		this._vertex = null;
+		
 		this._glContext = glContext;
 		// add some extensions - this enables fwidth() method, see https://www.khronos.org/registry/gles/extensions/OES/OES_standard_derivatives.txt
 		this._glContext.getExtension('OES_standard_derivatives');
@@ -146,7 +149,7 @@ this.WebGl = this.WebGl || {};
 			throw new Error( "Error compiling shader script " + this._glContext.getShaderInfoLog(shader) );
 		}
 		
-		this._glContext.attachShader(this._shaderProgram, shader);
+		return shader;
 	};
 	
 	
@@ -156,8 +159,18 @@ this.WebGl = this.WebGl || {};
 		var fragmentStr = xmlDoc.find( 'fragment' ).text();
 		var vertexStr = xmlDoc.find( 'vertex' ).text();
 		
-		this._compileShader( this._glContext.FRAGMENT_SHADER, fragmentStr );
-		this._compileShader( this._glContext.VERTEX_SHADER, vertexStr );
+		if ( this._fragment ) {
+			this._glContext.detachShader(this._shaderProgram, this._fragment);
+		}
+		if ( this._vertex ) {
+			this._glContext.detachShader(this._shaderProgram, this._vertex);
+		}
+		
+		this._fragment = this._compileShader( this._glContext.FRAGMENT_SHADER, fragmentStr );
+		this._vertex = this._compileShader( this._glContext.VERTEX_SHADER, vertexStr );
+		
+		this._glContext.attachShader(this._shaderProgram, this._fragment);
+		this._glContext.attachShader(this._shaderProgram, this._vertex);
 		
 		this._glContext.linkProgram( this._shaderProgram );
 

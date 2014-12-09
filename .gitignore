@@ -7,3 +7,4 @@
 /tools/cpuCoreBuilder/cpu6502.js
 /tools/cpuCoreBuilder/cpu6502_instructions.js
 /tools/assembler/out.nes
+/tools/buildShaderManifest/*.log
