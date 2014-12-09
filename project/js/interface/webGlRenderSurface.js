@@ -72,7 +72,7 @@ this.WebGl = this.WebGl || {};
 			that._glContext.uniform2fv(that._shader.getUniformLocation("rubyInputSize"), that._inputSizeShaderArray );
 			that._glContext.uniform2fv(that._shader.getUniformLocation("rubyOutputSize"), that._outputSizeShaderArray );
 			that._glContext.uniform2fv(that._shader.getUniformLocation("rubyTextureSize"), that._textureSizeShaderArray );
-			
+
 			that._glContext.uniformMatrix4fv( that._shader.getUniformLocation("aModelViewProjectionMatrix"), false, that._camera.getMVPMatrix() );
 
 			that._vertexBuffer.bind( that._shader.getAttrib( "aVertexPosition" ) );
@@ -80,7 +80,7 @@ this.WebGl = this.WebGl || {};
 			that._indexBuffer.bind();
 			that._texture.bind();
 
-			that._glContext.uniform1i(that._shader.getUniformLocation("rubyTexture"), 0);
+			that._glContext.uniform1i(that._shader.getUniformLocation("rubyTexture"), 0); //Texture unit 0 is for base images.
 			
 			callback();
 		}  );
@@ -165,6 +165,7 @@ this.WebGl = this.WebGl || {};
 		}
 		this._glContext.clear(this._glContext.COLOR_BUFFER_BIT);
 		this._texture.fill( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, this._offscreen8BitView );
+		this._glContext.uniform1i(this._shader.getUniformLocation("rubyFrameCount"), mainboard.ppu.frameCounter );
 		this._indexBuffer.draw();
 	};
 	

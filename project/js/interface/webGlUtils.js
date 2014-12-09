@@ -129,18 +129,28 @@ this.WebGl = this.WebGl || {};
 	ShaderProgram.prototype._compileShader = function( glType, str ) {
 	
 		var shader = this._glContext.createShader( glType );
-
-		if ( glType === this._glContext.VERTEX_SHADER ) {
-			// Add variables common to all vertex shaders
-			str = 'uniform mat4 aModelViewProjectionMatrix;\n' + str;
-			str = 'attribute vec4 aVertexPosition;\n' + str;
-			str = 'attribute vec4 aTextureCoord;\n' + str;
+		
+		var prepend = '';
+		
+		if ( str.indexOf( '#version' ) === 0 ) {
+			var versionString = str.substr( 0, str.indexOf( '\n' ) );
+			str = str.substring( versionString.length );
+			prepend += versionString;
 		}
 		
-		str = 'varying vec4	vTextureCoord[8];\n' + str;
+		prepend += 'precision mediump float;\n'; // Bodge precision on script
+		prepend += '#extension GL_OES_standard_derivatives : enable\n';
 		
-		str = 'precision mediump float;\n' + str; // Bodge precision on script
-		str = '#extension GL_OES_standard_derivatives : enable\n' + str;
+		if ( glType === this._glContext.VERTEX_SHADER ) {
+			// Add variables common to all vertex shaders
+			prepend += 'uniform mat4 aModelViewProjectionMatrix;\n';
+			prepend += 'attribute vec4 aVertexPosition;\n';
+			prepend += 'attribute vec4 aTextureCoord;\n';
+		}
+		
+		prepend += 'varying vec4 vTextureCoord[8];\n';
+
+		str = prepend + str;
 		
 		this._glContext.shaderSource(shader, str);
 		this._glContext.compileShader(shader);
@@ -156,8 +166,8 @@ this.WebGl = this.WebGl || {};
 	ShaderProgram.prototype._shaderLoadSuccess = function( xmlRaw, callback ) {
 		
 		var xmlDoc = $( xmlRaw );
-		var fragmentStr = xmlDoc.find( 'fragment' ).text();
-		var vertexStr = xmlDoc.find( 'vertex' ).text();
+		var fragmentStr = xmlDoc.find( 'fragment' )[0].textContent;
+		var vertexStr = xmlDoc.find( 'vertex' )[0].textContent;
 		
 		if ( this._fragment ) {
 			this._glContext.detachShader(this._shaderProgram, this._fragment);
