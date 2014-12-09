@@ -65,7 +65,7 @@ this.WebGl = this.WebGl || {};
 	WebGlRenderSurface.prototype.loadShader = function( shaderFilename, callback ) {
 	
 		var that = this;
-		shaderFilename = shaderFilename || 'none.xml'; //'v1.0/crt.xml';
+		shaderFilename = shaderFilename || 'v1.0/crt.xml'; // 'none.xml';
 		this._shader.loadAndLink( shaderFilename, function() {
 			that._shader.use();
 
@@ -92,10 +92,10 @@ this.WebGl = this.WebGl || {};
 		var u = SCREEN_HEIGHT / TEXTURE_HEIGHT;
 		
 		var vertices = new Float32Array( [
-				0, 0,							0.0,
-				SCREEN_WIDTH,	0,				0.0,
-				SCREEN_WIDTH,	SCREEN_HEIGHT,	0.0,
-				0,				SCREEN_HEIGHT,	0.0
+				0, 0,							0.0, 1.0,
+				SCREEN_WIDTH,	0,				0.0, 1.0,
+				SCREEN_WIDTH,	SCREEN_HEIGHT,	0.0, 1.0,
+				0,				SCREEN_HEIGHT,	0.0, 1.0
 			] );
 		var texCoords = new Float32Array( [
 				0.0,	0.0,
@@ -106,7 +106,7 @@ this.WebGl = this.WebGl || {};
 		var indices = new Uint16Array( [ 0, 1, 2,	0, 2, 3 ] );
 	
 		this._vertexBuffer = new WebGl.VertexBuffer( this._glContext );
-		this._vertexBuffer.setData( vertices, 3, 4 );
+		this._vertexBuffer.setData( vertices, 4, 4 );
 
 		this._textureCoordBuffer = new WebGl.VertexBuffer( this._glContext );
 		this._textureCoordBuffer.setData( texCoords, 2, 4 );

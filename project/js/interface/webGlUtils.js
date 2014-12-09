@@ -126,10 +126,17 @@ this.WebGl = this.WebGl || {};
 	ShaderProgram.prototype._compileShader = function( glType, str ) {
 	
 		var shader = this._glContext.createShader( glType );
+
+		if ( glType === this._glContext.VERTEX_SHADER ) {
+			// Add variables common to all vertex shaders
+			str = 'uniform mat4 aModelViewProjectionMatrix;\n' + str;
+			str = 'attribute vec4 aVertexPosition;\n' + str;
+			str = 'attribute vec2 aTextureCoord;\n' + str;
+		}
 		
 		str = 'precision mediump float;\n' + str; // Bodge precision on script
 		str = '#extension GL_OES_standard_derivatives : enable\n' + str;
-
+		
 		this._glContext.shaderSource(shader, str);
 		this._glContext.compileShader(shader);
 
