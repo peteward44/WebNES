@@ -114,6 +114,9 @@ this.WebGl = this.WebGl || {};
 	var ShaderProgram = function( glContext ) {
 	
 		this._glContext = glContext;
+		// add some extensions - this enables fwidth() method, see https://www.khronos.org/registry/gles/extensions/OES/OES_standard_derivatives.txt
+		this._glContext.getExtension('OES_standard_derivatives');
+		
 		this._uniformLocationCache = {};
 		this._attribCache = {};
 		this._shaderProgram = this._glContext.createProgram();
@@ -123,6 +126,9 @@ this.WebGl = this.WebGl || {};
 	ShaderProgram.prototype._compileShader = function( glType, str ) {
 	
 		var shader = this._glContext.createShader( glType );
+		
+		str = 'precision mediump float;\n' + str; // Bodge precision on script
+		str = '#extension GL_OES_standard_derivatives : enable\n' + str;
 
 		this._glContext.shaderSource(shader, str);
 		this._glContext.compileShader(shader);
@@ -154,14 +160,14 @@ this.WebGl = this.WebGl || {};
 	};
 	
 	
-	ShaderProgram.prototype.loadAndLink = function( shaderName, callback ) {
+	ShaderProgram.prototype.loadAndLink = function( shaderFile, callback ) {
 	
 		this._uniformLocationCache = {};
 		this._attribCache = {};
 			
 		var that = this;
 		$['ajax']({
-			'url': 'shaders/' + shaderName + '.xml',
+			'url': 'shaders/' + shaderFile,
 			'success': function( xmlDoc ) { that._shaderLoadSuccess( xmlDoc, callback ); },
 			'dataType': 'xml'
 		});
