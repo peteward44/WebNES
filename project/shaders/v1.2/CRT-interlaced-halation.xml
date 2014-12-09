@@ -35,7 +35,7 @@
 
         void main()
         {
-                vec2 xy = gl_TexCoord[0].st;
+                vec2 xy = vTextureCoord[0].st;
                 float oney = 1.0/rubyTextureSize.y;
 
                 float wid = 2.0;
@@ -72,7 +72,7 @@
 
         void main()
         {
-                vec2 xy = gl_TexCoord[0].st;
+                vec2 xy = vTextureCoord[0].st;
                 float onex = 1.0/rubyTextureSize.x;
 
                 float wid = 2.0;

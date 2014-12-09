@@ -29,7 +29,7 @@
 
       void main()
       {
-        vec2 xy = gl_TexCoord[0].st;
+        vec2 xy = vTextureCoord[0].st;
 
         vec2 xyp = xy * rubyTextureSize * 4.0 * PI / 3.0;
         xyp.y = xyp.y / 2.0 + 2.0 * PI / 3.0 * mod(rubyFrameCount,2);
@@ -69,7 +69,7 @@
 
       void main()
       {
-        vec2 xy = gl_TexCoord[0].st;
+        vec2 xy = vTextureCoord[0].st;
 
         vec2 xyf = fract(xy * rubyTextureSize);
         vec2 xyp = floor(xy * rubyTextureSize)+vec2(0.5);
@@ -144,7 +144,7 @@
         vec4 c4 = vec4(exp(-16.0/wid/wid));
         vec4 norm = 1.0 / (vec4(1.0) + vec4(2.0)*(c1+c2+c3+c4));
 
-        vec2 xy = gl_TexCoord[0].st;
+        vec2 xy = vTextureCoord[0].st;
         float onex = 1.0 / rubyTextureSize.x;
 
         sum += TEX2D(xy + vec2(-4.0 * onex,  0.0)) * c4;

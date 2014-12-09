@@ -34,11 +34,11 @@
          vec2 scale = (rubyOutputSize / rubyInputSize) / box_scale;
          vec2 middle = 0.5 * rubyInputSize / rubyTextureSize;
          vec2 diff = aTextureCoord.xy - middle;
-         gl_TexCoord[0].xy = middle + diff * scale;
+         vTextureCoord[0].xy = middle + diff * scale;
       }
   ]]></vertex>
   <fragment filter="nearest"><![CDATA[
      uniform sampler2D rubyTexture;
-     void main() { gl_FragColor = texture2D(rubyTexture, gl_TexCoord[0].xy); }
+     void main() { gl_FragColor = texture2D(rubyTexture, vTextureCoord[0].xy); }
   ]]></fragment>
 </shader>

@@ -12,15 +12,15 @@
       vec2 dy = vec2(0.0, y);
 
       gl_Position = aModelViewProjectionMatrix * aVertexPosition;
-      gl_TexCoord[0] = aTextureCoord;
-      gl_TexCoord[1].xy = gl_TexCoord[0].xy - dg1;
-      gl_TexCoord[1].zw = gl_TexCoord[0].xy - dy;
-      gl_TexCoord[2].xy = gl_TexCoord[0].xy - dg2;
-      gl_TexCoord[2].zw = gl_TexCoord[0].xy + dx;
-      gl_TexCoord[3].xy = gl_TexCoord[0].xy + dg1;
-      gl_TexCoord[3].zw = gl_TexCoord[0].xy + dy;
-      gl_TexCoord[4].xy = gl_TexCoord[0].xy + dg2;
-      gl_TexCoord[4].zw = gl_TexCoord[0].xy - dx;
+      vTextureCoord[0] = aTextureCoord;
+      vTextureCoord[1].xy = vTextureCoord[0].xy - dg1;
+      vTextureCoord[1].zw = vTextureCoord[0].xy - dy;
+      vTextureCoord[2].xy = vTextureCoord[0].xy - dg2;
+      vTextureCoord[2].zw = vTextureCoord[0].xy + dx;
+      vTextureCoord[3].xy = vTextureCoord[0].xy + dg1;
+      vTextureCoord[3].zw = vTextureCoord[0].xy + dy;
+      vTextureCoord[4].xy = vTextureCoord[0].xy + dg2;
+      vTextureCoord[4].zw = vTextureCoord[0].xy - dx;
     }
   ]]></vertex>
 
@@ -34,15 +34,15 @@
     const float lum_add = 0.25;  // effects smoothing
 
     void main() {
-      vec3 c00 = texture2D(rubyTexture, gl_TexCoord[1].xy).xyz; 
-      vec3 c10 = texture2D(rubyTexture, gl_TexCoord[1].zw).xyz; 
-      vec3 c20 = texture2D(rubyTexture, gl_TexCoord[2].xy).xyz; 
-      vec3 c01 = texture2D(rubyTexture, gl_TexCoord[4].zw).xyz; 
-      vec3 c11 = texture2D(rubyTexture, gl_TexCoord[0].xy).xyz; 
-      vec3 c21 = texture2D(rubyTexture, gl_TexCoord[2].zw).xyz; 
-      vec3 c02 = texture2D(rubyTexture, gl_TexCoord[4].xy).xyz; 
-      vec3 c12 = texture2D(rubyTexture, gl_TexCoord[3].zw).xyz; 
-      vec3 c22 = texture2D(rubyTexture, gl_TexCoord[3].xy).xyz; 
+      vec3 c00 = texture2D(rubyTexture, vTextureCoord[1].xy).xyz; 
+      vec3 c10 = texture2D(rubyTexture, vTextureCoord[1].zw).xyz; 
+      vec3 c20 = texture2D(rubyTexture, vTextureCoord[2].xy).xyz; 
+      vec3 c01 = texture2D(rubyTexture, vTextureCoord[4].zw).xyz; 
+      vec3 c11 = texture2D(rubyTexture, vTextureCoord[0].xy).xyz; 
+      vec3 c21 = texture2D(rubyTexture, vTextureCoord[2].zw).xyz; 
+      vec3 c02 = texture2D(rubyTexture, vTextureCoord[4].xy).xyz; 
+      vec3 c12 = texture2D(rubyTexture, vTextureCoord[3].zw).xyz; 
+      vec3 c22 = texture2D(rubyTexture, vTextureCoord[3].xy).xyz; 
       vec3 dt = vec3(1.0, 1.0, 1.0);
 
       float md1 = dot(abs(c00 - c22), dt);

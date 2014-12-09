@@ -65,7 +65,7 @@ this.WebGl = this.WebGl || {};
 	WebGlRenderSurface.prototype.loadShader = function( shaderFilename, callback ) {
 	
 		var that = this;
-		shaderFilename = shaderFilename || 'v1.0/crt.xml'; // 'none.xml';
+		shaderFilename = shaderFilename || 'v1.0/Lanczos (6tap).xml'; // 'none.xml';
 		this._shader.loadAndLink( shaderFilename, function() {
 			that._shader.use();
 

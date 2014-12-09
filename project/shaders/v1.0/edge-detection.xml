@@ -18,15 +18,15 @@
 	vec2 dy = vec2(0.0, y);
  
 	gl_Position = aModelViewProjectionMatrix * aVertexPosition;
-	gl_TexCoord[0] = aTextureCoord;
-	gl_TexCoord[1].xy = gl_TexCoord[0].xy - dg1;
-	gl_TexCoord[1].zw = gl_TexCoord[0].xy - dy;
-	gl_TexCoord[2].xy = gl_TexCoord[0].xy - dg2;
-	gl_TexCoord[2].zw = gl_TexCoord[0].xy + dx;
-	gl_TexCoord[3].xy = gl_TexCoord[0].xy + dg1;
-	gl_TexCoord[3].zw = gl_TexCoord[0].xy + dy;
-	gl_TexCoord[4].xy = gl_TexCoord[0].xy + dg2;
-	gl_TexCoord[4].zw = gl_TexCoord[0].xy - dx;
+	vTextureCoord[0] = aTextureCoord;
+	vTextureCoord[1].xy = vTextureCoord[0].xy - dg1;
+	vTextureCoord[1].zw = vTextureCoord[0].xy - dy;
+	vTextureCoord[2].xy = vTextureCoord[0].xy - dg2;
+	vTextureCoord[2].zw = vTextureCoord[0].xy + dx;
+	vTextureCoord[3].xy = vTextureCoord[0].xy + dg1;
+	vTextureCoord[3].zw = vTextureCoord[0].xy + dy;
+	vTextureCoord[4].xy = vTextureCoord[0].xy + dg2;
+	vTextureCoord[4].zw = vTextureCoord[0].xy - dx;
      }
     ]]></vertex>
  
@@ -41,13 +41,13 @@
  
      void main ()
      {
-	vec3 c00 = texture2D(rubyTexture, gl_TexCoord[1].xy).xyz;
-	vec3 c02 = texture2D(rubyTexture, gl_TexCoord[4].xy).xyz;
-	vec3 c11 = texture2D(rubyTexture, gl_TexCoord[0].xy).xyz;
-	vec3 c20 = texture2D(rubyTexture, gl_TexCoord[2].xy).xyz;
-	vec3 c22 = texture2D(rubyTexture, gl_TexCoord[3].xy).xyz;
+	vec3 c00 = texture2D(rubyTexture, vTextureCoord[1].xy).xyz;
+	vec3 c02 = texture2D(rubyTexture, vTextureCoord[4].xy).xyz;
+	vec3 c11 = texture2D(rubyTexture, vTextureCoord[0].xy).xyz;
+	vec3 c20 = texture2D(rubyTexture, vTextureCoord[2].xy).xyz;
+	vec3 c22 = texture2D(rubyTexture, vTextureCoord[3].xy).xyz;
  
-	vec2 tex = gl_TexCoord[0].xy;
+	vec2 tex = vTextureCoord[0].xy;
 	vec2 texsize = rubyTextureSize;
  
 	vec3 first = mix(c00, c20, fract(tex.x * texsize.x + 0.5));

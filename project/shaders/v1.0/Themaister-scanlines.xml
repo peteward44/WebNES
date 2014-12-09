@@ -15,7 +15,7 @@
      void main()
      {
 	gl_Position = aModelViewProjectionMatrix * aVertexPosition;
-	gl_TexCoord[0] = aTextureCoord;
+	vTextureCoord[0] = aTextureCoord;
 	omega = vec2(3.1415 * rubyOutputSize.x * rubyTextureSize.x / rubyInputSize.x, 2.0 * 3.1415 * rubyTextureSize.y);
      }
      ]]></vertex>
@@ -34,9 +34,9 @@
 
      void main ()
      {
-	vec4 c11 = texture2D(rubyTexture, gl_TexCoord[0].xy);
+	vec4 c11 = texture2D(rubyTexture, vTextureCoord[0].xy);
 
-	vec4 scanline = c11 * (base_brightness + dot(sine_comp * sin(gl_TexCoord[0].xy * omega), vec2(1.0)));
+	vec4 scanline = c11 * (base_brightness + dot(sine_comp * sin(vTextureCoord[0].xy * omega), vec2(1.0)));
 	gl_FragColor = clamp(scanline, 0.0, 1.0);
      }
      ]]></fragment>

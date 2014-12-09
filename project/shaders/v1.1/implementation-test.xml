@@ -55,8 +55,8 @@
     uniform sampler2D rubyTexture;
     void main() {
         vec2 imageCoordMax = rubyInputSize / rubyTextureSize;
-        vec2 imageCoord = gl_TexCoord[0].xy / imageCoordMax;
-        gl_FragColor = texture2D(rubyTexture, gl_TexCoord[0].xy);
+        vec2 imageCoord = vTextureCoord[0].xy / imageCoordMax;
+        gl_FragColor = texture2D(rubyTexture, vTextureCoord[0].xy);
         gl_FragColor.a = gl_FragColor.r + imageCoord.x * imageCoord.y;
     }
     ]]></fragment>
@@ -66,8 +66,8 @@
     uniform sampler2D rubyTexture;
     void main() {
         vec2 imageCoordMax = rubyInputSize / rubyTextureSize;
-        vec2 imageCoord = gl_TexCoord[0].xy / imageCoordMax;
-        gl_FragColor = texture2D(rubyTexture, gl_TexCoord[0].xy);
+        vec2 imageCoord = vTextureCoord[0].xy / imageCoordMax;
+        gl_FragColor = texture2D(rubyTexture, vTextureCoord[0].xy);
         gl_FragColor.g += imageCoord.x * imageCoord.y;
         gl_FragColor.r = gl_FragColor.a;
     }
@@ -78,16 +78,16 @@
     uniform sampler2D rubyTexture;
     void main() {
         vec2 imageCoordMax = rubyInputSize / rubyTextureSize;
-        vec2 imageCoord = gl_TexCoord[0].xy / imageCoordMax;
-        gl_FragColor = texture2D(rubyTexture, gl_TexCoord[0].xy);
+        vec2 imageCoord = vTextureCoord[0].xy / imageCoordMax;
+        gl_FragColor = texture2D(rubyTexture, vTextureCoord[0].xy);
         gl_FragColor.b += imageCoord.x * imageCoord.y;
     }
     ]]></fragment>
     <fragment><![CDATA[
     uniform sampler2D rubyTexture;
     void main() {
-        gl_FragColor = texture2D(rubyTexture, gl_TexCoord[0].xy);
-        gl_FragColor += texture2D(rubyTexture, -gl_TexCoord[0].xy);
+        gl_FragColor = texture2D(rubyTexture, vTextureCoord[0].xy);
+        gl_FragColor += texture2D(rubyTexture, -vTextureCoord[0].xy);
     }
     ]]></fragment>
 </shader>

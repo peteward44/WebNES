@@ -16,7 +16,7 @@
     }
 
     void main(void) {
-      gl_FragColor = texture2D(rubyTexture, radialDistortion(gl_TexCoord[0].xy));
+      gl_FragColor = texture2D(rubyTexture, radialDistortion(vTextureCoord[0].xy));
     }
   ]]></fragment>
 </shader>

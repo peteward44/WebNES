@@ -2,8 +2,8 @@
 <shader language="GLSL">
   <vertex><![CDATA[
     void main(void) {
-      gl_Position = ftransform();
-      gl_TexCoord[0] = aTextureCoord;
+      gl_Position = aModelViewProjectionMatrix * aVertexPosition;
+      vTextureCoord[0] = aTextureCoord;
     }
   ]]></vertex>
 
@@ -11,7 +11,7 @@
     uniform sampler2D rubyTexture;
 
     void main(void) {   
-      vec4 rgb = texture2D(rubyTexture, gl_TexCoord[0].xy);
+      vec4 rgb = texture2D(rubyTexture, vTextureCoord[0].xy);
       vec4 intens = smoothstep(0.2,0.8,rgb) + normalize(vec4(rgb.xyz, 1.0));
 
       if(fract(gl_FragCoord.y * 0.5) > 0.5) intens = rgb * 0.8;

@@ -42,9 +42,9 @@
          vec2 dx = vec2(ps.x, 0.0);
          vec2 dy = vec2(0.0, ps.y);
 
-         vec2 pixcoord = gl_TexCoord[0].xy/ps;
+         vec2 pixcoord = vTextureCoord[0].xy/ps;
          vec2 fp	= fract(pixcoord);
-         vec2 d11	= gl_TexCoord[0].xy - fp * ps;
+         vec2 d11	= vTextureCoord[0].xy - fp * ps;
 
          // Reading the texels
 
@@ -179,6 +179,6 @@
 
    <fragment filter="linear"><![CDATA[
       uniform sampler2D rubyTexture;
-      void main() { gl_FragColor = texture2D(rubyTexture, gl_TexCoord[0].xy); }
+      void main() { gl_FragColor = texture2D(rubyTexture, vTextureCoord[0].xy); }
    ]]></fragment>
 </shader>

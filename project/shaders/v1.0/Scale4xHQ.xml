@@ -33,19 +33,19 @@
                 vec2 ddx = vec2(x,0.0); vec2 ddy = vec2(0.0,y);
 
                 gl_Position = aModelViewProjectionMatrix * aVertexPosition;
-                gl_TexCoord[0] = aTextureCoord;
-                gl_TexCoord[1].xy = gl_TexCoord[0].xy - sd1;
-                gl_TexCoord[2].xy = gl_TexCoord[0].xy - sd2;
-                gl_TexCoord[3].xy = gl_TexCoord[0].xy + sd1;
-                gl_TexCoord[4].xy = gl_TexCoord[0].xy + sd2;
-                gl_TexCoord[5].xy = gl_TexCoord[0].xy - dg1;
-                gl_TexCoord[6].xy = gl_TexCoord[0].xy + dg1;
-                gl_TexCoord[5].zw = gl_TexCoord[0].xy - dg2;
-                gl_TexCoord[6].zw = gl_TexCoord[0].xy + dg2;
-                gl_TexCoord[1].zw = gl_TexCoord[0].xy - ddy;
-                gl_TexCoord[2].zw = gl_TexCoord[0].xy + ddx;
-                gl_TexCoord[3].zw = gl_TexCoord[0].xy + ddy;
-                gl_TexCoord[4].zw = gl_TexCoord[0].xy - ddx;
+                vTextureCoord[0] = aTextureCoord;
+                vTextureCoord[1].xy = vTextureCoord[0].xy - sd1;
+                vTextureCoord[2].xy = vTextureCoord[0].xy - sd2;
+                vTextureCoord[3].xy = vTextureCoord[0].xy + sd1;
+                vTextureCoord[4].xy = vTextureCoord[0].xy + sd2;
+                vTextureCoord[5].xy = vTextureCoord[0].xy - dg1;
+                vTextureCoord[6].xy = vTextureCoord[0].xy + dg1;
+                vTextureCoord[5].zw = vTextureCoord[0].xy - dg2;
+                vTextureCoord[6].zw = vTextureCoord[0].xy + dg2;
+                vTextureCoord[1].zw = vTextureCoord[0].xy - ddy;
+                vTextureCoord[2].zw = vTextureCoord[0].xy + ddx;
+                vTextureCoord[3].zw = vTextureCoord[0].xy + ddy;
+                vTextureCoord[4].zw = vTextureCoord[0].xy - ddx;
         }
     ]]></vertex>
     <fragment><![CDATA[
@@ -59,19 +59,19 @@
 
         void main()
         {
-                vec3 c  = texture2D(rubyTexture, gl_TexCoord[0].xy).xyz;
-                vec3 i1 = texture2D(rubyTexture, gl_TexCoord[1].xy).xyz;
-                vec3 i2 = texture2D(rubyTexture, gl_TexCoord[2].xy).xyz;
-                vec3 i3 = texture2D(rubyTexture, gl_TexCoord[3].xy).xyz;
-                vec3 i4 = texture2D(rubyTexture, gl_TexCoord[4].xy).xyz;
-                vec3 o1 = texture2D(rubyTexture, gl_TexCoord[5].xy).xyz;
-                vec3 o3 = texture2D(rubyTexture, gl_TexCoord[6].xy).xyz;
-                vec3 o2 = texture2D(rubyTexture, gl_TexCoord[5].zw).xyz;
-                vec3 o4 = texture2D(rubyTexture, gl_TexCoord[6].zw).xyz;
-                vec3 s1 = texture2D(rubyTexture, gl_TexCoord[1].zw).xyz;
-                vec3 s2 = texture2D(rubyTexture, gl_TexCoord[2].zw).xyz;
-                vec3 s3 = texture2D(rubyTexture, gl_TexCoord[3].zw).xyz;
-                vec3 s4 = texture2D(rubyTexture, gl_TexCoord[4].zw).xyz;
+                vec3 c  = texture2D(rubyTexture, vTextureCoord[0].xy).xyz;
+                vec3 i1 = texture2D(rubyTexture, vTextureCoord[1].xy).xyz;
+                vec3 i2 = texture2D(rubyTexture, vTextureCoord[2].xy).xyz;
+                vec3 i3 = texture2D(rubyTexture, vTextureCoord[3].xy).xyz;
+                vec3 i4 = texture2D(rubyTexture, vTextureCoord[4].xy).xyz;
+                vec3 o1 = texture2D(rubyTexture, vTextureCoord[5].xy).xyz;
+                vec3 o3 = texture2D(rubyTexture, vTextureCoord[6].xy).xyz;
+                vec3 o2 = texture2D(rubyTexture, vTextureCoord[5].zw).xyz;
+                vec3 o4 = texture2D(rubyTexture, vTextureCoord[6].zw).xyz;
+                vec3 s1 = texture2D(rubyTexture, vTextureCoord[1].zw).xyz;
+                vec3 s2 = texture2D(rubyTexture, vTextureCoord[2].zw).xyz;
+                vec3 s3 = texture2D(rubyTexture, vTextureCoord[3].zw).xyz;
+                vec3 s4 = texture2D(rubyTexture, vTextureCoord[4].zw).xyz;
                 vec3 dt = vec3(1.0,1.0,1.0);
 
                 float ko1=dot(abs(o1-c),dt);

@@ -21,8 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
    <vertex><![CDATA[
       void main()
       {
-         gl_Position    = ftransform();
-         gl_TexCoord[0] = aTextureCoord;
+         gl_Position    = aModelViewProjectionMatrix * aVertexPosition;
+         vTextureCoord[0] = aTextureCoord;
       }
    ]]></vertex>
 
@@ -37,15 +37,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
       {
          vec4 sum = vec4(0.0);
          vec4 bum = vec4(0.0);
-         vec2 texcoord = vec2(gl_TexCoord[0]);
+         vec2 texcoord = vec2(vTextureCoord[0]);
          int j;
          int i;
 
          vec2 glaresize = vec2(glarebasesize) / rubyTextureSize;
 
-         for(i = -2; i < 2; i++)
+         for(int i = -2; i < 2; i++)
          {
-            for (j = -1; j < 1; j++)
+            for (int j = -1; j < 1; j++)
             {
                sum += texture2D(texture, texcoord + vec2(-i, j)*glaresize) * power;
                bum += texture2D(texture, texcoord + vec2(j, i)*glaresize) * power;            

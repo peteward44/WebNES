@@ -37,14 +37,14 @@
       //     G5 H5 I5
 
       gl_Position = aModelViewProjectionMatrix * aVertexPosition;
-      gl_TexCoord[0] = aTextureCoord;
-      gl_TexCoord[1] = aTextureCoord.xxxy + vec4(    -dx,   0,  dx, -2.0*dy);  //  A1 B1 C1
-      gl_TexCoord[2] = aTextureCoord.xxxy + vec4(    -dx,   0,  dx,     -dy);  //   A  B  C
-      gl_TexCoord[3] = aTextureCoord.xxxy + vec4(    -dx,   0,  dx,       0);  //   D  E  F
-      gl_TexCoord[4] = aTextureCoord.xxxy + vec4(    -dx,   0,  dx,      dy);  //   G  H  I
-      gl_TexCoord[5] = aTextureCoord.xxxy + vec4(    -dx,   0,  dx,  2.0*dy);  //  G5 H5 I5
-      gl_TexCoord[6] = aTextureCoord.xyyy + vec4(-2.0*dx, -dy,   0,      dy);  //  A0 D0 G0
-      gl_TexCoord[7] = aTextureCoord.xyyy + vec4( 2.0*dx, -dy,   0,      dy);  //  C4 F4 I4 
+      vTextureCoord[0] = aTextureCoord;
+      vTextureCoord[1] = aTextureCoord.xxxy + vec4(    -dx,   0,  dx, -2.0*dy);  //  A1 B1 C1
+      vTextureCoord[2] = aTextureCoord.xxxy + vec4(    -dx,   0,  dx,     -dy);  //   A  B  C
+      vTextureCoord[3] = aTextureCoord.xxxy + vec4(    -dx,   0,  dx,       0);  //   D  E  F
+      vTextureCoord[4] = aTextureCoord.xxxy + vec4(    -dx,   0,  dx,      dy);  //   G  H  I
+      vTextureCoord[5] = aTextureCoord.xxxy + vec4(    -dx,   0,  dx,  2.0*dy);  //  G5 H5 I5
+      vTextureCoord[6] = aTextureCoord.xyyy + vec4(-2.0*dx, -dy,   0,      dy);  //  A0 D0 G0
+      vTextureCoord[7] = aTextureCoord.xyyy + vec4( 2.0*dx, -dy,   0,      dy);  //  C4 F4 I4 
     }
   ]]></vertex>
 
@@ -93,35 +93,35 @@
     }
 
     void main() {
-      vec2 fp = fract(gl_TexCoord[0].xy * rubyTextureSize);
+      vec2 fp = fract(vTextureCoord[0].xy * rubyTextureSize);
 
-      vec3 A1 = texture2D(rubyTexture, gl_TexCoord[1].xw).rgb;
-      vec3 B1 = texture2D(rubyTexture, gl_TexCoord[1].yw).rgb;
-      vec3 C1 = texture2D(rubyTexture, gl_TexCoord[1].zw).rgb;
+      vec3 A1 = texture2D(rubyTexture, vTextureCoord[1].xw).rgb;
+      vec3 B1 = texture2D(rubyTexture, vTextureCoord[1].yw).rgb;
+      vec3 C1 = texture2D(rubyTexture, vTextureCoord[1].zw).rgb;
 
-      vec3 A  = texture2D(rubyTexture, gl_TexCoord[2].xw).rgb;
-      vec3 B  = texture2D(rubyTexture, gl_TexCoord[2].yw).rgb;
-      vec3 C  = texture2D(rubyTexture, gl_TexCoord[2].zw).rgb;
+      vec3 A  = texture2D(rubyTexture, vTextureCoord[2].xw).rgb;
+      vec3 B  = texture2D(rubyTexture, vTextureCoord[2].yw).rgb;
+      vec3 C  = texture2D(rubyTexture, vTextureCoord[2].zw).rgb;
 
-      vec3 D  = texture2D(rubyTexture, gl_TexCoord[3].xw).rgb;
-      vec3 E  = texture2D(rubyTexture, gl_TexCoord[3].yw).rgb;
-      vec3 F  = texture2D(rubyTexture, gl_TexCoord[3].zw).rgb;
+      vec3 D  = texture2D(rubyTexture, vTextureCoord[3].xw).rgb;
+      vec3 E  = texture2D(rubyTexture, vTextureCoord[3].yw).rgb;
+      vec3 F  = texture2D(rubyTexture, vTextureCoord[3].zw).rgb;
 
-      vec3 G  = texture2D(rubyTexture, gl_TexCoord[4].xw).rgb;
-      vec3 H  = texture2D(rubyTexture, gl_TexCoord[4].yw).rgb;
-      vec3 I  = texture2D(rubyTexture, gl_TexCoord[4].zw).rgb;
+      vec3 G  = texture2D(rubyTexture, vTextureCoord[4].xw).rgb;
+      vec3 H  = texture2D(rubyTexture, vTextureCoord[4].yw).rgb;
+      vec3 I  = texture2D(rubyTexture, vTextureCoord[4].zw).rgb;
 
-      vec3 G5 = texture2D(rubyTexture, gl_TexCoord[5].xw).rgb;
-      vec3 H5 = texture2D(rubyTexture, gl_TexCoord[5].yw).rgb;
-      vec3 I5 = texture2D(rubyTexture, gl_TexCoord[5].zw).rgb;
+      vec3 G5 = texture2D(rubyTexture, vTextureCoord[5].xw).rgb;
+      vec3 H5 = texture2D(rubyTexture, vTextureCoord[5].yw).rgb;
+      vec3 I5 = texture2D(rubyTexture, vTextureCoord[5].zw).rgb;
 
-      vec3 A0 = texture2D(rubyTexture, gl_TexCoord[6].xy).rgb;
-      vec3 D0 = texture2D(rubyTexture, gl_TexCoord[6].xz).rgb;
-      vec3 G0 = texture2D(rubyTexture, gl_TexCoord[6].xw).rgb;
+      vec3 A0 = texture2D(rubyTexture, vTextureCoord[6].xy).rgb;
+      vec3 D0 = texture2D(rubyTexture, vTextureCoord[6].xz).rgb;
+      vec3 G0 = texture2D(rubyTexture, vTextureCoord[6].xw).rgb;
 
-      vec3 C4 = texture2D(rubyTexture, gl_TexCoord[7].xy).rgb;
-      vec3 F4 = texture2D(rubyTexture, gl_TexCoord[7].xz).rgb;
-      vec3 I4 = texture2D(rubyTexture, gl_TexCoord[7].xw).rgb;
+      vec3 C4 = texture2D(rubyTexture, vTextureCoord[7].xy).rgb;
+      vec3 F4 = texture2D(rubyTexture, vTextureCoord[7].xz).rgb;
+      vec3 I4 = texture2D(rubyTexture, vTextureCoord[7].xw).rgb;
 
       vec4 b = RGBtoYUV(B, D, H, F);
       vec4 c = RGBtoYUV(C, A, G, I);

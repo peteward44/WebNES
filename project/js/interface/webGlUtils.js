@@ -131,8 +131,10 @@ this.WebGl = this.WebGl || {};
 			// Add variables common to all vertex shaders
 			str = 'uniform mat4 aModelViewProjectionMatrix;\n' + str;
 			str = 'attribute vec4 aVertexPosition;\n' + str;
-			str = 'attribute vec2 aTextureCoord;\n' + str;
+			str = 'attribute vec4 aTextureCoord;\n' + str;
 		}
+		
+		str = 'varying vec4	vTextureCoord[8];\n' + str;
 		
 		str = 'precision mediump float;\n' + str; // Bodge precision on script
 		str = '#extension GL_OES_standard_derivatives : enable\n' + str;

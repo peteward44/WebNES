@@ -29,8 +29,8 @@ GNU General Public License for more details.
     <vertex><![CDATA[
         void main()
         {
-            gl_TexCoord[0] = aTextureCoord;         //center
-            gl_Position = ftransform();
+            vTextureCoord[0] = aTextureCoord;         //center
+            gl_Position = aModelViewProjectionMatrix * aVertexPosition;
         }
     ]]></vertex>
 
@@ -70,7 +70,7 @@ GNU General Public License for more details.
         void main()
         {
             vec2 stepxy = 1.0 / rubyTextureSize.xy;
-            vec2 pos = gl_TexCoord[0].xy + stepxy * 0.5;
+            vec2 pos = vTextureCoord[0].xy + stepxy * 0.5;
             vec2 f = fract(pos / stepxy);
 
             vec3 linetaps1   = weight3(0.5 - f.x * 0.5);

@@ -22,8 +22,8 @@ This shader works best at scale 3x or else the pixels don't match up correctly.
 <shader language="GLSL">
   <vertex><![CDATA[
     void main(void) {
-      gl_Position = ftransform();
-      gl_TexCoord[0] = aTextureCoord;
+      gl_Position = aModelViewProjectionMatrix * aVertexPosition;
+      vTextureCoord[0] = aTextureCoord;
     }
   ]]></vertex>
 
@@ -31,13 +31,13 @@ This shader works best at scale 3x or else the pixels don't match up correctly.
     uniform sampler2D rubyTexture;
 
     void main(void) {   
-      vec4 rgb = texture2D(rubyTexture, gl_TexCoord[0].xy);
+      vec4 rgb = texture2D(rubyTexture, vTextureCoord[0].xy);
       vec4 intens ;
 	  if (fract(gl_FragCoord.y * (0.5*4.0/3.0)) > 0.5)
 		intens = vec4(0);
 		else
 		intens = smoothstep(0.2,0.8,rgb) + normalize(vec4(rgb.xyz, 1.0));
-		float level = (4.0-gl_TexCoord[0].z) * 0.19;
+		float level = (4.0-vTextureCoord[0].z) * 0.19;
       gl_FragColor = intens * (0.5-level) + rgb * 1.1 ;
     }
   ]]></fragment>

@@ -18,14 +18,14 @@
 <shader language="GLSL">
   <fragment filter="linear" size_x="256"><![CDATA[
      uniform sampler2D rubyTexture;
-     void main() { gl_FragColor = texture2D(rubyTexture, gl_TexCoord[0].xy); }
+     void main() { gl_FragColor = texture2D(rubyTexture, vTextureCoord[0].xy); }
   ]]></fragment>
   <fragment filter="linear" outscale_x="1.0"><![CDATA[
      uniform sampler2D rubyTexture;
-     void main() { gl_FragColor = texture2D(rubyTexture, gl_TexCoord[0].xy); }
+     void main() { gl_FragColor = texture2D(rubyTexture, vTextureCoord[0].xy); }
   ]]></fragment>
   <fragment filter="nearest"><![CDATA[
      uniform sampler2D rubyTexture;
-     void main() { gl_FragColor = texture2D(rubyTexture, gl_TexCoord[0].xy); }
+     void main() { gl_FragColor = texture2D(rubyTexture, vTextureCoord[0].xy); }
   ]]></fragment>
 </shader>
