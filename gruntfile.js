@@ -68,6 +68,9 @@ module.exports = function(grunt) {
 					{ expand: true, nonull: true, cwd: 'project', src: ['**.html'], dest: rootOutput },
 					{ expand: true, nonull: true, cwd: 'bower_components/jquery-ui/themes/smoothness/images', src: ['**'], dest: path.join( rootOutput, 'css/images' ) },
 					{ expand: true, nonull: true, cwd: 'project/js/db', src: ['**'], dest: path.join( rootOutput, 'js/db' ) },
+					{ expand: true, nonull: true, cwd: 'bower_components/xml-shaders/shaders/OpenGL', src: ['**'], dest: path.join( rootOutput, 'shaders' ), rename: function(dest, src) {
+							return path.join( dest, src.replace('.shader','.xml') );
+						} },
 					{ expand: true, nonull: true, cwd: 'project/shaders', src: ['**'], dest: path.join( rootOutput, 'shaders' ) }
 				]
 			}
