@@ -20,47 +20,60 @@ this.WebGl = this.WebGl || {};
 (function(){
 	"use strict";
 	
+	var defaultVertexShader =
+			"void main(void) {" +
+				"gl_Position = aModelViewProjectionMatrix * aVertexPosition;" +
+				"vTextureCoord[0] = aTextureCoord;" +
+			"}";
+	
+	var defaultFragmentShader =
+			"uniform sampler2D rubyTexture;" +
+			"void main(void) {" +
+				"gl_FragColor = texture2D(rubyTexture, vec2(vTextureCoord[0].s, vTextureCoord[0].t));" +
+			"}";
+	
+	
 	var getGlContext = function( canvas ) {
 		return canvas.getContext("webgl") || canvas.getContext("experimental-webgl")
 	};
 	
 	
-	var MultiCallback = function() {
+	// var MultiCallback = function() {
 	
-		this._allCallback = null;
-		this._dueCount = 0;
-		this._completeCount = 0;
-	};
+		// this._allCallback = null;
+		// this._dueCount = 0;
+		// this._completeCount = 0;
+	// };
 	
 		
-	MultiCallback.prototype._callbackComplete = function() {
+	// MultiCallback.prototype._callbackComplete = function() {
 	
-		this._completeCount++;
-		this._checkComplete();
-	};
-	
-	
-	MultiCallback.prototype._checkComplete = function() {
-	
-		if ( this._completeCount === this._dueCount ) {
-			this._allCallback();
-		}
-	};
+		// this._completeCount++;
+		// this._checkComplete();
+	// };
 	
 	
-	MultiCallback.prototype.callback = function() {
+	// MultiCallback.prototype._checkComplete = function() {
+	
+		// if ( this._completeCount === this._dueCount ) {
+			// this._allCallback();
+		// }
+	// };
+	
+	
+	// MultiCallback.prototype.callback = function() {
 		
-		this._dueCount++;
-		var that = this;
-		return function() { that._callbackComplete(); }
-	};
+		// this._dueCount++;
+		// var that = this;
+		// return function() { that._callbackComplete(); }
+	// };
 	
 	
-	MultiCallback.prototype.start = function( allCallback ) {
+	// MultiCallback.prototype.start = function( allCallback ) {
 	
-		this._allCallback = allCallback;
-		this._checkComplete();
-	};
+		// this._allCallback = allCallback;
+		// this._checkComplete();
+	// };
 	
 	
 	
@@ -164,11 +177,27 @@ this.WebGl = this.WebGl || {};
 	
 	
 	ShaderProgram.prototype._shaderLoadSuccess = function( xmlRaw, callback ) {
+	
+		var fragmentStr, vertexStr;
+		var fragmentXml, vertexXml;
 		
-		var xmlDoc = $( xmlRaw );
-		var fragmentStr = xmlDoc.find( 'fragment' )[0].textContent;
-		var vertexStr = xmlDoc.find( 'vertex' )[0].textContent;
-		
+		if ( xmlRaw ) {
+			var xmlDoc = $( xmlRaw );
+			fragmentXml = xmlDoc.find( 'fragment' )[0];
+			vertexXml = xmlDoc.find( 'vertex' )[0];
+		}
+
+		if ( fragmentXml && fragmentXml.textContent ) {
+			fragmentStr = fragmentXml.textContent;
+		} else {
+			fragmentStr = defaultFragmentShader;
+		}
+		if ( vertexXml && vertexXml.textContent ) {
+			vertexStr = vertexXml.textContent;
+		} else {
+			vertexStr = defaultVertexShader;
+		}
+
 		if ( this._fragment ) {
 			this._glContext.detachShader(this._shaderProgram, this._fragment);
 		}
@@ -196,13 +225,17 @@ this.WebGl = this.WebGl || {};
 	
 		this._uniformLocationCache = {};
 		this._attribCache = {};
-			
-		var that = this;
-		$['ajax']({
-			'url': 'shaders/' + shaderFile,
-			'success': function( xmlDoc ) { that._shaderLoadSuccess( xmlDoc, callback ); },
-			'dataType': 'xml'
-		});
+		
+		if ( shaderFile && shaderFile.length > 0 ) {
+			var that = this;
+			$['ajax']({
+				'url': 'shaders/' + shaderFile,
+				'success': function( xmlDoc ) { that._shaderLoadSuccess( xmlDoc, callback ); },
+				'dataType': 'xml'
+			});
+		} else {
+			this._shaderLoadSuccess( null, callback );
+		}
 	};
 	
 	
