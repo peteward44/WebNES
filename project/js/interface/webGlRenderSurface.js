@@ -29,6 +29,7 @@ this.WebGl = this.WebGl || {};
 	var WebGlRenderSurface = function( canvasParent ) {
 	
 		var that = this;
+		this._ready = false;
 
 		this._clearArray = new Uint32Array( SCREEN_WIDTH * SCREEN_HEIGHT );
 		this._clearArrayColour = this._clearArray[0];
@@ -40,23 +41,48 @@ this.WebGl = this.WebGl || {};
 		this._element = canvasParent.getCanvasElement();
 		this._glContext = WebGl.getGlContext( this._element );
 
-		this._initShaders();
-		this._initBuffers();
-
 		this._camera = new WebGl.OrthoCamera( this._glContext );
 		this._camera.setup( SCREEN_WIDTH, SCREEN_HEIGHT );
-		this._camera.setMatrices( this._pMatrixUniform, this._mvMatrixUniform );
-		
+
+		this._initBuffers();
+			
 		this._texture = new WebGl.FillableTexture( this._glContext, TEXTURE_WIDTH, TEXTURE_HEIGHT );
-		
-		this._vertexBuffer.bind( this._vertexPositionAttribute );
-		this._textureCoordBuffer.bind( this._textureCoordAttribute );
-		this._indexBuffer.bind();
-		this._texture.bind();
-
-		this._glContext.uniform1i(this._samplerUniform, 0);
-
+			
 		canvasParent.connect( 'resize', function() { that._onResize(); } );
+
+		this._inputSizeShaderArray = new Float32Array( [ SCREEN_WIDTH, SCREEN_HEIGHT ] );
+		this._outputSizeShaderArray = new Float32Array( [ SCREEN_WIDTH, SCREEN_HEIGHT ] );
+		this._textureSizeShaderArray = new Float32Array( [ TEXTURE_WIDTH, TEXTURE_HEIGHT ] );
+		
+		this._shader = new WebGl.ShaderProgram( this._glContext );
+		
+		this.loadShader( null, function() {
+			that._ready = true;
+		} );
+	};
+	
+	
+	WebGlRenderSurface.prototype.loadShader = function( shaderFilename, callback ) {
+	
+		var that = this;
+		this._shader.loadAndLink( shaderFilename, function() {
+			that._shader.use();
+
+			that._glContext.uniform2fv(that._shader.getUniformLocation("rubyInputSize"), that._inputSizeShaderArray );
+			that._glContext.uniform2fv(that._shader.getUniformLocation("rubyOutputSize"), that._outputSizeShaderArray );
+			that._glContext.uniform2fv(that._shader.getUniformLocation("rubyTextureSize"), that._textureSizeShaderArray );
+
+			that._glContext.uniformMatrix4fv( that._shader.getUniformLocation("aModelViewProjectionMatrix"), false, that._camera.getMVPMatrix() );
+
+			that._vertexBuffer.bind( that._shader.getAttrib( "aVertexPosition" ) );
+			that._textureCoordBuffer.bind( that._shader.getAttrib( "aTextureCoord" ) );
+			that._indexBuffer.bind();
+			that._texture.bind();
+
+			that._glContext.uniform1i(that._shader.getUniformLocation("rubyTexture"), 0); //Texture unit 0 is for base images.
+			
+			callback();
+		}  );
 	};
 
 	
@@ -65,10 +91,10 @@ this.WebGl = this.WebGl || {};
 		var u = SCREEN_HEIGHT / TEXTURE_HEIGHT;
 		
 		var vertices = new Float32Array( [
-				0, 0,							0.0,
-				SCREEN_WIDTH,	0,				0.0,
-				SCREEN_WIDTH,	SCREEN_HEIGHT,	0.0,
-				0,				SCREEN_HEIGHT,	0.0
+				0, 0,							0.0, 1.0,
+				SCREEN_WIDTH,	0,				0.0, 1.0,
+				SCREEN_WIDTH,	SCREEN_HEIGHT,	0.0, 1.0,
+				0,				SCREEN_HEIGHT,	0.0, 1.0
 			] );
 		var texCoords = new Float32Array( [
 				0.0,	0.0,
@@ -79,7 +105,7 @@ this.WebGl = this.WebGl || {};
 		var indices = new Uint16Array( [ 0, 1, 2,	0, 2, 3 ] );
 	
 		this._vertexBuffer = new WebGl.VertexBuffer( this._glContext );
-		this._vertexBuffer.setData( vertices, 3, 4 );
+		this._vertexBuffer.setData( vertices, 4, 4 );
 
 		this._textureCoordBuffer = new WebGl.VertexBuffer( this._glContext );
 		this._textureCoordBuffer.setData( texCoords, 2, 4 );
@@ -88,21 +114,6 @@ this.WebGl = this.WebGl || {};
 		this._indexBuffer.setData( indices, 6 );
 	};
 	
-
-	WebGlRenderSurface.prototype._initShaders = function() {
-	
-		this._shader = new WebGl.ShaderProgram( this._glContext );
-		this._shader.loadAndLink( "shader-fs", "shader-vs" );
-		this._shader.use();
-
-		this._vertexPositionAttribute = this._shader.getAttrib( "aVertexPosition" );
-		this._textureCoordAttribute = this._shader.getAttrib( "aTextureCoord" );
-
-		this._pMatrixUniform = this._shader.getUniformLocation("uPMatrix");
-		this._mvMatrixUniform = this._shader.getUniformLocation("uMVMatrix");
-		this._samplerUniform = this._shader.getUniformLocation("uSampler");
-	};
-
 
 	WebGlRenderSurface.prototype._onResize = function() {
 		this._glContext.viewport(0, 0, this._element.width, this._element.height);
@@ -148,8 +159,12 @@ this.WebGl = this.WebGl || {};
 	
 	WebGlRenderSurface.prototype.render = function( mainboard ) {
 
+		if ( !this._ready ) {
+			return;
+		}
 		this._glContext.clear(this._glContext.COLOR_BUFFER_BIT);
 		this._texture.fill( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, this._offscreen8BitView );
+		this._glContext.uniform1i(this._shader.getUniformLocation("rubyFrameCount"), mainboard.ppu.frameCounter );
 		this._indexBuffer.draw();
 	};
 	
@@ -183,7 +198,13 @@ this.WebGl = this.WebGl || {};
 		return element.toDataURL("image/png");
 	};
 	
+	
+	WebGlRenderSurface.prototype.loadShaderFromUrl = function( url ) {
+	
+		this.loadShader( url, function() {} );
+	};
 
+	
 	Gui.WebGlRenderSurface = WebGlRenderSurface;
 	
 }());

@@ -20,9 +20,61 @@ this.WebGl = this.WebGl || {};
 (function(){
 	"use strict";
 	
+	var defaultVertexShader =
+			"void main(void) {" +
+				"gl_Position = aModelViewProjectionMatrix * aVertexPosition;" +
+				"vTextureCoord[0] = aTextureCoord;" +
+			"}";
+	
+	var defaultFragmentShader =
+			"uniform sampler2D rubyTexture;" +
+			"void main(void) {" +
+				"gl_FragColor = texture2D(rubyTexture, vec2(vTextureCoord[0].s, vTextureCoord[0].t));" +
+			"}";
+	
+	
 	var getGlContext = function( canvas ) {
 		return canvas.getContext("webgl") || canvas.getContext("experimental-webgl")
 	};
+	
+	
+	// var MultiCallback = function() {
+	
+		// this._allCallback = null;
+		// this._dueCount = 0;
+		// this._completeCount = 0;
+	// };
+	
+		
+	// MultiCallback.prototype._callbackComplete = function() {
+	
+		// this._completeCount++;
+		// this._checkComplete();
+	// };
+	
+	
+	// MultiCallback.prototype._checkComplete = function() {
+	
+		// if ( this._completeCount === this._dueCount ) {
+			// this._allCallback();
+		// }
+	// };
+	
+	
+	// MultiCallback.prototype.callback = function() {
+		
+		// this._dueCount++;
+		// var that = this;
+		// return function() { that._callbackComplete(); }
+	// };
+	
+	
+	// MultiCallback.prototype.start = function( allCallback ) {
+	
+		// this._allCallback = allCallback;
+		// this._checkComplete();
+	// };
+	
 	
 	
 	var VertexBuffer = function( glContext ) {
@@ -74,57 +126,115 @@ this.WebGl = this.WebGl || {};
 	
 	var ShaderProgram = function( glContext ) {
 	
+		this._fragment = null;
+		this._vertex = null;
+		
 		this._glContext = glContext;
+		// add some extensions - this enables fwidth() method, see https://www.khronos.org/registry/gles/extensions/OES/OES_standard_derivatives.txt
+		this._glContext.getExtension('OES_standard_derivatives');
+		
+		this._uniformLocationCache = {};
+		this._attribCache = {};
 		this._shaderProgram = this._glContext.createProgram();
 	};
 	
 
-	ShaderProgram.prototype._compileShader = function(id) {
-		var shaderScript = document.getElementById(id);
-		if (!shaderScript) {
-			throw new Error( "Could not find shader script for DOM element '" + id + "'" );
+	ShaderProgram.prototype._compileShader = function( glType, str ) {
+	
+		var shader = this._glContext.createShader( glType );
+		
+		var prepend = '';
+		
+		if ( str.indexOf( '#version' ) === 0 ) {
+			var versionString = str.substr( 0, str.indexOf( '\n' ) );
+			str = str.substring( versionString.length );
+			prepend += versionString;
 		}
-
-		var str = "";
-		var k = shaderScript.firstChild;
-		while (k) {
-			if (k.nodeType === 3) {
-				str += k.textContent;
-			}
-			k = k.nextSibling;
+		
+		prepend += 'precision mediump float;\n'; // Bodge precision on script
+		prepend += '#extension GL_OES_standard_derivatives : enable\n';
+		
+		if ( glType === this._glContext.VERTEX_SHADER ) {
+			// Add variables common to all vertex shaders
+			prepend += 'uniform mat4 aModelViewProjectionMatrix;\n';
+			prepend += 'attribute vec4 aVertexPosition;\n';
+			prepend += 'attribute vec4 aTextureCoord;\n';
 		}
+		
+		prepend += 'varying vec4 vTextureCoord[8];\n';
 
-		var shader;
-		if (shaderScript.type === "x-shader/x-fragment") {
-			shader = this._glContext.createShader(this._glContext.FRAGMENT_SHADER);
-		} else if (shaderScript.type === "x-shader/x-vertex") {
-			shader = this._glContext.createShader(this._glContext.VERTEX_SHADER);
-		} else {
-			throw new Error( "Could not find shader script for DOM element '" + id + "'" );
-		}
-
+		str = prepend + str;
+		
 		this._glContext.shaderSource(shader, str);
 		this._glContext.compileShader(shader);
 
 		if (!this._glContext.getShaderParameter(shader, this._glContext.COMPILE_STATUS)) {
-			throw new Error( "Error compiling shader script '" + id + "' " + this._glContext.getShaderInfoLog(shader) );
+			throw new Error( "Error compiling shader script " + this._glContext.getShaderInfoLog(shader) );
 		}
-
+		
 		return shader;
 	};
 	
 	
-	ShaderProgram.prototype.loadAndLink = function( fragmentName, vertexName ) {
+	ShaderProgram.prototype._shaderLoadSuccess = function( xmlRaw, callback ) {
 	
-		var fragmentShader = this._compileShader( fragmentName );
-		var vertexShader = this._compileShader( vertexName );
+		var fragmentStr, vertexStr;
+		var fragmentXml, vertexXml;
+		
+		if ( xmlRaw ) {
+			var xmlDoc = $( xmlRaw );
+			fragmentXml = xmlDoc.find( 'fragment' )[0];
+			vertexXml = xmlDoc.find( 'vertex' )[0];
+		}
 
-		this._glContext.attachShader(this._shaderProgram, vertexShader);
-		this._glContext.attachShader(this._shaderProgram, fragmentShader);
-		this._glContext.linkProgram(this._shaderProgram);
+		if ( fragmentXml && fragmentXml.textContent ) {
+			fragmentStr = fragmentXml.textContent;
+		} else {
+			fragmentStr = defaultFragmentShader;
+		}
+		if ( vertexXml && vertexXml.textContent ) {
+			vertexStr = vertexXml.textContent;
+		} else {
+			vertexStr = defaultVertexShader;
+		}
 
-		if (!this._glContext.getProgramParameter(this._shaderProgram, this._glContext.LINK_STATUS)) {
-			throw new Error("Could not initialise shaders");
+		if ( this._fragment ) {
+			this._glContext.detachShader(this._shaderProgram, this._fragment);
+		}
+		if ( this._vertex ) {
+			this._glContext.detachShader(this._shaderProgram, this._vertex);
+		}
+		
+		this._fragment = this._compileShader( this._glContext.FRAGMENT_SHADER, fragmentStr );
+		this._vertex = this._compileShader( this._glContext.VERTEX_SHADER, vertexStr );
+		
+		this._glContext.attachShader(this._shaderProgram, this._fragment);
+		this._glContext.attachShader(this._shaderProgram, this._vertex);
+		
+		this._glContext.linkProgram( this._shaderProgram );
+
+		if (!this._glContext.getProgramParameter( this._shaderProgram, this._glContext.LINK_STATUS )) {
+			throw new Error( this._glContext.getProgramInfoLog( this._shaderProgram ) );
+		}
+		
+		callback( null );
+	};
+	
+	
+	ShaderProgram.prototype.loadAndLink = function( shaderFile, callback ) {
+	
+		this._uniformLocationCache = {};
+		this._attribCache = {};
+		
+		if ( shaderFile && shaderFile.length > 0 ) {
+			var that = this;
+			$['ajax']({
+				'url': 'shaders/' + shaderFile,
+				'success': function( xmlDoc ) { that._shaderLoadSuccess( xmlDoc, callback ); },
+				'dataType': 'xml'
+			});
+		} else {
+			this._shaderLoadSuccess( null, callback );
 		}
 	};
 	
@@ -135,18 +245,23 @@ this.WebGl = this.WebGl || {};
 	};
 	
 	
-	ShaderProgram.prototype.getAttrib = function( name ) {
-		var attrib = this._glContext.getAttribLocation(this._shaderProgram, name);
-		this._glContext.enableVertexAttribArray( attrib );
-		return attrib;
-	};
-	
-	
 	ShaderProgram.prototype.getUniformLocation = function( name ) {
 	
-		return this._glContext.getUniformLocation(this._shaderProgram, name);
+		if ( !this._uniformLocationCache.hasOwnProperty( name ) ) {
+			 this._uniformLocationCache[ name ] = this._glContext.getUniformLocation(this._shaderProgram, name);
+		}
+		return this._uniformLocationCache[ name ];
 	};
+		
 	
+	ShaderProgram.prototype.getAttrib = function( name ) {
+	
+		if ( !this._attribCache.hasOwnProperty( name ) ) {
+			this._attribCache[ name ] = this._glContext.getAttribLocation(this._shaderProgram, name);
+			this._glContext.enableVertexAttribArray( this._attribCache[ name ] );
+		}
+		return this._attribCache[ name ];
+	};
 	
 	
 	var FillableTexture = function( glContext, width, height ) {
@@ -167,6 +282,8 @@ this.WebGl = this.WebGl || {};
   
 		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MAG_FILTER, filtering);
 		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_MIN_FILTER, filtering);
+		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_WRAP_S, this._glContext.CLAMP_TO_EDGE);
+		this._glContext.texParameteri(this._glContext.TEXTURE_2D, this._glContext.TEXTURE_WRAP_T, this._glContext.CLAMP_TO_EDGE);
 	};
 	
 	FillableTexture.prototype.fill = function( x, y, width, height, array ) {
@@ -190,9 +307,10 @@ this.WebGl = this.WebGl || {};
 		mat4.translate(this._mvMatrix, this._mvMatrix, [0.0, 0.0, -0.1]);
 	};
 	
-	OrthoCamera.prototype.setMatrices = function( pMatrixUniform, mvMatrixUniform ) {
-		this._glContext.uniformMatrix4fv(pMatrixUniform, false, this._pMatrix);
-		this._glContext.uniformMatrix4fv(mvMatrixUniform, false, this._mvMatrix);
+	OrthoCamera.prototype.getMVPMatrix = function() {
+		var combined = mat4.create();
+		mat4.multiply( combined, this._pMatrix, this._mvMatrix );
+		return combined;
 	};
 	
 	

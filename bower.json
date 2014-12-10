@@ -11,7 +11,8 @@
     "rusha": "latest",
     "fpsmeter": "latest",
     "jquery-ui": "latest",
-    "bower-qtip2": "~2.1.1"
+    "bower-qtip2": "~2.1.1",
+	"xml-shaders": "git://gitorious.org/bsnes/xml-shaders.git"
   },
   "devDependencies": {
     "qunit": "latest"

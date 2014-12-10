@@ -94,6 +94,7 @@ var animateFunction;
 			if ( WebGl.webGlSupported() ) {
 				console.log( "Using WebGL for rendering..." );
 				this._renderSurface = new Gui.WebGlRenderSurface( this._canvasParent );
+				$('#postProcessingDiv').css( 'display', 'block' ); // Show shader drop list
 			} else {
 				console.log( "WebGL not supported. Using canvas for rendering..." );
 				this._renderSurface = new Gui.CanvasRenderSurface( this._canvasParent );
@@ -388,6 +389,14 @@ var animateFunction;
 	App.prototype.gameGenieCode = function( code ) {
 	
 		Nes.processGameGenieCode( this._mainboard, code, true );
+	};
+	
+	
+	App.prototype.loadShaderFromUrl = function( url ) {
+	
+		if ( this._renderSurface.loadShaderFromUrl ) {
+			this._renderSurface.loadShaderFromUrl( url );
+		}
 	};
 
 	

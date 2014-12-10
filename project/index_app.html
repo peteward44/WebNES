@@ -42,6 +42,50 @@
 			<li>Arrow keys - DPAD</li>
 			</ul>
 			<p>Pete Ward, 2014 [peteward44 at gmail dot com]</p>
+			<div id="postProcessingDiv" style="display:none;">
+			<p>Post processing effects:</p>
+			<p>
+				<select type="text" list="shaderList" id="shaderListComboBox">
+					<datalist id="shaderList">
+						<option value="">None</option>
+						<option disabled>------------</option>
+<option value="v1.0/CRT.xml">CRT</option>
+<option value="v1.1/CRT-interlaced.xml">CRT-interlaced</option>
+<option value="v1.0/Curvature.xml">Curvature</option>
+<option value="v1.0/Dot 'n Bloom.xml">Dot 'n Bloom</option>
+<option value="v1.0/edge-detection.xml">edge-detection</option>
+<option value="v1.0/HDR-TV.xml">HDR-TV</option>
+<option value="v1.0/simplebloom.xml">simplebloom</option>
+<option value="v1.0/heavybloom.xml">heavybloom</option>
+<option value="v1.0/Phosphor-simple.xml">Phosphor-simple</option>
+<option value="v1.0/Pixellate-scanlines.xml">Pixellate-scanlines</option>
+<option value="v1.0/Pixellate.xml">Pixellate</option>
+<option value="v1.0/Themaister-Waterpaint-scanlines.xml">Themaister-Waterpaint-scanlines</option>
+<option value="v1.0/Themaister-Waterpaint.xml">Themaister-Waterpaint</option>
+<option value="v1.0/Themaister-scanlines.xml">Themaister-scanlines</option>
+<option value="v1.0/Bicubic (normal).xml">Bicubic (normal)</option>
+<option value="v1.0/5xBR Rounded.xml">5xBR Rounded</option>
+<option disabled>------------</option>
+<option value="v1.0/5xBR Semi-Rounded.xml">5xBR Semi-Rounded</option>
+<option value="v1.0/5xBR Squared.xml">5xBR Squared</option>
+<option value="v1.0/Bicubic (sharp).xml">Bicubic (sharp)</option>
+<option value="v1.0/Bicubic (sharper).xml">Bicubic (sharper)</option>
+<option value="v1.0/CRT-simple.xml">CRT-simple</option>
+<option value="v1.0/HQ2x.xml">HQ2x</option>
+<option value="v1.0/Lanczos (6tap).xml">Lanczos (6tap)</option>
+<option value="v1.0/Quilez.xml">Quilez</option>
+<option value="v1.0/SABR.xml">SABR</option>
+<option value="v1.0/Scale2x.xml">Scale2x</option>
+<option value="v1.0/Scale4xHQ.xml">Scale4xHQ</option>
+<option value="v1.0/scanline-3x.xml">scanline-3x</option>
+<option value="v1.0/scanline-4x.xml">scanline-4x</option>
+<option value="v1.1/4xBR.OpenGL.xml">4xBR.OpenGL</option>
+<option value="v1.1/Integer-Scale.OpenGL.xml">Integer-Scale.OpenGL</option>
+<option value="v1.1/SimpleTVBlur.OpenGL.xml">SimpleTVBlur.OpenGL</option>
+					</datalist>
+				</select>
+			</p>
+			</div>
 		</div>
 		<div id="socialMediaPanel" class="socialMediaPanel">
 			<div id="twitter">
@@ -132,28 +176,6 @@
 			<div id="gameGenieDialog_contents"></div>
 		</div>
 	</div>
-	
-	<!-- shaders required by WebGL -->
-	<script id="shader-fs" type="x-shader/x-fragment">
-		precision mediump float;
-		varying vec2 vTextureCoord;
-		uniform sampler2D uSampler;
-		void main(void) {
-			gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-		}
-	</script>
-
-	<script id="shader-vs" type="x-shader/x-vertex">
-		attribute vec3 aVertexPosition;
-		attribute vec2 aTextureCoord;
-		uniform mat4 uMVMatrix;
-		uniform mat4 uPMatrix;
-		varying vec2 vTextureCoord;
-		void main(void) {
-			gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-			vTextureCoord = aTextureCoord;
-		}
-	</script>
 
 	<!-- build:js js/nes.components.min.js -->
 	<script type="text/javascript" src="js/polyfills/arrayPolyfills.js"></script>

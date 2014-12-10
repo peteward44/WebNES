@@ -1,3 +1,9 @@
+CRT TODO:
+
+- Handle loading failures better (load up none.xml instead)
+- If vertex / fragment shader missing, use none.xml implementation instead
+- calgari-scanlines is broken
+
 Game genie codes: http://nintendoage.com/forum/messageview.cfm?StartRow=1&catid=31&threadid=34751
 
 - MMC1 - better distinction between SUROM, SOROM, SXROM - http://wiki.nesdev.com/w/index.php/MMC1
