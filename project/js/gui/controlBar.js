@@ -55,6 +55,7 @@ this.Gui = this.Gui || {};
 		this._addButton( "controlBar_quickLoadButton", { enabledWhenRomIsLoaded: true, primary: { label: "Quick load", icon: "ui-icon-folder-collapsed" }, click: function() { that._onLoadButtonClick(); } } );
 		this._addButton( "controlBar_screenshotButton", { enabledWhenRomIsLoaded: true, primary: { label: "Screenshot", icon: "ui-icon-image" }, click: function() { that._onScreenshotButtonClick(); } } );
 		this._debugButton = this._addButton( "controlBar_debugButton", { primary: { label: "Debug panel", icon: "ui-icon-wrench" }, click: function() { that._onDebugButtonClick(); } } );
+		this._keyboardRemapperButton = this._addButton( "controlBar_keyboardRemap", { primary: { label: "Remap controls", icon: "ui-icon-calculator" }, click: function() { that._onKeyboardRemapButtonClick(); } } );
 		
 		this._soundButton = this._addButton( "controlBar_soundButton", { primary: { label: "Volume", icon: "ui-icon-volume-on" }, toggle: { label: "Volume", icon: 'ui-icon-volume-off' }, click: function() { that._onSoundButtonClick(); return false; } } );
 		this._soundSlider = new Gui.ControlBarSlider( "controlBar_volumeSlider", this._soundButton, {
@@ -115,6 +116,12 @@ this.Gui = this.Gui || {};
 			that._setPosition();
 		});
 		this._setPosition();
+	};
+	
+	
+	ControlBar.prototype._onKeyboardRemapButtonClick = function() {
+		
+		this._app._keyboardRemapDialog.show();
 	};
 	
 	

@@ -20,59 +20,83 @@ this.Gui = this.Gui || {};
 (function(){
 	"use strict";
 	
-	var globalInstance = null;
+	var _open = null;
 	
-	var LogWindow = function( mainboard, divElement ) {
 	
-		globalInstance = this;
-		var that = this;
-		this._strArray = [];
-		this._dataArray = [];
-		this._element = document.createElement('textarea');
-		this._element.rows = 15;
-		this._element.cols = 80;
-		divElement.appendChild( this._element );
-		this._mainboard = mainboard;
-
-		setInterval( function() { that._onTextRefresh(); }, 1000 );
-	};
-
-	
-	LogWindow.prototype._onLog = function( log ) {
-		//console.log( log );
-		//this._addData( log );
-	};
+	var KeyboardRemapper = function( app ) {
 		
-	
-	LogWindow.prototype._addData = function( obj ) {
-		this._dataArray.push( obj );
-		if ( this._dataArray.length > 80 ) {
-			this._dataArray.shift();
-		}
+		var that = this;
+		this._app = app;
+		this._contentsDiv = $( "#keyboardRemapperDialog_contents" );
+		
+		this._dialog = $( "#keyboardRemapperDialog" ).dialog({
+			'autoOpen': false,
+			'title': 'Control mapping',
+			'height': 400,
+			'width': 900,
+			'modal': true,
+			'buttons': {
+				'OK': function() {
+					that._onApplyClick();
+				},
+				'Close': function() {
+					that._dialog.dialog( "close" );
+				}
+			},
+			'close': function() {
+				that._onClose();
+			}
+		});
+		
+		// TODO: Load previously used key map from local storage
+		var html = '';
+		
+		html += this._buildHtmlForButton( JOYPAD_A, [ 90 ] );
+		html += this._buildHtmlForButton( JOYPAD_B, [ 88 ] );
+		html += this._buildHtmlForButton( JOYPAD_SELECT, [ 16, 160, 161, 67 ] );
+		html += this._buildHtmlForButton( JOYPAD_START, [ 13, 32, 86 ] );
+		html += this._buildHtmlForButton( JOYPAD_UP, [ 38, 87, 104 ] );
+		html += this._buildHtmlForButton( JOYPAD_DOWN, [ 40, 83, 101, 98 ] );
+		html += this._buildHtmlForButton( JOYPAD_LEFT, [ 37, 65, 100 ] );
+		html += this._buildHtmlForButton( JOYPAD_RIGHT, [ 39, 68, 102 ] );
+		
+		this._contentsDiv[0].innerHTML = html;
 	};
 	
 	
-	LogWindow.prototype._onTextRefresh = function( consoleToo ) {
-	
-		var tot = '';
-		for ( var i=0; i<this._dataArray.length; ++i ) {
-			var str = this._dataArray[i];
-			tot += str + "\r\n";
-		}
-		this._element.innerHTML = tot;
-		if ( consoleToo ) {
-			console.log( tot );
-		}
+	KeyboardRemapper.prototype._buildHtmlForButton = function( keyEnum, keyCodeArray ) {
+		
+		return '<p>' + keyEnum + '</p>';
 	};
 
+
+	KeyboardRemapper.prototype.show = function() {
 	
-	Gui.LogWindow = LogWindow;
-	
-	
-	Gui.log = function( module, str ) {
-		if ( globalInstance ) {
-			globalInstance._onLog( module + " " + str );
-		}
+		_open = this;
+		this._app.pause( true );
+		this._dialog.dialog( "open" );
 	};
+	
+	
+	KeyboardRemapper.prototype._onClose = function() {
+	
+		this._app.pause( false );
+	};
+	
+	
+	KeyboardRemapper.prototype._onApplyClick = function() {
+	
+		this._dialog.dialog( "close" );
+	};
+	
+	
+	var keyboardRemapperDialog_onsetkeyclick = function( keyEnum, keyCode ) {
+		// set single key code for action
+	};
+
+
+	
+	Gui.KeyboardRemapper = KeyboardRemapper;
+	Gui[ 'keyboardRemapperDialog_onsetkeyclick' ] = keyboardRemapperDialog_onsetkeyclick;
 
 }());
