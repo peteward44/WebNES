@@ -24,16 +24,18 @@ this.Gui = this.Gui || {};
 	
 	
 	var KeyboardRemapper = function( app ) {
-		
+
 		var that = this;
 		this._app = app;
+		this._waitingPress = false;
+		this._waitingPressKey = '';
 		this._contentsDiv = $( "#keyboardRemapperDialog_contents" );
 		
 		this._dialog = $( "#keyboardRemapperDialog" ).dialog({
 			'autoOpen': false,
 			'title': 'Control mapping',
-			'height': 400,
-			'width': 900,
+			'height': 335,
+			'width': 603,
 			'modal': true,
 			'buttons': {
 				'OK': function() {
@@ -48,34 +50,49 @@ this.Gui = this.Gui || {};
 			}
 		});
 		
+		this._setKeyDialog = $( "#keyboardRemapperSetKeyDialog" ).dialog({
+			'dialogClass': "no-close",
+			'draggable': false,
+			'autoOpen': false,
+			'height': 200,
+			'minHeight': 200,
+			'width': 400,
+			'minWidth': 400,
+			'modal': true,
+			'resizable': false,
+			'buttons': {
+				'Close': function() {
+					that._setKeyDialog.dialog( "close" );
+				}
+			},
+			'close': function() {
+				that._waitingPress = false;
+			}
+		});
+		
+		this._setKeyDialogContents = $( "#keyboardRemapperSetKeyDialog_contents" );
+		
 		// TODO: Load previously used key map from local storage
-		var html = '';
+
+		$('.keyboardMap').maphilight();
 		
-		html += this._buildHtmlForButton( JOYPAD_A, [ 90 ] );
-		html += this._buildHtmlForButton( JOYPAD_B, [ 88 ] );
-		html += this._buildHtmlForButton( JOYPAD_SELECT, [ 16, 160, 161, 67 ] );
-		html += this._buildHtmlForButton( JOYPAD_START, [ 13, 32, 86 ] );
-		html += this._buildHtmlForButton( JOYPAD_UP, [ 38, 87, 104 ] );
-		html += this._buildHtmlForButton( JOYPAD_DOWN, [ 40, 83, 101, 98 ] );
-		html += this._buildHtmlForButton( JOYPAD_LEFT, [ 37, 65, 100 ] );
-		html += this._buildHtmlForButton( JOYPAD_RIGHT, [ 39, 68, 102 ] );
-		
-		this._contentsDiv[0].innerHTML = html;
+		$( document ).keypress( function( event ) { that._onDocumentKeypress( event ); } );
 	};
 	
 	
-	KeyboardRemapper.prototype._buildHtmlForButton = function( keyEnum, keyCodeArray ) {
+	KeyboardRemapper.prototype._onDocumentKeypress = function( event ) {
 		
-		var keys = 'Keys: ';
-		for ( var i=0; i<keyCodeArray.length; ++i ) {
-			keys += keyCodeArray[ i ] ) + ' ';
+		if ( this._waitingPress ) {
+			this._setKeyDialogContents[0].innerHTML += " " + event.which;
 		}
-		var onclick = 'Gui.keyboardRemapperDialog_onsetkeyclick( ' + keyEnum + ' )';
-		
-		return '<div><p>' + JOYPAD_ID_TO_NAME( keyEnum ) + '</p><p><button type="button" value="" onclick="' + onclick + '">' + keys + '</button></p></div>';
 	};
-
-
+	
+	
+	KeyboardRemapper.prototype._keyCodeToString = function( keyCode ) {
+		return keyCode.toString();
+	};
+	
+	
 	KeyboardRemapper.prototype.show = function() {
 	
 		_open = this;
@@ -96,8 +113,19 @@ this.Gui = this.Gui || {};
 	};
 	
 	
-	var keyboardRemapperDialog_onsetkeyclick = function( keyEnum ) {
-		// set single key code for action
+	KeyboardRemapper.prototype._onSetKeyClick = function( keyName ) {
+		
+		var id = JOYPAD_NAME_TO_ID( keyName );
+		this._waitingPressKey = id;
+		this._waitingPress = true;
+		this._setKeyDialog.dialog('option', 'title', 'Press keys to assign to ' + keyName );
+		this._setKeyDialog.dialog( "open" );
+	};
+	
+	
+	var keyboardRemapperDialog_onsetkeyclick = function( keyName ) {
+
+		_open._onSetKeyClick( keyName );
 	};
 
 

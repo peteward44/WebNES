@@ -12,7 +12,7 @@
     "fpsmeter": "latest",
     "jquery-ui": "latest",
     "bower-qtip2": "~2.1.1",
-	"xml-shaders": "git://gitorious.org/bsnes/xml-shaders.git"
+	"maphilight": "~1.3.0"
   },
   "devDependencies": {
     "qunit": "latest"
