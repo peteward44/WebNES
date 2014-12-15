@@ -66,7 +66,13 @@ this.Gui = this.Gui || {};
 	
 	KeyboardRemapper.prototype._buildHtmlForButton = function( keyEnum, keyCodeArray ) {
 		
-		return '<p>' + keyEnum + '</p>';
+		var keys = 'Keys: ';
+		for ( var i=0; i<keyCodeArray.length; ++i ) {
+			keys += keyCodeArray[ i ] ) + ' ';
+		}
+		var onclick = 'Gui.keyboardRemapperDialog_onsetkeyclick( ' + keyEnum + ' )';
+		
+		return '<div><p>' + JOYPAD_ID_TO_NAME( keyEnum ) + '</p><p><button type="button" value="" onclick="' + onclick + '">' + keys + '</button></p></div>';
 	};
 
 
@@ -90,7 +96,7 @@ this.Gui = this.Gui || {};
 	};
 	
 	
-	var keyboardRemapperDialog_onsetkeyclick = function( keyEnum, keyCode ) {
+	var keyboardRemapperDialog_onsetkeyclick = function( keyEnum ) {
 		// set single key code for action
 	};
 
