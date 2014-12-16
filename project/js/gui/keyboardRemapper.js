@@ -42,12 +42,13 @@ this.Gui = this.Gui || {};
 		this._waitingPlayerId = 0;
 		this._waitingPressKey = '';
 		this._contentsDiv = $( "#keyboardRemapperDialog_contents" );
+		this._existingKeysContents = $( "#keyboardRemapperSetKeyDialog_existingKeysContents" );
 		
 		this._dialog = $( "#keyboardRemapperDialog" ).dialog({
 			'autoOpen': false,
 			'title': 'Control mapping',
-			'height': 690,
-			'width': 603,
+			'height': 450,
+			'width': 325,
 			'modal': true,
 			'buttons': {
 				'Close': function() {
@@ -90,6 +91,15 @@ this.Gui = this.Gui || {};
 		window.addEventListener( 'keyup', function( event ) { that._onDocumentKeypress( event, false ); }, false );
 	};
 	
+	KeyboardRemapper.prototype._keyArrayToHtml = function( keysArray ) {
+	
+		var str = keysArray.map( function( kc ) { return keyCodeToName( kc ); } ).join( ' ' );
+		if ( str.length === 0 ) {
+			str = '&lt;NONE&gt;';
+		}
+		return str;
+	};
+	
 	
 	KeyboardRemapper.prototype._onDocumentKeypress = function( event, pressed ) {
 		
@@ -98,7 +108,7 @@ this.Gui = this.Gui || {};
 				var kc = Number( event.keyCode );
 				if ( this._keysAssigned.indexOf( kc ) < 0 ) {
 					this._keysAssigned.push( kc );
-					this._setKeyDialogContents[0].innerHTML = this._keysAssigned.map( function( kc ) { return keyCodeToName( kc ); } ).join( ' ' );
+					this._setKeyDialogContents[0].innerHTML = '<p>New keys: ' + this._keyArrayToHtml( this._keysAssigned ) + '</p>';
 				}
 			}
 		}
@@ -131,8 +141,11 @@ this.Gui = this.Gui || {};
 		this._waitingPress = true;
 		this._waitingPlayerId = playerId;
 		this._keysAssigned.length = 0;
-		this._setKeyDialogContents[0].innerHTML = '';
-		this._setKeyDialog.dialog('option', 'title', 'Press keys to assign to ' + keyName );
+		this._setKeyDialogContents[0].innerHTML = '<p>New keys:</p>';
+		var existingKeys = this._app._input.getKeyBindings( playerId, id );
+		
+		this._existingKeysContents[0].innerHTML = '<p>Current keys: ' + this._keyArrayToHtml( existingKeys ) + '</p>';
+		this._setKeyDialog.dialog('option', 'title', 'Player ' + ( playerId + 1 ) + ': Press keys to assign to ' + keyName );
 		this._setKeyDialog.dialog( "open" );
 	};
 	
