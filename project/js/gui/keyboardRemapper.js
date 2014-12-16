@@ -75,15 +75,18 @@ this.Gui = this.Gui || {};
 		// TODO: Load previously used key map from local storage
 
 		$('.keyboardMap').maphilight();
-		
-		$( document ).keypress( function( event ) { that._onDocumentKeypress( event ); } );
+
+		window.addEventListener( 'keydown', function( event ) { that._onDocumentKeypress( event, true ); }, false );
+		window.addEventListener( 'keyup', function( event ) { that._onDocumentKeypress( event, false ); }, false );
 	};
 	
 	
-	KeyboardRemapper.prototype._onDocumentKeypress = function( event ) {
+	KeyboardRemapper.prototype._onDocumentKeypress = function( event, pressed ) {
 		
 		if ( this._waitingPress ) {
-			this._setKeyDialogContents[0].innerHTML += " " + event.which;
+			if ( pressed ) {
+				this._setKeyDialogContents[0].innerHTML += " " + event.keyCode;
+			}
 		}
 	};
 	
