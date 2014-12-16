@@ -97,9 +97,11 @@ this.Gui = this.Gui || {};
 	
 		this._mainboard = mainboard;
 		this._pads = [];
+		
+		// TODO: Load previously used key map from local storage
 		this._playerKeyboardMaps = [
 			[
-				// Only has defaults for player 1
+				// defaults for player 1
 				[ 90 ], // Z // var JOYPAD_A = 0;
 				[ 88 ], // X // var JOYPAD_B = 1;
 				[ 16, 160, 161, 67 ], // shift, left shift, right shift, C // var JOYPAD_SELECT = 2;
@@ -108,6 +110,36 @@ this.Gui = this.Gui || {};
 				[ 40, 83, 101, 98 ], // down, S, numpad 5, numpad 2 // var JOYPAD_DOWN = 5;
 				[ 37, 65, 100 ], // left, A, numpad 4 // var JOYPAD_LEFT = 6;
 				[ 39, 68, 102 ] // right, D, numpad 6 // var JOYPAD_RIGHT = 7;
+			],
+			[
+				[],
+				[],
+				[],
+				[],
+				[],
+				[],
+				[],
+				[]
+			],
+			[
+				[],
+				[],
+				[],
+				[],
+				[],
+				[],
+				[],
+				[]
+			],
+			[
+				[],
+				[],
+				[],
+				[],
+				[],
+				[],
+				[],
+				[]
 			]
 		];
 		
@@ -262,6 +294,13 @@ this.Gui = this.Gui || {};
 			}
 		}
 		return wasPressed;
+	};
+	
+	
+	Input.prototype.saveKeyBindings = function( playerId, key, keysAssigned ) {
+		
+		this._playerKeyboardMaps[ playerId ][ key ] = keysAssigned.slice( 0 );
+		// TODO: Save to local storage
 	};
 	
 

@@ -179,17 +179,34 @@
 		</div>
 		<div id="keyboardRemapperDialog" class="gameGenieDialog">
 			<div id="keyboardRemapperDialog_contents">
-				<img class="keyboardMap" src="images/nescontroller.jpg" alt="" usemap="#controllermap"/>
-				<map name="controllermap">
-					<area shape="rect" coords="100, 79, 148, 119" alt="UP" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 'UP' );"/>
-					<area shape="rect" coords="100, 154, 148, 194" alt="DOWN" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 'DOWN' );"/>
-					<area shape="rect" coords="68, 112, 108, 160" alt="LEFT" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 'LEFT' );"/>
-					<area shape="rect" coords="143, 112, 183, 160" alt="RIGHT" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 'RIGHT' );"/>
-					<area shape="rect" coords="220, 145, 275, 177" alt="SELECT" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 'SELECT' );"/>
-					<area shape="rect" coords="275, 145, 330, 177" alt="START" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 'START' );"/>
-					<area shape="rect" coords="365, 132, 421, 188" alt="B" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 'B' );"/>
-					<area shape="rect" coords="437, 132, 493, 188" alt="A" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 'A' );"/>
+				<map name="controllermap1">
+					<area shape="rect" coords="100, 79, 148, 119" alt="UP" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 0, 'UP' );"/>
+					<area shape="rect" coords="100, 154, 148, 194" alt="DOWN" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 0, 'DOWN' );"/>
+					<area shape="rect" coords="68, 112, 108, 160" alt="LEFT" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 0, 'LEFT' );"/>
+					<area shape="rect" coords="143, 112, 183, 160" alt="RIGHT" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 0, 'RIGHT' );"/>
+					<area shape="rect" coords="220, 145, 275, 177" alt="SELECT" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 0, 'SELECT' );"/>
+					<area shape="rect" coords="275, 145, 330, 177" alt="START" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 0, 'START' );"/>
+					<area shape="rect" coords="365, 132, 421, 188" alt="B" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 0, 'B' );"/>
+					<area shape="rect" coords="437, 132, 493, 188" alt="A" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 0, 'A' );"/>
 				</map>
+				<map name="controllermap2">
+					<area shape="rect" coords="100, 79, 148, 119" alt="UP" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 1, 'UP' );"/>
+					<area shape="rect" coords="100, 154, 148, 194" alt="DOWN" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 1, 'DOWN' );"/>
+					<area shape="rect" coords="68, 112, 108, 160" alt="LEFT" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 1, 'LEFT' );"/>
+					<area shape="rect" coords="143, 112, 183, 160" alt="RIGHT" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 1, 'RIGHT' );"/>
+					<area shape="rect" coords="220, 145, 275, 177" alt="SELECT" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 1, 'SELECT' );"/>
+					<area shape="rect" coords="275, 145, 330, 177" alt="START" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 1, 'START' );"/>
+					<area shape="rect" coords="365, 132, 421, 188" alt="B" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 1, 'B' );"/>
+					<area shape="rect" coords="437, 132, 493, 188" alt="A" onclick="Gui.keyboardRemapperDialog_onsetkeyclick( 1, 'A' );"/>
+				</map>
+				<div>
+					<h1>Player 1</h2>
+					<img class="keyboardMap" src="images/nescontroller.jpg" alt="" usemap="#controllermap1"/>
+				</div>
+				<div>
+					<h1>Player 2</h2>
+					<img class="keyboardMap" src="images/nescontroller.jpg" alt="" usemap="#controllermap2"/>
+				</div>
 			</div>
 			<div id="keyboardRemapperSetKeyDialog">
 				<div id="keyboardRemapperSetKeyDialog_contents">
