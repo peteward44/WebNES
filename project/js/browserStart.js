@@ -40,7 +40,7 @@ window.onload = function() {
 	}
 	
 	// And this is the select box for selecting a WebGL shader
-	var sel = $('#shaderListComboBox');
+	sel = $('#shaderListComboBox');
 	if ( sel ) {
 		sel['change'](function(){
 			var value = $(this)['val']();
