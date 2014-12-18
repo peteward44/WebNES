@@ -51,16 +51,16 @@ this.Gui = this.Gui || {};
 	
 	
 	var getMetaObject = function( cartName ) {
-		var str = localStorage.getItem( getMetaName( cartName ) );
-		if ( str ) {
-			return JSON.parse( str );
+		var obj = loadFromLocalStorage( getMetaName( cartName ) );
+		if ( !obj ) {
+			obj = { slots: {} };
 		}
-		return { slots: {} };
+		return obj;
 	};
 	
 	
 	var setMetaObject = function( cartName, obj ) {
-		localStorage.setItem( getMetaName( cartName ), JSON.stringify( obj ) );
+		saveToLocalStorage( getMetaName( cartName ), obj );
 	};
 	
 	
@@ -68,12 +68,8 @@ this.Gui = this.Gui || {};
 		
 		if ( localStorage ) {
 			// save state data as it's own local storage object
-			var raw = JSON.stringify( data );
-			var uncompressedLength = raw.length;
-			var compressed = compress( raw );
-			console.log( "Saved data size: " + compressed.length + " (uncompressed: " + uncompressedLength + ")" );
-			localStorage.setItem( getCartName( slotName, cartName ), compressed );
-			
+			saveToLocalStorage( getCartName( slotName, cartName ), data );
+
 			// add to meta data object
 			var meta = getMetaObject( cartName );
 			var slotMeta = {};
@@ -168,6 +164,29 @@ this.Gui = this.Gui || {};
 	
 		return !!localStorage;
 	};
+		
+	
+	var saveToLocalStorage = function( name, data ) {
+		if ( localStorage ) {
+			var raw = JSON.stringify( data );
+			var compressed = compress( raw );
+			localStorage.setItem( name, compressed );
+		}
+	};
+	
+	
+	var loadFromLocalStorage = function( name ) {
+		if ( localStorage ) {
+			var compressed = localStorage.getItem( name );
+			if ( compressed ) {
+				var compressedLength = compressed.length;
+				var decompressed = decompress( compressed );
+				var obj = JSON.parse( decompressed );
+				return obj;
+			}
+		}
+		return null;
+	};
 	
 	
 	Gui.saveState = saveState;
@@ -175,5 +194,7 @@ this.Gui = this.Gui || {};
 	Gui.getStateMetaData = getStateMetaData;
 	Gui.renameQuickSaveStates = renameQuickSaveStates;
 	Gui.saveStateSupported = saveStateSupported;
+	Gui.saveToLocalStorage = saveToLocalStorage;
+	Gui.loadFromLocalStorage = loadFromLocalStorage;
 	
 }());

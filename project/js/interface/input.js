@@ -97,20 +97,9 @@ this.Gui = this.Gui || {};
 	
 		this._mainboard = mainboard;
 		this._pads = [];
-		this._playerKeyboardMaps = [
-			[
-				// Only has defaults for player 1
-				[ 90 ], // Z // var JOYPAD_A = 0;
-				[ 88 ], // X // var JOYPAD_B = 1;
-				[ 16, 160, 161, 67 ], // shift, left shift, right shift, C // var JOYPAD_SELECT = 2;
-				[ 13, 32, 86 ], // enter, space, V // var JOYPAD_START = 3;
-				[ 38, 87, 104 ], // up, W, numpad 8 // var JOYPAD_UP = 4;
-				[ 40, 83, 101, 98 ], // down, S, numpad 5, numpad 2 // var JOYPAD_DOWN = 5;
-				[ 37, 65, 100 ], // left, A, numpad 4 // var JOYPAD_LEFT = 6;
-				[ 39, 68, 102 ] // right, D, numpad 6 // var JOYPAD_RIGHT = 7;
-			]
-		];
 		
+		this._loadKeyBindingsFromLocalStorage();
+
 		// these values are guessed - need testing
 		this._gamepadButtonMap = {
 			'UP': [ gamepad_consts.dpadUp ],
@@ -262,6 +251,76 @@ this.Gui = this.Gui || {};
 			}
 		}
 		return wasPressed;
+	};
+	
+	
+	Input.prototype.saveKeyBindings = function( playerId, key, keysAssigned ) {
+		
+		this._playerKeyboardMaps[ playerId ][ key ] = keysAssigned.slice( 0 );
+		this._saveKeyBindingsToLocalStorage();
+	};
+		
+		
+	Input.prototype.getKeyBindings = function( playerId, key ) {
+		
+		return this._playerKeyboardMaps[ playerId ][ key ].slice( 0 );
+	};
+	
+	
+	Input.prototype._loadKeyBindingsFromLocalStorage = function() {
+		this._playerKeyboardMaps = Gui.loadFromLocalStorage( "webnes_keybindings" );
+				
+		// Load defaults if no local storage found
+		if ( !this._playerKeyboardMaps ) {
+			this._playerKeyboardMaps = [
+				[
+					// defaults for player 1
+					[ 90 ], // Z // var JOYPAD_A = 0;
+					[ 88 ], // X // var JOYPAD_B = 1;
+					[ 16, 160, 161, 67 ], // shift, left shift, right shift, C // var JOYPAD_SELECT = 2;
+					[ 13, 32, 86 ], // enter, space, V // var JOYPAD_START = 3;
+					[ 38, 87, 104 ], // up, W, numpad 8 // var JOYPAD_UP = 4;
+					[ 40, 83, 101, 98 ], // down, S, numpad 5, numpad 2 // var JOYPAD_DOWN = 5;
+					[ 37, 65, 100 ], // left, A, numpad 4 // var JOYPAD_LEFT = 6;
+					[ 39, 68, 102 ] // right, D, numpad 6 // var JOYPAD_RIGHT = 7;
+				],
+				[
+					[],
+					[],
+					[],
+					[],
+					[],
+					[],
+					[],
+					[]
+				],
+				[
+					[],
+					[],
+					[],
+					[],
+					[],
+					[],
+					[],
+					[]
+				],
+				[
+					[],
+					[],
+					[],
+					[],
+					[],
+					[],
+					[],
+					[]
+				]
+			];
+		}
+	};
+	
+	
+	Input.prototype._saveKeyBindingsToLocalStorage = function() {
+		Gui.saveToLocalStorage( "webnes_keybindings", this._playerKeyboardMaps );
 	};
 	
 

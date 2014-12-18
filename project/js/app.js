@@ -111,6 +111,7 @@ var animateFunction;
 			this._controlBar = new Gui.ControlBar( this );
 			this._controlBar.connect( 'romLoaded', function( name, binaryString ) { that._loadRomCallback( name, binaryString ); } );
 			this._input = new Gui.Input( this._mainboard );
+			this._keyboardRemapDialog = new Gui.KeyboardRemapper( this );
 		}
 		
 		this._saveStateManager = new Gui.SaveStateManager( this, this._options.createGuiComponents );

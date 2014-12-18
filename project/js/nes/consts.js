@@ -126,3 +126,17 @@ var JOYPAD_NAME_TO_ID = function( name ) {
 	else { throw new Error( "JOYPAD_NAME_TO_ID: Invalid parameter" ); }
 };
 
+
+var JOYPAD_ID_TO_NAME = function( id ) {
+	if ( id === JOYPAD_UP ) { return 'UP'; }
+	else if ( id === JOYPAD_DOWN ) { return 'DOWN'; }
+	else if ( id === JOYPAD_LEFT ) { return 'LEFT'; }
+	else if ( id === JOYPAD_RIGHT ) { return 'RIGHT'; }
+	else if ( id === JOYPAD_A ) { return 'A'; }
+	else if ( id === JOYPAD_B ) { return 'B'; }
+	else if ( id === JOYPAD_SELECT ) { return 'SELECT'; }
+	else if ( id === JOYPAD_START ) { return 'START'; }
+	else { throw new Error( "JOYPAD_ID_TO_NAME: Invalid parameter " + id ); }
+};
+
+
