@@ -85,7 +85,7 @@ this.Gui = this.Gui || {};
 		
 		this._setKeyDialogContents = $( "#keyboardRemapperSetKeyDialog_contents" );
 
-		$('.keyboardMap').maphilight();
+		$('.keyboardMap')['maphilight']();
 
 		window.addEventListener( 'keydown', function( event ) { that._onDocumentKeypress( event, true ); }, false );
 		window.addEventListener( 'keyup', function( event ) { that._onDocumentKeypress( event, false ); }, false );
