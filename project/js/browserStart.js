@@ -47,6 +47,8 @@ window.onload = function() {
 			if ( value.length > 0 ) {
 				console.log( "Loading shader " + value );
 				Gui.App.loadShaderFromUrl( value );
+			} else {
+				Gui.App.loadShaderFromUrl( null );
 			}
 		});
 	}

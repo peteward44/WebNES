@@ -1,21 +1,21 @@
 {
   "name": "nesulator-online",
-  "version": "0.0.1",
+  "version": "0.0.1-snapshot.0",
   "dependencies": {
-    "gl-matrix": "latest",
-    "jszip": "latest",
-    "jsziptools": "latest",
-    "jquery": "latest",
-    "FileSaver": "latest",
-    "canvas-toBlob.js": "latest",
-    "rusha": "latest",
-    "fpsmeter": "latest",
-    "jquery-ui": "latest",
+    "gl-matrix": "~2.2.1",
+    "jszip": "~2.0.0",
+    "jsziptools": "~2.4.4",
+    "jquery": "~2.1.1",
+    "FileSaver": "11751a6a65",
+    "canvas-toBlob.js": "~0.1.3",
+    "rusha": "~0.7.7",
+    "fpsmeter": "~0.3.1",
+    "jquery-ui": "~1.11.2",
     "bower-qtip2": "~2.1.1",
 	"maphilight": "~1.3.0"
   },
   "devDependencies": {
-    "qunit": "latest"
+    "qunit": "~1.17.1"
   },
   "private": true
 }
