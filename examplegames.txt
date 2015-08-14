@@ -1,0 +1,67 @@
+			<p>
+				<select type="text" list="gamesList" id="loadGameComboBox">
+					<datalist id="gamesList">
+						<option value="">Select a ROM file to load...</option>
+						<option value="roms/Super Mario Bros 3 (U) (PRG 0).nes.zip">Super Mario Bros 3</option>
+						<option value="roms/Super Mario Bros (E).nes.zip">Super Mario Bros</option>
+						<option value="roms/Zelda 2 - The Adventure of Link (U).nes.zip">Zelda 2: The Adventure of Link</option>
+						<option value="roms/Legend of Zelda, The (U) (PRG 0).nes.zip">The Legend of Zelda</option>
+						<option value="roms/Mega Man (U).nes.zip">Mega Man</option>
+						<option value="roms/Mega Man 2 (U).nes.zip">Mega Man 2</option>
+						<option value="roms/Mega Man 3 (U) [!].nes.zip">Mega Man 3</option>
+						<option value="roms/Mega Man 4 (U).nes.zip">Mega Man 4</option>
+						<option value="roms/Mega Man 5 (U).nes.zip">Mega Man 5</option>
+						<option value="roms/Mega Man 6 (U).nes.zip">Mega Man 6</option>
+						<option value="roms/Metroid (U).nes.zip">Metroid</option>
+						<option value="roms/Startropics 2 - Zoda's Revenge (U).nes.zip">Startropics 2 - Zoda's Revenge</option>
+						<option value="roms/Snake Rattle'n Roll (U).nes.zip">Snake Rattle'n Roll</option>
+						<option value="roms/Defender 2 (U).nes.zip">Defender 2</option>
+						<option value="roms/Slalom (U).nes.zip">Slalom</option>
+						<option value="roms/River City Ransom (U).nes.zip">River City Ransom</option>
+						<option value="roms/RC Pro-Am 2 (U).nes.zip">RC Pro-Am 2</option>
+						<option value="roms/Prince of Persia (U).nes.zip">Prince of Persia</option>
+						<option value="roms/Mike Tyson's Punch-Out!! (U) (PRG 0).nes.zip">Mike Tyson's Punch-Out!!</option>
+						<option value="roms/Marble Madness (U).nes.zip">Marble Madness</option>
+						<option value="roms/Ghosts'n Goblins (U).nes.zip">Ghosts 'n Goblins</option>
+						<option value="roms/Darkwing Duck (U).nes.zip">Darkwing Duck</option>
+						<option value="roms/Contra (U).nes.zip">Contra</option>
+						<option value="roms/Castlevania 3 - Dracula's Curse (U).nes.zip">Castlevania 3 - Dracula's Curse</option>
+						<option value="roms/Battletoads (U).nes.zip">Battletoads</option>
+						<option value="roms/Battletoads Double Dragon (U).nes.zip">Battletoads Double Dragon</option>
+						<option value="roms/Balloon Fight (E).nes.zip">Balloon Fight</option>
+						<option value="roms/1943 (U).nes.zip">1943</option>
+						<option value="roms/Tetris 2 (U) [!].nes.zip">Tetris 2</option>
+						<option value="roms/Terminator 2 - Judgement Day (U).nes.zip">Terminator 2 - Judgement Day</option>
+						<option value="roms/Teenage Mutant Ninja Turtles 3 (U).nes.zip">Teenage Mutant Ninja Turtles 3</option>
+						<option value="roms/TaleSpin (U).nes.zip">TaleSpin</option>
+						<option value="roms/Air Fortress (U).nes.zip">Air Fortress</option>
+						<option value="roms/Airwolf (U).nes.zip">Airwolf</option>
+						<option value="roms/Aladdin (E) [!].nes.zip">Aladdin</option>
+						<option value="roms/Bionic Commando (U).nes.zip">Bionic Commando</option>
+						<option value="roms/Bomberman 2 (U).nes.zip">Bomberman 2</option>
+						<option value="roms/Cobra Triangle (U).nes.zip">Cobra Triangle</option>
+						<option value="roms/Crystalis (U).nes.zip">Crystalis</option>
+						<option value="roms/Double Dragon 3 - The Sacred Stones (U).nes.zip">Double Dragon 3 - The Sacred Stones</option>
+						<option value="roms/Duck Tales 2 (U).nes.zip">Duck Tales 2</option>
+						<option value="roms/Fantastic Adventures of Dizzy, The (U).nes.zip">The Fantastic Adventures of Dizzy</option>
+						<option value="roms/Galaga (U).nes.zip">Galaga</option>
+						<option value="roms/Gradius (U).nes.zip">Gradius</option>
+						<option value="roms/Gun Nac (U).nes.zip">Gun Nac</option>
+						<option value="roms/Impossible Mission 2 (U).nes.zip">Impossible Mission 2</option>
+						<option value="roms/Ninja Gaiden (U).nes.zip">Ninja Gaiden</option>
+						<option value="roms/Ninja Gaiden 2 - The Dark Sword of Chaos (U).nes.zip">Ninja Gaiden 2 - The Dark Sword of Chaos</option>
+						<option value="roms/Ninja Gaiden 3 - The Ancient Ship of Doom (U).nes.zip">Ninja Gaiden 3 - The Ancient Ship of Doom</option>
+						<option value="roms/Pac-Man (Namco) (E) [!].nes.zip">Pac-Man (Namco)</option>
+						<option value="roms/Paperboy 2 (U).nes.zip">Paperboy 2</option>
+						<option value="roms/Astyanax (U).nes.zip">Astyanax</option>
+						<option value="roms/Bucky O'Hare (U) [!].nes.zip">Bucky O'Hare</option>
+						<option value="roms/Captain America and the Avengers (U).nes.zip">Captain America and the Avengers</option>
+						<option value="roms/Elite (E).nes.zip">Elite</option>
+						<option value="roms/Excitebike (E).nes.zip">Excitebike</option>
+						<option value="roms/Faxanadu (U).nes.zip">Faxanadu</option>
+						<option value="roms/Lemmings (U).nes.zip">Lemmings</option>
+						<option value="roms/Q-bert (U).nes.zip">Q-bert</option>
+						<option value="roms/Rampage (U).nes.zip">Rampage</option>
+					</datalist>
+				</select>
+			</p>
