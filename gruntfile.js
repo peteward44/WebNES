@@ -20,7 +20,7 @@ module.exports = function(grunt) {
 		compilerFile: 'closureCompiler/build/compiler.jar',
 		checkModified: false,
 		compilerOpts: {
-			compilation_level: 'ADVANCED_OPTIMIZATIONS',
+			compilation_level: 'SIMPLE_OPTIMIZATIONS',
 			debug: isDebug,
 			externs: ['closureCompiler/externs/*.js'],
 			warning_level: 'verbose',
