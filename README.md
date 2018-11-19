@@ -20,24 +20,24 @@ WebNES supports the following features:
 - Debugging for ROM authors or other emulator authors - Trace logs can be generated for CPU instructions and PPU events
 
 
-#Just play
+# Just play
 
 A release build can be played here [http://peteward44.github.io/WebNES](http://peteward44.github.io/WebNES)
 
 
-#Building
+# Building
 
 WebNES can run without building, however various optimisations are performed by the closure compiler and the grunt build script.
 You will need npm and bower installed.
 
-##Windows
+## Windows
 
 ```
 Run setup.cmd
 Run build_release.cmd
 ```
 
-##Linux
+## Linux
 
 ```
 npm install
