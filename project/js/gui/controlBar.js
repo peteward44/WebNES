@@ -304,7 +304,7 @@ this.Gui = this.Gui || {};
 			// If we use onloadend, we need to check the readyState.
 			reader.onloadend = function( loadEvent ) {
 				if ( loadEvent.target.readyState === FileReader.DONE ) {
-					that._eventBus.invoke( 'romLoaded', file.name, loadEvent.target.result );
+					that._eventBus.invoke( 'romLoaded', file.name, new Uint8Array( loadEvent.target.result ) );
 				}
 			};
 
