@@ -9,11 +9,19 @@ A release build can be played here [http://peteward44.github.io/WebNES](http://p
 
 # Screenshots
 
-![Super Mario 3](./readme/webnes-example-smb.jpg)
+## Super Mario Brothers 3
+
+![Super Mario Brothers 3](./readme/webnes-example-smb.jpg)
+
+## Mike Tyson's Punchout
 
 ![Mike Tyson's Punchout](./readme/webnes-example-mike-tyson.jpg)
 
+## RC Pro Am 2
+
 ![RC Pro Am 2](./readme/webnes-example-rc-pro-am.jpg)
+
+## Slalom
 
 ![Slalom](./readme/webnes-example-slalom.jpg)
 
