@@ -3,7 +3,21 @@ WebNES
 
 NES emulator in Javascript using HTML5 canvas. Optimised for Chrome's V8 engine. Due to various performance issues and the lack of real typed arrays in IE, it is entirely not supported.
 
-WebNES supports the following features:
+# Just play
+
+A release build can be played here [http://peteward44.github.io/WebNES](http://peteward44.github.io/WebNES)
+
+# Screenshots
+
+![Super Mario 3](./readme/webnes-example-smb.jpg)
+
+![Mike Tyson's Punchout](./readme/webnes-example-mike-tyson.jpg)
+
+![RC Pro Am 2](./readme/webnes-example-rc-pro-am.jpg)
+
+![Slalom](./readme/webnes-example-slalom.jpg)
+
+# Features
 
 - Supports all common NES mapper formats, approximately 98% of games should work
 - Audio support using the HTML5 WebAudio API
@@ -18,12 +32,6 @@ WebNES supports the following features:
 - Zip file support to load ROMs
 - Game speed can be slowed down / sped up
 - Debugging for ROM authors or other emulator authors - Trace logs can be generated for CPU instructions and PPU events
-
-
-# Just play
-
-A release build can be played here [http://peteward44.github.io/WebNES](http://peteward44.github.io/WebNES)
-
 
 # Building
 
